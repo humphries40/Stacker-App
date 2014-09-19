@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <section name="Workbench">
-	<section name="ResourcesSelectionDialog">
-		<item value="false" key="showFilesInAllProjects"/>
-	</section>
 	<section name="SaveAsImageDialogSettings">
 		<item value="false" key="exportSelection"/>
 		<item value="false" key="saveToFile"/>
 		<item value="false" key="hideAnnotations"/>
 	</section>
-	<section name="NewProjectWizard">
+	<section name="ResourcesSelectionDialog">
+		<item value="false" key="showFilesInAllProjects"/>
 	</section>
 </section>
