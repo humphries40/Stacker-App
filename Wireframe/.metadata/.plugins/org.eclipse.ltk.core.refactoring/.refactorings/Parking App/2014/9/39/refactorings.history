@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename resource &apos;Parking App/NewScreen.screen&apos; to &apos;Menu.screen&apos;" description="Rename resource &apos;NewScreen.screen&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="NewScreen.screen" name="Menu.screen" stamp="1411506093869" updateReferences="true"/>
+</session>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<workbench progressCount="11" version="2.0">
+<workbench progressCount="12" version="2.0">
 <workbenchAdvisor/>
 <window height="1010" maximized="true" width="840" x="199" y="-20">
 <fastViewData fastViewLocation="1024"/>
@@ -27,14 +27,12 @@
 <folder appearance="1" expanded="2">
 <presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">
 <part id="0"/>
-<part id="1"/>
-<part id="2"/>
 </presentation>
 </folder>
 </info>
 </editorArea>
-<editor activePart="true" focus="true" id="com.wireframesketcher.ui.editors.ScreenEditor" name="NewScreen.screen" partName="NewScreen.screen" path="C:/Connorworkingtemp/GitHub/Stacker-App/Wireframe/Stacker/NewScreen.screen" title="NewScreen.screen" tooltip="Stacker/NewScreen.screen" workbook="DefaultEditorWorkbook">
-<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/Stacker/NewScreen.screen"/>
+<editor activePart="true" focus="true" id="com.wireframesketcher.ui.editors.ScreenEditor" name="Menu.screen" partName="Menu.screen" path="C:/Connorworkingtemp/GitHub/Stacker-App/Wireframe/Parking App/Menu.screen" title="Menu.screen" tooltip="Parking App/Menu.screen" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/Parking App/Menu.screen"/>
 </editor>
 </editors>
 <views>
@@ -51,7 +49,7 @@
 <viewState/>
 </view>
 </views>
-<perspectives activePart="com.wireframesketcher.ui.editors.ScreenEditor" activePerspective="com.wireframesketcher.ui.perspective">
+<perspectives activePart="org.eclipse.ui.navigator.ProjectExplorer" activePerspective="com.wireframesketcher.ui.perspective">
 <perspective editorAreaTrimState="2" editorAreaVisible="1" fixed="0" version="0.016">
 <descriptor class="com.wireframesketcher.ui.PerspectiveFactory" id="com.wireframesketcher.ui.perspective" label="Wireframing"/>
 <alwaysOnActionSet id="org.eclipse.search.searchActionSet"/>
@@ -87,23 +85,23 @@
 <hide_menu_item_id id="org.eclipse.ui.window.closeAllPerspectives"/>
 <hide_menu_item_id id="org.eclipse.ui.window.previousPerspective"/>
 <hide_menu_item_id id="project"/>
-<hide_menu_item_id id="org.eclipse.ui.window.nextView"/>
 <hide_menu_item_id id="org.eclipse.ui.edit.findReplace"/>
+<hide_menu_item_id id="org.eclipse.ui.window.nextView"/>
 <hide_menu_item_id id="org.eclipse.ui.window.quickAccess"/>
 <hide_menu_item_id id="org.eclipse.ui.window.showKeyAssist"/>
-<hide_menu_item_id id="org.eclipse.ui.window.showSystemMenu"/>
 <hide_menu_item_id id="org.eclipse.ui.window.showViewMenu"/>
+<hide_menu_item_id id="org.eclipse.ui.window.showSystemMenu"/>
 <hide_menu_item_id id="org.eclipse.ui.window.savePerspective"/>
-<hide_menu_item_id id="org.eclipse.ui.edit.addTask"/>
 <hide_menu_item_id id="org.eclipse.ui.window.nextPerspective"/>
+<hide_menu_item_id id="org.eclipse.ui.edit.addTask"/>
 <hide_toolbar_item_id id="org.eclipse.ui.navigate.backwardHistory"/>
 <hide_toolbar_item_id id="com.wireframesketcher.ui.fontUnderline"/>
-<hide_toolbar_item_id id="org.eclipse.ui.edit.delete"/>
-<hide_toolbar_item_id id="com.wireframesketcher.ui.fontBold"/>
 <hide_toolbar_item_id id="com.wireframesketcher.ui.fontItalic"/>
+<hide_toolbar_item_id id="com.wireframesketcher.ui.fontBold"/>
+<hide_toolbar_item_id id="org.eclipse.ui.edit.delete"/>
 <hide_toolbar_item_id id="com.wireframesketcher.ui.textAlignRight"/>
-<hide_toolbar_item_id id="org.eclipse.ui.edit.text.toggleShowSelectedElementOnly"/>
 <hide_toolbar_item_id id="org.eclipse.ui.navigate.forwardHistory"/>
+<hide_toolbar_item_id id="org.eclipse.ui.edit.text.toggleShowSelectedElementOnly"/>
 <hide_toolbar_item_id id="com.wireframesketcher.ui.textAlignCenter"/>
 <hide_toolbar_item_id id="com.wireframesketcher.ui.textAlignLeft"/>
 <view id="org.eclipse.ui.navigator.ProjectExplorer"/>
@@ -139,8 +137,8 @@
 </presentation>
 </folder>
 </info>
-<info folder="true" part="middleLeft" ratio="0.5" ratioLeft="196" ratioRight="196" relationship="4" relative="topLeft">
-<folder activePageID="org.eclipse.ui.views.PropertySheet" appearance="2" expanded="2">
+<info folder="true" part="middleLeft" ratio="0.5" ratioLeft="271" ratioRight="271" relationship="4" relative="topLeft">
+<folder activePageID="com.wireframesketcher.ui.linkView" appearance="2" expanded="2">
 <page content="org.eclipse.ui.views.PropertySheet" label="Properties"/>
 <page content="com.wireframesketcher.ui.linkView" label="Links"/>
 <presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">
@@ -156,72 +154,65 @@
 <workingSets/>
 <navigationHistory>
 <editors>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.wireframesketcher.ui.editors.ScreenEditor" path="/Stacker App/AccountScreen.screen"/>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.wireframesketcher.ui.editors.ScreenEditor" path="/Stacker App/login.screen"/>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.wireframesketcher.ui.editors.ScreenEditor" path="/Stacker App/Home.screen"/>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.wireframesketcher.ui.editors.ScreenEditor" path="/Stacker App/Signup.screen"/>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.wireframesketcher.ui.editors.ScreenEditor" path="/Stacker App/Group Creation.screen"/>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.wireframesketcher.ui.editors.ScreenEditor" path="/Stacker App/Group Home.screen"/>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.wireframesketcher.ui.editors.ScreenEditor" path="/Stacker App/NewScreen.screen"/>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.wireframesketcher.ui.editors.ScreenEditor" path="/Stacker App/Notifcation Screen.screen"/>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.wireframesketcher.ui.editors.ScreenEditor" path="/Stacker App/Calendar.screen"/>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.wireframesketcher.ui.editors.ScreenEditor" path="/Stacker App/AccountScreen.screen"/>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.wireframesketcher.ui.editors.ScreenEditor" path="/Stacker App/Calendar.screen"/>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.wireframesketcher.ui.editors.ScreenEditor" path="/Stacker App/Group Home.screen"/>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.wireframesketcher.ui.editors.ScreenEditor" path="/Stacker App/Notifcation Screen.screen"/>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.wireframesketcher.ui.editors.ScreenEditor" path="/Stacker App/NewScreen.screen"/>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.wireframesketcher.ui.editors.ScreenEditor" path="/Stacker/NewScreen.screen"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.wireframesketcher.ui.editors.ScreenEditor" path="/Stacker/Login.screen"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.wireframesketcher.ui.editors.ScreenEditor" path="/Stacker/Welcome.screen"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.wireframesketcher.ui.editors.ScreenEditor" path="/Stacker/Home.screen"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.wireframesketcher.ui.editors.ScreenEditor" path="/Stacker/Groups.screen"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.wireframesketcher.ui.editors.ScreenEditor" path="/Stacker/NewGroup.screen"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.wireframesketcher.ui.editors.ScreenEditor" path="/Stacker/GroupSettings.screen"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.wireframesketcher.ui.editors.ScreenEditor" path="/Stacker/Signup.screen"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.wireframesketcher.ui.editors.ScreenEditor" path="/Parking App/NewScreen.screen"/>
 </editors>
 <item historyLabel="Home.screen" index="2"/>
-<item historyLabel="Group Creation.screen" index="4"/>
+<item historyLabel="Login.screen" index="0"/>
 <item historyLabel="Home.screen" index="2"/>
-<item historyLabel="Group Creation.screen" index="4"/>
-<item historyLabel="Group Home.screen" index="5"/>
-<item historyLabel="Group Creation.screen" index="4"/>
-<item historyLabel="Group Home.screen" index="5"/>
+<item historyLabel="Welcome.screen" index="1"/>
 <item historyLabel="Home.screen" index="2"/>
-<item historyLabel="NewScreen.screen" index="6"/>
+<item historyLabel="Login.screen" index="0"/>
 <item historyLabel="Home.screen" index="2"/>
-<item historyLabel="Notifcation Screen.screen" index="7"/>
+<item historyLabel="Groups.screen" index="3"/>
+<item historyLabel="Login.screen" index="0"/>
 <item historyLabel="Home.screen" index="2"/>
-<item historyLabel="Notifcation Screen.screen" index="7"/>
+<item historyLabel="Groups.screen" index="3"/>
 <item historyLabel="Home.screen" index="2"/>
-<item historyLabel="Notifcation Screen.screen" index="7"/>
-<item historyLabel="Group Home.screen" index="5"/>
+<item historyLabel="Groups.screen" index="3"/>
 <item historyLabel="Home.screen" index="2"/>
-<item historyLabel="Group Home.screen" index="5"/>
-<item historyLabel="Notifcation Screen.screen" index="7"/>
-<item historyLabel="Group Creation.screen" index="4"/>
-<item historyLabel="Signup.screen" index="3"/>
-<item historyLabel="AccountScreen.screen" index="0"/>
+<item historyLabel="Groups.screen" index="3"/>
 <item historyLabel="Home.screen" index="2"/>
-<item historyLabel="Notifcation Screen.screen" index="7"/>
+<item historyLabel="Groups.screen" index="3"/>
 <item historyLabel="Home.screen" index="2"/>
-<item historyLabel="Calendar.screen" index="8"/>
-<item historyLabel="AccountScreen.screen" index="0"/>
+<item historyLabel="Groups.screen" index="3"/>
 <item historyLabel="Home.screen" index="2"/>
-<item historyLabel="Calendar.screen" index="8"/>
-<item historyLabel="AccountScreen.screen" index="0"/>
-<item historyLabel="login.screen" index="1"/>
-<item historyLabel="AccountScreen.screen" index="0"/>
-<item historyLabel="Signup.screen" index="3"/>
-<item historyLabel="AccountScreen.screen" index="0"/>
-<item historyLabel="Group Creation.screen" index="4"/>
-<item historyLabel="AccountScreen.screen" index="0"/>
-<item historyLabel="Group Home.screen" index="5"/>
-<item historyLabel="AccountScreen.screen" index="0"/>
+<item historyLabel="Groups.screen" index="3"/>
 <item historyLabel="Home.screen" index="2"/>
-<item historyLabel="Group Home.screen" index="5"/>
-<item historyLabel="Notifcation Screen.screen" index="7"/>
-<item historyLabel="Calendar.screen" index="8"/>
-<item historyLabel="AccountScreen.screen" index="0"/>
+<item historyLabel="Groups.screen" index="3"/>
 <item historyLabel="Home.screen" index="2"/>
-<item historyLabel="AccountScreen.screen" index="9"/>
-<item historyLabel="Calendar.screen" index="10"/>
-<item historyLabel="Group Home.screen" index="11"/>
-<item historyLabel="Notifcation Screen.screen" index="12"/>
-<item historyLabel="NewScreen.screen" index="13"/>
-<item active="true" historyLabel="NewScreen.screen" index="14"/>
+<item historyLabel="Groups.screen" index="3"/>
+<item historyLabel="NewGroup.screen" index="4"/>
+<item historyLabel="Groups.screen" index="3"/>
+<item historyLabel="NewGroup.screen" index="4"/>
+<item historyLabel="Groups.screen" index="3"/>
+<item historyLabel="NewGroup.screen" index="4"/>
+<item historyLabel="GroupSettings.screen" index="5"/>
+<item historyLabel="NewGroup.screen" index="4"/>
+<item historyLabel="GroupSettings.screen" index="5"/>
+<item historyLabel="NewGroup.screen" index="4"/>
+<item historyLabel="GroupSettings.screen" index="5"/>
+<item historyLabel="NewGroup.screen" index="4"/>
+<item historyLabel="Groups.screen" index="3"/>
+<item historyLabel="Home.screen" index="2"/>
+<item historyLabel="Login.screen" index="0"/>
+<item historyLabel="Welcome.screen" index="1"/>
+<item historyLabel="Login.screen" index="0"/>
+<item historyLabel="Welcome.screen" index="1"/>
+<item historyLabel="Signup.screen" index="6"/>
+<item historyLabel="Welcome.screen" index="1"/>
+<item historyLabel="Signup.screen" index="6"/>
+<item historyLabel="Login.screen" index="0"/>
+<item historyLabel="Signup.screen" index="6"/>
+<item historyLabel="Login.screen" index="0"/>
+<item historyLabel="Signup.screen" index="6"/>
+<item active="true" historyLabel="NewScreen.screen" index="7"/>
 </navigationHistory>
 <input factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/" type="8"/>
 </page>
@@ -238,6 +229,24 @@
 </trimLayout>
 </window>
 <mruList>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.wireframesketcher.ui.editors.ScreenEditor" name="Signup.screen" tooltip="Stacker/Signup.screen">
+<persistable path="/Stacker/Signup.screen"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.wireframesketcher.ui.editors.ScreenEditor" name="GroupSettings.screen" tooltip="Stacker/GroupSettings.screen">
+<persistable path="/Stacker/GroupSettings.screen"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.wireframesketcher.ui.editors.ScreenEditor" name="NewGroup.screen" tooltip="Stacker/NewGroup.screen">
+<persistable path="/Stacker/NewGroup.screen"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.wireframesketcher.ui.editors.ScreenEditor" name="Groups.screen" tooltip="Stacker/Groups.screen">
+<persistable path="/Stacker/Groups.screen"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.wireframesketcher.ui.editors.ScreenEditor" name="Home.screen" tooltip="Stacker/Home.screen">
+<persistable path="/Stacker/Home.screen"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.wireframesketcher.ui.editors.ScreenEditor" name="Login.screen" tooltip="Stacker/Login.screen">
+<persistable path="/Stacker/Login.screen"/>
+</file>
 <file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.wireframesketcher.ui.editors.ScreenEditor" name="NewScreen.screen" tooltip="Stacker/NewScreen.screen">
 <persistable path="/Stacker/NewScreen.screen"/>
 </file>
