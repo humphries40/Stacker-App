@@ -21,7 +21,7 @@
     <items x="0" y="104" width="350" height="34"/>
   </widgets>
   <widgets xsi:type="model:VScrollbar" id="2" x="552" y="277" measuredWidth="17" measuredHeight="100"/>
-  <widgets xsi:type="model:Button" id="7" x="248" y="416" width="297" height="41" text="Create New Group" measuredWidth="297" measuredHeight="41" link="NewGroup.screen">
+  <widgets xsi:type="model:Button" id="7" x="248" y="416" width="297" height="41" text="Create New Group" measuredWidth="297" measuredHeight="41">
     <font size="19px"/>
   </widgets>
   <hRuler/>
