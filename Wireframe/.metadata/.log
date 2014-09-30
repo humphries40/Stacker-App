@@ -1,0 +1,12 @@
+!SESSION 2014-09-25 17:02:20.683 -----------------------------------------------
+eclipse.buildId=unknown
+java.version=1.7.0_65
+java.vendor=Oracle Corporation
+BootLoader constants: OS=win32, ARCH=x86, WS=win32, NL=en_US
+Command-line arguments:  -os win32 -ws win32 -arch x86 -data C:\Connorworkingtemp\GitHub\Stacker-App\Wireframe
+
+!ENTRY com.wireframesketcher.ui 1 0 2014-09-25 17:02:22.480
+!MESSAGE WireframeSketcher v4.3.2 (trial)
+
+!ENTRY org.eclipse.ui 4 4 2014-09-25 17:02:22.509
+!MESSAGE Unable to find view with id: org.eclipse.jdt.ui.PackageExplorer, when creating perspective com.wireframesketcher.ui.perspective
