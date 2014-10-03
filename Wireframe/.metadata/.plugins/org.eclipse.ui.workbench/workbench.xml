@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <workbench progressCount="11" version="2.0">
 <workbenchAdvisor/>
+<<<<<<< HEAD
 <window height="788" maximized="true" width="840" x="0" y="0">
+=======
+<window height="768" maximized="true" width="1024" x="150" y="150">
+>>>>>>> origin/master
 <fastViewData fastViewLocation="1024"/>
 <perspectiveBar/>
 <coolbarLayout>
@@ -31,15 +35,33 @@
 <part id="2"/>
 <part id="3"/>
 <part id="4"/>
+<part id="5"/>
 </presentation>
 </folder>
 </info>
 </editorArea>
+<<<<<<< HEAD
 <editor id="com.wireframesketcher.ui.editors.ScreenEditor" name="Notifcation Screen.screen" partName="Notifcation Screen.screen" path="C:/Users/humphries.40/WireframeSketcher/Stacker App/Notifcation Screen.screen" title="Notifcation Screen.screen" tooltip="Stacker App/Notifcation Screen.screen" workbook="DefaultEditorWorkbook">
 <input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/Stacker App/Notifcation Screen.screen"/>
+=======
+<editor id="com.wireframesketcher.ui.editors.ScreenEditor" name="Calendars.screen" partName="Calendars.screen" path="C:/Connorworkingtemp/GitHub/Stacker-App/Wireframe/Stacker/Calendars.screen" title="Calendars.screen" tooltip="Stacker/Calendars.screen" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/Stacker/Calendars.screen"/>
 </editor>
-<editor id="com.wireframesketcher.ui.editors.ScreenEditor" name="Calendar.screen" partName="Calendar.screen" path="C:/Users/humphries.40/WireframeSketcher/Stacker App/Calendar.screen" title="Calendar.screen" tooltip="Stacker App/Calendar.screen" workbook="DefaultEditorWorkbook">
-<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/Stacker App/Calendar.screen"/>
+<editor activePart="true" focus="true" id="com.wireframesketcher.ui.editors.ScreenEditor" name="Groups.screen" partName="Groups.screen" path="C:/Connorworkingtemp/GitHub/Stacker-App/Wireframe/Stacker/Groups.screen" title="Groups.screen" tooltip="Stacker/Groups.screen" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/Stacker/Groups.screen"/>
+</editor>
+<editor id="com.wireframesketcher.ui.editors.ScreenEditor" name="Home.screen" partName="Home.screen" path="C:/Connorworkingtemp/GitHub/Stacker-App/Wireframe/Stacker/Home.screen" title="Home.screen" tooltip="Stacker/Home.screen" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/Stacker/Home.screen"/>
+</editor>
+<editor id="com.wireframesketcher.ui.editors.ScreenEditor" name="GroupStackedCal.screen" partName="GroupStackedCal.screen" path="C:/Connorworkingtemp/GitHub/Stacker-App/Wireframe/Stacker/GroupStackedCal.screen" title="GroupStackedCal.screen" tooltip="Stacker/GroupStackedCal.screen" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/Stacker/GroupStackedCal.screen"/>
+>>>>>>> origin/master
+</editor>
+<editor id="com.wireframesketcher.ui.editors.ScreenEditor" name="Login.screen" partName="Login.screen" path="C:/Connorworkingtemp/GitHub/Stacker-App/Wireframe/Stacker/Login.screen" title="Login.screen" tooltip="Stacker/Login.screen" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/Stacker/Login.screen"/>
+</editor>
+<editor id="com.wireframesketcher.ui.editors.ScreenEditor" name="NewGroup.screen" partName="NewGroup.screen" path="C:/Connorworkingtemp/GitHub/Stacker-App/Wireframe/Stacker/NewGroup.screen" title="NewGroup.screen" tooltip="Stacker/NewGroup.screen" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/Stacker/NewGroup.screen"/>
 </editor>
 </editors>
 <views>
@@ -127,14 +149,14 @@
 </presentation>
 </folder>
 </info>
-<info folder="true" part="org.eclipse.ui.internal.ViewStack@fe6823" ratio="0.75" ratioLeft="750" ratioRight="250" relationship="2" relative="topLeft">
+<info folder="true" part="org.eclipse.ui.internal.ViewStack@e68b3b" ratio="0.75" ratioLeft="750" ratioRight="250" relationship="2" relative="topLeft">
 <folder appearance="2" expanded="2">
 <page content="org.eclipse.help.ui.HelpView" label="LabelNotFound"/>
 <page content="org.eclipse.ui.internal.introview" label="LabelNotFound"/>
 <presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory"/>
 </folder>
 </info>
-<info part="org.eclipse.ui.editorss" ratio="0.22588377" ratioLeft="377" ratioRight="1292" relationship="2" relative="topLeft"/>
+<info part="org.eclipse.ui.editorss" ratio="0.28" ratioLeft="280" ratioRight="720" relationship="2" relative="topLeft"/>
 <info part="org.eclipse.gef.ui.palette_view" ratio="0.8388889" ratioLeft="604" ratioRight="116" relationship="2" relative="org.eclipse.ui.editorss"/>
 <info folder="true" part="bottomLeft" ratio="0.59938836" ratioLeft="392" ratioRight="262" relationship="4" relative="topLeft">
 <folder activePageID="org.eclipse.ui.views.ContentOutline" appearance="2" expanded="2">
@@ -145,7 +167,7 @@
 </folder>
 </info>
 <info folder="true" part="middleLeft" ratio="0.5" ratioLeft="196" ratioRight="196" relationship="4" relative="topLeft">
-<folder activePageID="org.eclipse.ui.views.PropertySheet" appearance="2" expanded="2">
+<folder activePageID="com.wireframesketcher.ui.linkView" appearance="2" expanded="2">
 <page content="org.eclipse.ui.views.PropertySheet" label="Properties"/>
 <page content="com.wireframesketcher.ui.linkView" label="Links"/>
 <presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">
@@ -161,6 +183,7 @@
 <workingSets/>
 <navigationHistory>
 <editors>
+<<<<<<< HEAD
 <editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.wireframesketcher.ui.editors.ScreenEditor" path="/Stacker App/AccountScreen.screen"/>
 <editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.wireframesketcher.ui.editors.ScreenEditor" path="/Stacker App/login.screen"/>
 <editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.wireframesketcher.ui.editors.ScreenEditor" path="/Stacker App/Home.screen"/>
@@ -192,13 +215,22 @@
 <item historyLabel="Home.screen" index="2"/>
 <item historyLabel="Notifcation Screen.screen" index="7"/>
 <item historyLabel="Group Home.screen" index="5"/>
+=======
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.wireframesketcher.ui.editors.ScreenEditor" path="/Stacker/Calendars.screen"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.wireframesketcher.ui.editors.ScreenEditor" path="/Stacker/Groups.screen"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.wireframesketcher.ui.editors.ScreenEditor" path="/Stacker/Home.screen"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.wireframesketcher.ui.editors.ScreenEditor" path="/Stacker/GroupStackedCal.screen"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.wireframesketcher.ui.editors.ScreenEditor" path="/Stacker/Login.screen"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.wireframesketcher.ui.editors.ScreenEditor" path="/Stacker/NewGroup.screen"/>
+</editors>
+<item historyLabel="Calendars.screen" index="0"/>
+<item historyLabel="Groups.screen" index="1"/>
+<item historyLabel="Calendars.screen" index="0"/>
+>>>>>>> origin/master
 <item historyLabel="Home.screen" index="2"/>
-<item historyLabel="Group Home.screen" index="5"/>
-<item historyLabel="Notifcation Screen.screen" index="7"/>
-<item historyLabel="Group Creation.screen" index="4"/>
-<item historyLabel="Signup.screen" index="3"/>
-<item historyLabel="AccountScreen.screen" index="0"/>
+<item historyLabel="Groups.screen" index="1"/>
 <item historyLabel="Home.screen" index="2"/>
+<<<<<<< HEAD
 <item historyLabel="Notifcation Screen.screen" index="7"/>
 <item historyLabel="Home.screen" index="2"/>
 <item historyLabel="Calendar.screen" index="8"/>
@@ -223,6 +255,12 @@
 <item historyLabel="AccountScreen.screen" index="9"/>
 <item historyLabel="Home.screen" index="2"/>
 <item active="true" historyLabel="Group Home.screen" index="10"/>
+=======
+<item historyLabel="GroupStackedCal.screen" index="3"/>
+<item historyLabel="Login.screen" index="4"/>
+<item historyLabel="NewGroup.screen" index="5"/>
+<item active="true" historyLabel="Groups.screen" index="1"/>
+>>>>>>> origin/master
 </navigationHistory>
 <input factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/" type="8"/>
 </page>
@@ -239,32 +277,23 @@
 </trimLayout>
 </window>
 <mruList>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.wireframesketcher.ui.editors.ScreenEditor" name="Calendar.screen" tooltip="Stacker App/Calendar.screen">
-<persistable path="/Stacker App/Calendar.screen"/>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.wireframesketcher.ui.editors.ScreenEditor" name="NewGroup.screen" tooltip="Stacker/NewGroup.screen">
+<persistable path="/Stacker/NewGroup.screen"/>
 </file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.wireframesketcher.ui.editors.ScreenEditor" name="NewScreen.screen" tooltip="Stacker App/NewScreen.screen">
-<persistable path="/Stacker App/NewScreen.screen"/>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.wireframesketcher.ui.editors.ScreenEditor" name="Login.screen" tooltip="Stacker/Login.screen">
+<persistable path="/Stacker/Login.screen"/>
 </file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.wireframesketcher.ui.editors.ScreenEditor" name="Group Home.screen" tooltip="Stacker App/Group Home.screen">
-<persistable path="/Stacker App/Group Home.screen"/>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.wireframesketcher.ui.editors.ScreenEditor" name="GroupStackedCal.screen" tooltip="Stacker/GroupStackedCal.screen">
+<persistable path="/Stacker/GroupStackedCal.screen"/>
 </file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.wireframesketcher.ui.editors.ScreenEditor" name="Group Creation.screen" tooltip="Stacker App/Group Creation.screen">
-<persistable path="/Stacker App/Group Creation.screen"/>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.wireframesketcher.ui.editors.ScreenEditor" name="Home.screen" tooltip="Stacker/Home.screen">
+<persistable path="/Stacker/Home.screen"/>
 </file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.wireframesketcher.ui.editors.ScreenEditor" name="Signup.screen" tooltip="Stacker App/Signup.screen">
-<persistable path="/Stacker App/Signup.screen"/>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.wireframesketcher.ui.editors.ScreenEditor" name="Groups.screen" tooltip="Stacker/Groups.screen">
+<persistable path="/Stacker/Groups.screen"/>
 </file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.wireframesketcher.ui.editors.ScreenEditor" name="Home.screen" tooltip="Stacker App/Home.screen">
-<persistable path="/Stacker App/Home.screen"/>
-</file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.wireframesketcher.ui.editors.ScreenEditor" name="login.screen" tooltip="Stacker App/login.screen">
-<persistable path="/Stacker App/login.screen"/>
-</file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.wireframesketcher.ui.editors.ScreenEditor" name="FirstScreen.screen" tooltip="Stacker App/FirstScreen.screen">
-<persistable path="/Stacker App/FirstScreen.screen"/>
-</file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.wireframesketcher.ui.editors.ScreenEditor" name="AccountScreen.screen" tooltip="Stacker App/AccountScreen.screen">
-<persistable path="/Stacker App/AccountScreen.screen"/>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.wireframesketcher.ui.editors.ScreenEditor" name="Calendars.screen" tooltip="Stacker/Calendars.screen">
+<persistable path="/Stacker/Calendars.screen"/>
 </file>
 </mruList>
 </workbench>

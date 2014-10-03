@@ -1,4 +1,10 @@
 eclipse.preferences.version=1
+<<<<<<< HEAD
 location=185564
 paletteMemento=<?xml version\="1.0" encoding\="UTF-8"?>\r\n<paletteState/>
 timestamp=1411075607380
+=======
+location=47611401
+paletteMemento=<?xml version\="1.0" encoding\="UTF-8"?>\r\n<paletteState sashPosition\="200">\r\n<categoryTree Assets\="true" Library\="true"/>\r\n</paletteState>
+timestamp=1411056549455
+>>>>>>> origin/master

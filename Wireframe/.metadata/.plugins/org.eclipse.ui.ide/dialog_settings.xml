@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <section name="Workbench">
+<<<<<<< HEAD
 	<section name="org.eclipse.ui.dialogs.FilteredResourcesSelectionDialog">
 		<item value="true" key="ShowStatusLine"/>
 		<item value="false" key="ShowDerived"/>
@@ -13,10 +14,13 @@
 			<item value="1|Segoe UI|9.0|0|WINDOWS|1|-12|0|0|0|400|0|0|0|1|0|0|0|0|Segoe UI" key="DIALOG_FONT_NAME"/>
 		</section>
 	</section>
+=======
+>>>>>>> origin/master
 	<section name="ExternalProjectImportWizard">
 		<item value="false" key="WizardProjectsImportPage.STORE_ARCHIVE_SELECTED"/>
 		<item value="false" key="WizardProjectsImportPage.STORE_COPY_PROJECT_ID"/>
 	</section>
+<<<<<<< HEAD
 	<section name="SaveAsDialogSettings">
 		<item value="525" key="DIALOG_WIDTH"/>
 		<item value="127" key="DIALOG_Y_ORIGIN"/>
@@ -24,4 +28,6 @@
 		<item value="579" key="DIALOG_HEIGHT"/>
 		<item value="1|Segoe UI|9.0|0|WINDOWS|1|-12|0|0|0|400|0|0|0|1|0|0|0|0|Segoe UI" key="DIALOG_FONT_NAME"/>
 	</section>
+=======
+>>>>>>> origin/master
 </section>
