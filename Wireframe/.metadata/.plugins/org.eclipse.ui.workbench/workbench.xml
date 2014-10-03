@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<workbench progressCount="7" version="2.0">
+<workbench progressCount="11" version="2.0">
 <workbenchAdvisor/>
-<window height="1010" maximized="true" width="840" x="0" y="0">
+<window height="788" maximized="true" width="840" x="0" y="0">
 <fastViewData fastViewLocation="1024"/>
 <perspectiveBar/>
 <coolbarLayout>
@@ -35,15 +35,6 @@
 </folder>
 </info>
 </editorArea>
-<editor id="com.wireframesketcher.ui.editors.ScreenEditor" name="AccountScreen.screen" partName="AccountScreen.screen" path="C:/Users/humphries.40/WireframeSketcher/Stacker App/AccountScreen.screen" title="AccountScreen.screen" tooltip="Stacker App/AccountScreen.screen" workbook="DefaultEditorWorkbook">
-<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/Stacker App/AccountScreen.screen"/>
-</editor>
-<editor activePart="true" focus="true" id="com.wireframesketcher.ui.editors.ScreenEditor" name="Home.screen" partName="Home.screen" path="C:/Users/humphries.40/WireframeSketcher/Stacker App/Home.screen" title="Home.screen" tooltip="Stacker App/Home.screen" workbook="DefaultEditorWorkbook">
-<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/Stacker App/Home.screen"/>
-</editor>
-<editor id="com.wireframesketcher.ui.editors.ScreenEditor" name="Group Home.screen" partName="Group Home.screen" path="C:/Users/humphries.40/WireframeSketcher/Stacker App/Group Home.screen" title="Group Home.screen" tooltip="Stacker App/Group Home.screen" workbook="DefaultEditorWorkbook">
-<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/Stacker App/Group Home.screen"/>
-</editor>
 <editor id="com.wireframesketcher.ui.editors.ScreenEditor" name="Notifcation Screen.screen" partName="Notifcation Screen.screen" path="C:/Users/humphries.40/WireframeSketcher/Stacker App/Notifcation Screen.screen" title="Notifcation Screen.screen" tooltip="Stacker App/Notifcation Screen.screen" workbook="DefaultEditorWorkbook">
 <input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/Stacker App/Notifcation Screen.screen"/>
 </editor>
@@ -89,37 +80,37 @@
 <new_wizard_action id="com.wireframesketcher.ui.wizards.ScreenNewWizard"/>
 <new_wizard_action id="com.wireframesketcher.ui.wizards.StoryNewWizard"/>
 <new_wizard_action id="org.eclipse.ui.wizards.new.folder"/>
-<hide_menu_item_id id="org.eclipse.ui.edit.addTask"/>
 <hide_menu_item_id id="org.eclipse.ui.edit.addBookmark"/>
-<hide_menu_item_id id="org.eclipse.ui.edit.findReplace"/>
-<hide_menu_item_id id="org.eclipse.ui.help.helpSearch"/>
-<hide_menu_item_id id="project"/>
-<hide_menu_item_id id="navigate"/>
-<hide_menu_item_id id="org.eclipse.ui.window.newEditor"/>
-<hide_menu_item_id id="org.eclipse.ui.window.savePerspective"/>
 <hide_menu_item_id id="org.eclipse.ui.window.closePerspective"/>
-<hide_menu_item_id id="org.eclipse.ui.window.closeAllPerspectives"/>
-<hide_menu_item_id id="org.eclipse.ui.window.nextPerspective"/>
-<hide_menu_item_id id="org.eclipse.ui.window.previousPerspective"/>
-<hide_menu_item_id id="org.eclipse.ui.window.showViewMenu"/>
-<hide_menu_item_id id="org.eclipse.ui.file.revert"/>
-<hide_menu_item_id id="org.eclipse.ui.window.quickAccess"/>
-<hide_menu_item_id id="org.eclipse.ui.window.showSystemMenu"/>
-<hide_menu_item_id id="org.eclipse.ui.window.activateEditor"/>
-<hide_menu_item_id id="org.eclipse.ui.window.nextView"/>
+<hide_menu_item_id id="navigate"/>
 <hide_menu_item_id id="org.eclipse.ui.window.previousView"/>
+<hide_menu_item_id id="org.eclipse.ui.file.revert"/>
+<hide_menu_item_id id="org.eclipse.ui.window.activateEditor"/>
+<hide_menu_item_id id="org.eclipse.ui.help.helpSearch"/>
 <hide_menu_item_id id="org.eclipse.ui.edit.text.openLocalFile"/>
+<hide_menu_item_id id="org.eclipse.ui.window.newEditor"/>
+<hide_menu_item_id id="org.eclipse.ui.window.closeAllPerspectives"/>
+<hide_menu_item_id id="org.eclipse.ui.window.previousPerspective"/>
+<hide_menu_item_id id="project"/>
+<hide_menu_item_id id="org.eclipse.ui.window.nextView"/>
+<hide_menu_item_id id="org.eclipse.ui.edit.findReplace"/>
+<hide_menu_item_id id="org.eclipse.ui.window.quickAccess"/>
 <hide_menu_item_id id="org.eclipse.ui.window.showKeyAssist"/>
-<hide_toolbar_item_id id="org.eclipse.ui.navigate.forwardHistory"/>
+<hide_menu_item_id id="org.eclipse.ui.window.showSystemMenu"/>
+<hide_menu_item_id id="org.eclipse.ui.window.showViewMenu"/>
+<hide_menu_item_id id="org.eclipse.ui.window.savePerspective"/>
+<hide_menu_item_id id="org.eclipse.ui.edit.addTask"/>
+<hide_menu_item_id id="org.eclipse.ui.window.nextPerspective"/>
 <hide_toolbar_item_id id="org.eclipse.ui.navigate.backwardHistory"/>
 <hide_toolbar_item_id id="com.wireframesketcher.ui.fontUnderline"/>
-<hide_toolbar_item_id id="com.wireframesketcher.ui.fontItalic"/>
+<hide_toolbar_item_id id="org.eclipse.ui.edit.delete"/>
 <hide_toolbar_item_id id="com.wireframesketcher.ui.fontBold"/>
+<hide_toolbar_item_id id="com.wireframesketcher.ui.fontItalic"/>
 <hide_toolbar_item_id id="com.wireframesketcher.ui.textAlignRight"/>
+<hide_toolbar_item_id id="org.eclipse.ui.edit.text.toggleShowSelectedElementOnly"/>
+<hide_toolbar_item_id id="org.eclipse.ui.navigate.forwardHistory"/>
 <hide_toolbar_item_id id="com.wireframesketcher.ui.textAlignCenter"/>
 <hide_toolbar_item_id id="com.wireframesketcher.ui.textAlignLeft"/>
-<hide_toolbar_item_id id="org.eclipse.ui.edit.delete"/>
-<hide_toolbar_item_id id="org.eclipse.ui.edit.text.toggleShowSelectedElementOnly"/>
 <view id="org.eclipse.ui.navigator.ProjectExplorer"/>
 <view id="org.eclipse.ui.views.ContentOutline"/>
 <view id="org.eclipse.ui.views.PropertySheet"/>
@@ -179,10 +170,9 @@
 <editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.wireframesketcher.ui.editors.ScreenEditor" path="/Stacker App/NewScreen.screen"/>
 <editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.wireframesketcher.ui.editors.ScreenEditor" path="/Stacker App/Notifcation Screen.screen"/>
 <editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.wireframesketcher.ui.editors.ScreenEditor" path="/Stacker App/Calendar.screen"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.wireframesketcher.ui.editors.ScreenEditor" path="/Stacker App/AccountScreen.screen"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.wireframesketcher.ui.editors.ScreenEditor" path="/Stacker App/Group Home.screen"/>
 </editors>
-<item historyLabel="Group Home.screen" index="5"/>
-<item historyLabel="Group Creation.screen" index="4"/>
-<item historyLabel="Group Home.screen" index="5"/>
 <item historyLabel="Group Creation.screen" index="4"/>
 <item historyLabel="Group Home.screen" index="5"/>
 <item historyLabel="Group Creation.screen" index="4"/>
@@ -229,18 +219,16 @@
 <item historyLabel="Notifcation Screen.screen" index="7"/>
 <item historyLabel="Calendar.screen" index="8"/>
 <item historyLabel="AccountScreen.screen" index="0"/>
-<item active="true" historyLabel="Home.screen" index="2"/>
+<item historyLabel="Home.screen" index="2"/>
+<item historyLabel="AccountScreen.screen" index="9"/>
+<item historyLabel="Home.screen" index="2"/>
+<item active="true" historyLabel="Group Home.screen" index="10"/>
 </navigationHistory>
 <input factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/" type="8"/>
 </page>
 <workbenchWindowAdvisor/>
 <actionBarAdvisor/>
 <trimLayout>
-<trimArea IMemento.internal.id="16384">
-<trimItem IMemento.internal.id="topLeft"/>
-<trimItem IMemento.internal.id="bottomLeft"/>
-<trimItem IMemento.internal.id="middleLeft"/>
-</trimArea>
 <trimArea IMemento.internal.id="128">
 <trimItem IMemento.internal.id="org.eclipse.ui.internal.WorkbenchWindow.topBar"/>
 </trimArea>
