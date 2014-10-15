@@ -1,4 +1,4 @@
-
+/*
 var http = require('http');
 http.createServer(function (req, res) {
   res.writeHead(200, {'Content-Type': 'text/plain'});
@@ -8,16 +8,13 @@ http.createServer(function (req, res) {
   res.end('Hello World\n');
 }).listen(80);
 console.log('Server listening on port 80');
-
+*/
 
 
 /*
 Things to think about and add. 
 
 Current Goal: This works for all U.S time zones. 
-
-
-Figuring out how to compare an arbitrary number of calendars to find the free time
 
 */
 
@@ -55,8 +52,6 @@ Figuring out how to compare an arbitrary number of calendars to find the free ti
 			[7, 7, 2014, "04:00 PM", "08:00 PM"],
 			[7, 8, 2014, "01:00 PM", "07:00 PM"]
 			);
-		console.log(filters);
-		console.log("hellor");
 		var openTimes = new Array (
 			findOpen(person1Events, filters),
 			findOpen(person2Events, filters),
@@ -66,48 +61,53 @@ Figuring out how to compare an arbitrary number of calendars to find the free ti
 		var meetingTimes = new Array();
 		
 		var curTime = filters[0].slice();
-		console.log(curTime)
+		curTime[4]= "Current Time"
 		
 		var startMeetingTime = curTime.slice();
 		var endMeetingTime = curTime.slice();
-		while(compareDay(curTime, filters[1]) <= 1) {
+		var allCouldMeet = false;
+		while(compareDay(curTime, filters[1]) < 1) {
 			var canMeet = true;
-			var allCouldMeet = false;
 			var count = 0;
 			var curEventCount = 1;
-			startFreeTime = curTime.slice();
-			console.log(curTime);
-			while(canMeet && openTimes.length < count)
+			startMeetingTime = curTime.slice();
+			startMeetingTime[4] = "Start Meeting Time"
+			while(canMeet && openTimes.length > count)
 			{
 				//This while loop increments us to the current free time block in the current calendar.
 				// If the current free time blocks ending is before the current time then we want to increment to the next block. 
-				while(curEventCount %2 == 1 && curEventCount < openTimes[count].length && compareDay(curTime, openTimes[count][curEventCount]) > 0)
-				{
-					curEventCount += 2;
+				while(curEventCount % 2 == 1 && curEventCount < openTimes[count].length){
+				  if(compareDay(curTime, openTimes[count][curEventCount]) > 0){
+					    curEventCount += 2;
+			    	}
+			    else{
+			      break;
+			    }
 				}
 				//This means the current time is after all of the free time in this calendar.
-				if(curEventCount > openTimes[count].length)
-				{
-					if(allCouldMeet)
-					{
-					  meetingTimes.push(startMeetingTime.slice());
-					  endMeetingTime[4] = "Poop";
-						meetingTimes.push(endMeetingTime.slice());
+				if(curEventCount >= openTimes[count].length){
+					if(allCouldMeet){
+					  if(compareDay(startMeetingTime, endMeetingTime) != 0){
+					  meetingTimes.push(startMeetingTime);
+					  endMeetingTime[4] = "End Meeting Time";
+						meetingTimes.push(endMeetingTime);
+					  }
 						allCouldMeet = false;
 					}
 					canMeet = false;
 				}		
 				//if the current time is before the start of free time that means they can't meet
-				if(compareDay(curTime, openTimes[count][curEventCount-1]) < 0)
-				{
+				else if(compareDay(curTime, openTimes[count][curEventCount-1]) < 0) {
 					if(allCouldMeet)
 					{
-					  endMeetingTime[4] = "Balls";
-						meetingTimes.push(endMeetingTime.slice());
+					  if(compareDay(startMeetingTime, endMeetingTime) != 0){
+					  meetingTimes.push(startMeetingTime);
+					  endMeetingTime[4] = "End Meeting Time";
+						meetingTimes.push(endMeetingTime);
+					  }
 						allCouldMeet = false;
 					}
 					canMeet = false;
-					startMeetingTime = curTime;
 				}
 				//The current time works in this calendar. It's possible for them to meet. 
 				else if (compareDay(curTime, openTimes[count][curEventCount-1]) >= 0 && compareDay(curTime, openTimes[count][curEventCount]) <= 0){
@@ -116,19 +116,19 @@ Figuring out how to compare an arbitrary number of calendars to find the free ti
 				}
 				
 				//we have gone through all the calendars and all can meet so we start over
-				if(count > openTimes.length && canMeet){
+				if(count >= openTimes.length && canMeet){
 					count = 0;
 					allCouldMeet = true;
 					endMeetingTime = curTime.slice();
 					endMeetingTime[4] = "End Meeting Time";
-					
+					curTime = incrementTime(curTime);
 				}
-		  	curTime = incrementTime(curTime);
-		  	console.log(curTime);
-		  	console.log("bitches")
 			}
 			curTime = incrementTime(curTime);
+
+			
 		}
+		console.log(meetingTimes);
 		return meetingTimes;	
 }
 
@@ -272,7 +272,7 @@ function findOpen(events, filters) {
 			curTimeAM = true;
 		}
 		//Incrementing curTime
-		curTimeMinute += 15;
+		curTimeMinute += 1;
 		if (curTimeMinute >= 60) {
 			curTimeMinute %= 60;
 			curTimeHour++;
