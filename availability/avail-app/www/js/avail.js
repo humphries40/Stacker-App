@@ -16,6 +16,11 @@ Things to think about and add.
 
 Current Goal: This works for all U.S time zones. 
 
+Note: Inorder to finding meeting times when 2 people are available run compareTimes on subset of calendars.
+Then you can return those meeting times plus the users who are available for those times.
+
+Things to consider : Multi-day events
+
 */
 
 /*
@@ -57,7 +62,7 @@ Current Goal: This works for all U.S time zones.
 			findOpen(person2Events, filters),
 			findOpen(person3Events, filters)
 			);
-	
+		
 		var meetingTimes = new Array();
 		
 		var curTime = filters[0].slice();
@@ -92,7 +97,7 @@ Current Goal: This works for all U.S time zones.
 					  endMeetingTime[4] = "End Meeting Time";
 						meetingTimes.push(endMeetingTime);
 					  }
-						allCouldMeet = false;
+					allCouldMeet = false;
 					}
 					canMeet = false;
 				}		
@@ -105,7 +110,7 @@ Current Goal: This works for all U.S time zones.
 					  endMeetingTime[4] = "End Meeting Time";
 						meetingTimes.push(endMeetingTime);
 					  }
-						allCouldMeet = false;
+					allCouldMeet = false;
 					}
 					canMeet = false;
 				}
@@ -138,18 +143,6 @@ function convertToStandardTime(time)
 	}
 
 function findOpen(events, filters) {
-		/*events = new Array(
-			[7, 7, 2014, "01:00 PM", "02:00 PM"],
-			[7, 7, 2014, "05:00 PM", "06:00 PM"],
-			[7, 7, 2014, "08:00 PM", "09:00 PM"],
-			[7, 8, 2014, "10:00 AM", "02:00 PM"],
-			[7, 8, 2014, "04:00 PM", "05:00 PM"],
-			[7, 8, 2014, "07:00 PM", "11:00 PM"]
-			);
-		filters = new Array(
-			[7, 7, 2014, "12:00 AM", "Start Day"],
-			[7, 8, 2014, "11:59 PM", "End Day"]);
-			*/
 		console.log(filters);
 		var freeTime = [];
 		var count = 0;
