@@ -1,33 +1,40 @@
-/* Runnable JS Additions
+
 var http = require('http');
 http.createServer(function (req, res) {
   res.writeHead(200, {'Content-Type': 'text/plain'});
   var eventsarr;
   var filterarr;
-  res.write(" " + findOpen(eventsarr, filterarr));
+  res.write(" " + compareTimes());
   res.end('Hello World\n');
 }).listen(80);
 console.log('Server listening on port 80');
-*
+
+
+
+/*
+Things to think about and add. 
+
+Current Goal: This works for all U.S time zones. 
+
+
+Figuring out how to compare an arbitrary number of calendars to find the free time
+
 */
-
-
-
 
 /*
 * This javascript file contains the implementation of the 
 * javascript for the availability reporting features
 *
 *
-*
+
 */
-var availreport {
 
 	//This function would compare schedules and return possible meeting times
 	function compareTimes() {
 		var filters = new Array(
 			[7, 7, 2014, "12:00 AM", "Start Day"],
 			[7, 8, 2014, "11:59 PM", "End Day"]);
+			
 		var person1Events = new Array(
 			[7, 7, 2014, "01:00 PM", "02:00 PM"],
 			[7, 7, 2014, "05:00 PM", "06:00 PM"],
@@ -48,16 +55,87 @@ var availreport {
 			[7, 7, 2014, "04:00 PM", "08:00 PM"],
 			[7, 8, 2014, "01:00 PM", "07:00 PM"]
 			);
-    var openTimes = new Array (
+		console.log(filters);
+		console.log("hellor");
+		var openTimes = new Array (
 			findOpen(person1Events, filters),
 			findOpen(person2Events, filters),
 			findOpen(person3Events, filters)
 			);
 	
-
-		return openTimes;	
+		var meetingTimes = new Array();
+		
+		var curTime = filters[0].slice();
+		console.log(curTime)
+		
+		var startMeetingTime = curTime.slice();
+		var endMeetingTime = curTime.slice();
+		while(compareDay(curTime, filters[1]) <= 1) {
+			var canMeet = true;
+			var allCouldMeet = false;
+			var count = 0;
+			var curEventCount = 1;
+			startFreeTime = curTime.slice();
+			console.log(curTime);
+			while(canMeet && openTimes.length < count)
+			{
+				//This while loop increments us to the current free time block in the current calendar.
+				// If the current free time blocks ending is before the current time then we want to increment to the next block. 
+				while(curEventCount %2 == 1 && curEventCount < openTimes[count].length && compareDay(curTime, openTimes[count][curEventCount]) > 0)
+				{
+					curEventCount += 2;
+				}
+				//This means the current time is after all of the free time in this calendar.
+				if(curEventCount > openTimes[count].length)
+				{
+					if(allCouldMeet)
+					{
+					  meetingTimes.push(startMeetingTime.slice());
+					  endMeetingTime[4] = "Poop";
+						meetingTimes.push(endMeetingTime.slice());
+						allCouldMeet = false;
+					}
+					canMeet = false;
+				}		
+				//if the current time is before the start of free time that means they can't meet
+				if(compareDay(curTime, openTimes[count][curEventCount-1]) < 0)
+				{
+					if(allCouldMeet)
+					{
+					  endMeetingTime[4] = "Balls";
+						meetingTimes.push(endMeetingTime.slice());
+						allCouldMeet = false;
+					}
+					canMeet = false;
+					startMeetingTime = curTime;
+				}
+				//The current time works in this calendar. It's possible for them to meet. 
+				else if (compareDay(curTime, openTimes[count][curEventCount-1]) >= 0 && compareDay(curTime, openTimes[count][curEventCount]) <= 0){
+					count++;
+					curEventCount = 1;
+				}
+				
+				//we have gone through all the calendars and all can meet so we start over
+				if(count > openTimes.length && canMeet){
+					count = 0;
+					allCouldMeet = true;
+					endMeetingTime = curTime.slice();
+					endMeetingTime[4] = "End Meeting Time";
+					
+				}
+		  	curTime = incrementTime(curTime);
+		  	console.log(curTime);
+		  	console.log("bitches")
+			}
+			curTime = incrementTime(curTime);
+		}
+		return meetingTimes;	
 }
 
+function convertToStandardTime(time)
+	{
+		//switch statement/if statements to determine what timezone/calendar is being used.	
+	}
 
 function findOpen(events, filters) {
 		/*events = new Array(
@@ -72,6 +150,7 @@ function findOpen(events, filters) {
 			[7, 7, 2014, "12:00 AM", "Start Day"],
 			[7, 8, 2014, "11:59 PM", "End Day"]);
 			*/
+		console.log(filters);
 		var freeTime = [];
 		var count = 0;
 		var curTime = filters[0].slice();
@@ -239,4 +318,3 @@ function findOpen(events, filters) {
 		curTime[3] = curTimeHour + ":" + curTimeMinute + " " + curTimeAM;
 		return curTime;
 	}
-}
