@@ -1,0 +1,5 @@
+#
+# Do an initial OPTIONS request
+TYPE=OPTIONS
+URL=http://regression.host/caldav.php/
+HEAD

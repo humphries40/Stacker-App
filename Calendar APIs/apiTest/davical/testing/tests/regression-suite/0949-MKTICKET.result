@@ -1,0 +1,19 @@
+HTTP/1.1 400 Bad Request
+Date: Dow, 01 Jan 2000 00:00:00 GMT
+DAV: 1, 2, 3, access-control, calendar-access, calendar-schedule
+DAV: extended-mkcol, bind, addressbook, calendar-auto-schedule, calendar-proxy
+ETag: "7bc3d8a76fb705dfff8a6654bb8d7fb8"
+Content-Length: 155
+Content-Type: text/xml; charset="utf-8"
+
+<?xml version="1.0" encoding="utf-8" ?>
+<error xmlns="DAV:" xmlns:T="http://www.xythos.com/namespaces/StorageServer">
+ <missing-xml-for-request/>
+</error>
+
+     dav_owner_id: >1002<
+       privileges: >000000000001001000100001<
+target_collection: >160<
+target_resource_i: >NULL<
+          timeout: >01:00:00<
+

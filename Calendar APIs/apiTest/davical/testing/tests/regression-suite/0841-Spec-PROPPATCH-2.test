@@ -1,0 +1,42 @@
+#
+# Check for support of PROPPATCH method
+#
+# Convert the collection back to a calendar, change the displayname
+# again, set the calendar as transparent and remove the arbitrary property.
+#
+TYPE=PROPPATCH
+URL=http://regression.host/caldav.php/user1/home/
+HEADER=User-agent: SpecTest PROPPATCH
+HEADER=Content-type: text/xml
+HEAD
+
+BEGINDATA
+<?xml version="1.0" encoding="utf-8" ?> 
+<propertyupdate xmlns="DAV:"
+                xmlns:C="urn:ietf:params:xml:ns:caldav">
+  <set> 
+    <prop> 
+      <resourcetype> 
+        <collection/>
+        <C:calendar/>
+      </resourcetype> 
+      <displayname>User One's Transparent Calendar</displayname> 
+      <C:schedule-calendar-transp>
+       <C:transparent/>
+      </C:schedule-calendar-transp>
+    </prop> 
+  </set> 
+  <remove> 
+    <prop> 
+      <arbitrary xmlns="urn:mcmillan:bogus:xml:ns:davical"/> 
+    </prop> 
+  </remove> 
+</propertyupdate> 
+ENDDATA
+
+QUERY
+SELECT dav_displayname, is_calendar, is_addressbook, resourcetypes,
+       modified > (current_timestamp - '5 minutes'::interval) AS changed_last_5m,
+       schedule_transp 
+  FROM collection WHERE dav_name = '/user1/home/';
+ENDQUERY

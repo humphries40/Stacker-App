@@ -1,0 +1,196 @@
+HTTP/1.1 207 Multi-Status
+Date: Dow, 01 Jan 2000 00:00:00 GMT
+DAV: 1, 2, 3, access-control, calendar-access, calendar-schedule
+DAV: extended-mkcol, bind, addressbook, calendar-auto-schedule, calendar-proxy
+ETag: "45a0a8b922545d0793e9b0b9d10726fe"
+Content-Length: 6054
+Content-Type: text/xml; charset="utf-8"
+
+<?xml version="1.0" encoding="utf-8" ?>
+<multistatus xmlns="DAV:" xmlns:C="http://calendarserver.org/ns/" xmlns:C1="urn:ietf:params:xml:ns:caldav" xmlns:C2="urn:ietf:params:xml:ns:carddav">
+ <response>
+  <href>/caldav.php/manager1/</href>
+  <propstat>
+   <prop>
+    <C:getctag>"ab4a67c917e242e0989cd278c75a510e"</C:getctag>
+    <displayname>Manager 1</displayname>
+    <resourcetype>
+     <collection/>
+     <principal/>
+    </resourcetype>
+    <group-membership>
+     <href>/caldav.php/assistant1/</href>
+     <href>/caldav.php/teamclient1/</href>
+     <href>/caldav.php/user1/</href>
+     <href>/caldav.php/user1/calendar-proxy-read/</href>
+     <href>/caldav.php/assistant1/calendar-proxy-read/</href>
+     <href>/caldav.php/resource1/calendar-proxy-read/</href>
+     <href>/caldav.php/resource2/calendar-proxy-read/</href>
+    </group-membership>
+    <C:calendar-proxy-read-for>
+     <href>/caldav.php/user1/</href>
+     <href>/caldav.php/assistant1/</href>
+     <href>/caldav.php/resource1/</href>
+     <href>/caldav.php/resource2/</href>
+    </C:calendar-proxy-read-for>
+    <C:calendar-proxy-write-for/>
+   </prop>
+   <status>HTTP/1.1 200 OK</status>
+  </propstat>
+  <propstat>
+   <prop>
+    <C1:calendar-description/>
+    <group-member-set/>
+   </prop>
+   <status>HTTP/1.1 404 Not Found</status>
+  </propstat>
+ </response>
+ <response>
+  <href>/caldav.php/manager1/home/</href>
+  <propstat>
+   <prop>
+    <C:getctag>"c240642ddef994358c96da82c0361a58"</C:getctag>
+    <displayname>manager1 home</displayname>
+    <resourcetype>
+     <collection/>
+     <C1:calendar/>
+    </resourcetype>
+    <group-membership>
+     <href>/caldav.php/assistant1/</href>
+     <href>/caldav.php/teamclient1/</href>
+     <href>/caldav.php/user1/</href>
+     <href>/caldav.php/user1/calendar-proxy-read/</href>
+     <href>/caldav.php/assistant1/calendar-proxy-read/</href>
+     <href>/caldav.php/resource1/calendar-proxy-read/</href>
+     <href>/caldav.php/resource2/calendar-proxy-read/</href>
+    </group-membership>
+    <C:calendar-proxy-read-for>
+     <href>/caldav.php/user1/</href>
+     <href>/caldav.php/assistant1/</href>
+     <href>/caldav.php/resource1/</href>
+     <href>/caldav.php/resource2/</href>
+    </C:calendar-proxy-read-for>
+    <C:calendar-proxy-write-for/>
+   </prop>
+   <status>HTTP/1.1 200 OK</status>
+  </propstat>
+  <propstat>
+   <prop>
+    <C1:calendar-description/>
+    <group-member-set/>
+   </prop>
+   <status>HTTP/1.1 404 Not Found</status>
+  </propstat>
+ </response>
+ <response>
+  <href>/caldav.php/manager1/addresses/</href>
+  <propstat>
+   <prop>
+    <C:getctag>"c240642ddef994358c96da82c0361a58"</C:getctag>
+    <displayname>manager1 addresses</displayname>
+    <resourcetype>
+     <collection/>
+     <C2:addressbook/>
+    </resourcetype>
+    <group-membership>
+     <href>/caldav.php/assistant1/</href>
+     <href>/caldav.php/teamclient1/</href>
+     <href>/caldav.php/user1/</href>
+     <href>/caldav.php/user1/calendar-proxy-read/</href>
+     <href>/caldav.php/assistant1/calendar-proxy-read/</href>
+     <href>/caldav.php/resource1/calendar-proxy-read/</href>
+     <href>/caldav.php/resource2/calendar-proxy-read/</href>
+    </group-membership>
+    <C:calendar-proxy-read-for>
+     <href>/caldav.php/user1/</href>
+     <href>/caldav.php/assistant1/</href>
+     <href>/caldav.php/resource1/</href>
+     <href>/caldav.php/resource2/</href>
+    </C:calendar-proxy-read-for>
+    <C:calendar-proxy-write-for/>
+   </prop>
+   <status>HTTP/1.1 200 OK</status>
+  </propstat>
+  <propstat>
+   <prop>
+    <C1:calendar-description/>
+    <group-member-set/>
+   </prop>
+   <status>HTTP/1.1 404 Not Found</status>
+  </propstat>
+ </response>
+ <response>
+  <href>/caldav.php/manager1/calendar-proxy-read/</href>
+  <propstat>
+   <prop>
+    <C:getctag>"ccdfbfa2e7ee6c47d3ea8f134d415b89"</C:getctag>
+    <displayname>/manager1/calendar-proxy-read/</displayname>
+    <resourcetype>
+     <collection/>
+     <C:calendar-proxy-read/>
+    </resourcetype>
+    <group-membership>
+     <href>/caldav.php/assistant1/</href>
+     <href>/caldav.php/teamclient1/</href>
+     <href>/caldav.php/user1/</href>
+     <href>/caldav.php/user1/calendar-proxy-read/</href>
+     <href>/caldav.php/assistant1/calendar-proxy-read/</href>
+     <href>/caldav.php/resource1/calendar-proxy-read/</href>
+     <href>/caldav.php/resource2/calendar-proxy-read/</href>
+    </group-membership>
+    <C:calendar-proxy-read-for>
+     <href>/caldav.php/user1/</href>
+     <href>/caldav.php/assistant1/</href>
+     <href>/caldav.php/resource1/</href>
+     <href>/caldav.php/resource2/</href>
+    </C:calendar-proxy-read-for>
+    <C:calendar-proxy-write-for/>
+   </prop>
+   <status>HTTP/1.1 200 OK</status>
+  </propstat>
+  <propstat>
+   <prop>
+    <C1:calendar-description/>
+    <group-member-set/>
+   </prop>
+   <status>HTTP/1.1 404 Not Found</status>
+  </propstat>
+ </response>
+ <response>
+  <href>/caldav.php/manager1/calendar-proxy-write/</href>
+  <propstat>
+   <prop>
+    <C:getctag>"ff25f14bac404c0aae34b5e75618d479"</C:getctag>
+    <displayname>/manager1/calendar-proxy-write/</displayname>
+    <resourcetype>
+     <collection/>
+     <C:calendar-proxy-write/>
+    </resourcetype>
+    <group-membership>
+     <href>/caldav.php/assistant1/</href>
+     <href>/caldav.php/teamclient1/</href>
+     <href>/caldav.php/user1/</href>
+     <href>/caldav.php/user1/calendar-proxy-read/</href>
+     <href>/caldav.php/assistant1/calendar-proxy-read/</href>
+     <href>/caldav.php/resource1/calendar-proxy-read/</href>
+     <href>/caldav.php/resource2/calendar-proxy-read/</href>
+    </group-membership>
+    <C:calendar-proxy-read-for>
+     <href>/caldav.php/user1/</href>
+     <href>/caldav.php/assistant1/</href>
+     <href>/caldav.php/resource1/</href>
+     <href>/caldav.php/resource2/</href>
+    </C:calendar-proxy-read-for>
+    <C:calendar-proxy-write-for/>
+   </prop>
+   <status>HTTP/1.1 200 OK</status>
+  </propstat>
+  <propstat>
+   <prop>
+    <C1:calendar-description/>
+    <group-member-set/>
+   </prop>
+   <status>HTTP/1.1 404 Not Found</status>
+  </propstat>
+ </response>
+</multistatus>

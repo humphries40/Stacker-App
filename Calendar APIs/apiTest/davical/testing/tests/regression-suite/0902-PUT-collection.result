@@ -1,0 +1,34 @@
+HTTP/1.1 100 Continue
+
+HTTP/1.1 200 OK
+Date: Dow, 01 Jan 2000 00:00:00 GMT
+DAV: 1, 2, 3, access-control, calendar-access, calendar-schedule
+DAV: extended-mkcol, bind, addressbook, calendar-auto-schedule, calendar-proxy
+Content-Length: 0
+Content-Type: text/plain; charset="utf-8"
+
+
+      caldav_data: >29<
+
+    calendar_item: >29<
+
+           alarms: >28<
+
+        attendees: >40<
+
+    collection_id: >1566<
+  dav_displayname: >anotherone<
+         dav_etag: >f9a8ee6b41d9b02aa5176e6da349121a<
+         dav_name: >/user1/anotherone/<
+default_privilege: >NULL<
+      description: ><
+   is_addressbook: >0<
+      is_calendar: >1<
+ parent_container: >/user1/<
+public_events_onl: >0<
+publicly_readable: >0<
+    resourcetypes: ><DAV::collection/><urn:ietf:params:xml:ns:caldav:calendar/><
+  schedule_transp: >opaque<
+         timezone: >NULL<
+          user_no: >10<
+

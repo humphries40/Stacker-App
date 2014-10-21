@@ -1,0 +1,13 @@
+HTTP/1.1 200 OK
+Date: Dow, 01 Jan 2000 00:00:00 GMT
+DAV: 1, 2, 3, access-control, calendar-access, calendar-schedule
+DAV: extended-mkcol, bind, addressbook, calendar-auto-schedule, calendar-proxy
+Content-Length: 0
+Content-Type: text/plain; charset="utf-8"
+
+
+         dav_etag: >d28a7507a92f6f6b368c87a65808155e<
+         dav_name: >/user1/anotherone/<
+ mod_in_last_hour: >1<
+          user_no: >10<
+

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<multistatus xmlns="DAV:">
+ <response>
+  <href>/caldav.php/user1/addressbook/andrew_mcmillan.vcf</href>
+  <propstat>
+   <prop>
+    <getcontenttype>text/vcard</getcontenttype>
+    <resourcetype/>
+    <getcontentlength>1286</getcontentlength>
+    <displayname>User 1</displayname>
+    <getlastmodified>Dow, 01 Jan 2000 00:00:00 GMT</getlastmodified>
+    <creationdate>yyyymmddThhmmssZ</creationdate>
+    <getetag>"24bae2a7f81c0a79413a656c06d8326b"</getetag>
+    <getcontentlanguage/>
+    <supportedlock>
+     <lockentry>
+      <lockscope>
+       <exclusive/>
+      </lockscope>
+      <locktype>
+       <write/>
+      </locktype>
+     </lockentry>
+    </supportedlock>
+    <owner>
+     <href>/caldav.php/user1/</href>
+    </owner>
+    <current-user-principal>
+     <href>/caldav.php/user1/</href>
+    </current-user-principal>
+   </prop>
+   <status>HTTP/1.1 200 OK</status>
+  </propstat>
+ </response>
+</multistatus>

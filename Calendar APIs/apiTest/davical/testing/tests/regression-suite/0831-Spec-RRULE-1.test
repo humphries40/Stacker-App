@@ -1,0 +1,17 @@
+#
+# Test specification compliance for RRULE
+#
+#
+TYPE=TESTRRULE
+URL=http://regression.host/caldav.php
+
+HEAD
+
+#
+# This is a special type of request which just calls a PHP
+# program specifically for exercising the RRULE library.
+#
+
+REPLACE=/P: 0\.\d{4}  & S: 0\.\d{4}//
+# REPLACE=/Content-Type: text.(html|plain)/Content-Type: text/
+REPLACE=~Content-Type: text/html~Content-Type: text/plain~

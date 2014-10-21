@@ -1,0 +1,14 @@
+#!/usr/bin/make -f
+
+VERSION=$(shell dpkg-parsechangelog | sed -rne 's,^Version: ([^-]+).*,\1,p')
+
+get-orig-source:
+	tar cJf ../davical_$(VERSION).orig.tar.xz --exclude-vcs --exclude=.gitattributes --exclude=debian .
+
+%:
+	dh $@
+
+override_dh_installchangelogs:
+	dh_installchangelogs ChangeLog
+	rm debian/davical/usr/share/davical/htdocs/.htaccess || true
+

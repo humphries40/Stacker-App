@@ -1,0 +1,391 @@
+#!/usr/bin/perl -w
+#
+# Run a test
+#
+
+use strict;
+
+use DBI;
+use Getopt::Long qw(:config permute);  # allow mixed args.
+
+# Options variables
+my $debug  = 0;
+my $dsn    = "davical";
+my $dbuser = "";
+my $dbpass = "";
+my $webhost = 'mycaldav';
+my $althost = 'myempty';
+my $testdef;
+my $suite;
+my $case;
+my $helpmeplease = 0;
+
+my $dbadir = $0;
+$dbadir =~ s{/[^/]*$}{};
+my $patchdir = $dbadir . "/patches";
+
+
+GetOptions ('debug!'    => \$debug,
+            'dsn=s'     => \$dsn,
+            'dbuser=s'  => \$dbuser,
+            'dbpass=s'  => \$dbpass,
+            'webhost=s' => \$webhost,
+            'althost=s' => \$althost,
+            'test=s'    => \$testdef,
+            'suite=s'   => \$suite,
+            'case=s'    => \$case,
+            'help'      => \$helpmeplease  );
+
+usage() if ( $helpmeplease || ((!defined($suite) || !defined($case)) && !defined($testdef)));
+
+my $dbh;
+
+
+my @arguments = ( "--basic", "--proxy", "", "--insecure", "--raw" );
+push @arguments, "--silent"  unless ( $debug );
+push @arguments, "--verbose" if ( $debug );
+
+my $url;
+my $script;
+my @scripts = ( );
+my $is_head_request = 0;
+my @auth = ( "--user", "user1:user1" );
+
+if ( !defined($testdef) ) {
+  $testdef = "tests/$suite/$case.test";
+}
+
+my $datafile = $testdef;
+$datafile =~ s{\.test$}{};
+push @arguments, "--header", 'X-DAViCal-Testcase: '.$datafile;
+$datafile .= '.data';
+
+my $state = "";
+my $data_binary;
+
+my $sql_variable = "";
+my $sql_statement = "";
+my $sql_values = {};
+my $queries = ();
+my $replacements = ();
+
+
+open( TEST, '<', $testdef ) or die "Can't open '$testdef'";
+while( <TEST> ) {
+  my $line = $_;
+
+  # Do any variable replcements we have so far
+  foreach my $variable ( keys %{$sql_values} ) {
+    my $value = $sql_values->{$variable};
+    $line =~ s/##$variable##/$value/g;
+  }
+
+  if ( $state ne "" ) {
+    if ( /^END$state$/ ) {
+      if ( $state eq "SQL" ) {
+        get_sql_value( $sql_variable, $sql_values, $sql_statement );
+      }
+      elsif ( $state eq "DOSQL" ) {
+        do_sql( $sql_statement );
+      }
+      elsif ( $state eq "QUERY" ) {
+        push @$queries, $sql_statement;
+      }
+      $state = "";
+    }
+    elsif ( $state eq "DATA" ) {
+      $data_binary .= $line;
+    }
+    elsif ( $state eq "SQL" || $state eq "QUERY" || $state eq "DOSQL" ) {
+      $sql_statement .= $line;
+    }
+    next;
+  }
+
+  /^\s*(#|$)/ && next;
+
+  $line =~ /^\s*HEAD\s*(#|$|=)/ && do {
+    push @arguments, "--include";
+  };
+
+  $line =~ /^\s*VERBOSE\s*(#|$|=)/ && do {
+    push @arguments, "--verbose";
+  };
+
+  $line =~ /^\s*NOAUTH\s*(#|$|=)/ && do {
+    @auth = ();
+  };
+
+  $line =~ /^\s*DIGEST\s*(#|$|=)/ && do {
+    push @arguments, "--digest";
+    @auth = ( "--user", $1 );
+  };
+
+  $line =~ /^\s*AUTH\s*=\s*(\S.*)$/ && do {
+    @auth = ( "--user", $1 );
+  };
+
+  $line =~ /^\s*DATA\s*=\s*(\S.*)$/ && do {
+    my $basename = $1;
+    if ( defined($suite) ) {
+      if ( -e "tests/$suite/$basename.data" ) {
+        $datafile="tests/$suite/$basename.data";
+      }
+      elsif ( -e "tests/$suite/$basename" ) {
+        $datafile="tests/$suite/$basename";
+      }
+
+    }
+    elsif ( -e "$basename.data" ) {
+      $datafile="$basename.data";
+    }
+    elsif ( -e $basename ) {
+      $datafile=$basename;
+    }
+    else {
+      die "Can't find DATA file $basename or $basename.data";
+    }
+  };
+
+  $line =~ /^BEGINDATA\s*$/ && do {
+    $data_binary = "";
+    $state = "DATA";
+  };
+
+  $line =~ /^GETSQL\s*=\s*(\S.*)$/ && do {
+    $sql_variable = $1;
+    $sql_statement = "";
+    $state = "SQL";
+  };
+
+  $line =~ /^DOSQL\s*$/ && do {
+    $sql_statement = "";
+    $state = "DOSQL";
+  };
+
+  $line =~ /^REPLACE\s*=\s*(\S)(.*)$/ && do {
+    my $separator = $1;
+    $2 =~ /^([^$separator]*)$separator([^$separator]*)$separator$/ && do {
+      push @$replacements, { 'pattern' => $1, 'replacement' => $2 };
+    };
+  };
+
+  $line =~ /^QUERY\s*$/ && do {
+    $sql_statement = "";
+    $state = "QUERY";
+  };
+
+  $line =~ /^\s*TYPE\s*=\s*(\S.*)$/ && do {
+    if ( $1 eq "HEAD" ) {
+      $is_head_request = 1;
+    }
+    else {
+      push @arguments, "--request", $1;
+    }
+  };
+
+  $line =~ /^\s*HEADER\s*=\s*(\S.*)$/ && do {
+    my $arg = $1;
+    $arg =~ s{regression.host}{$webhost};
+    $arg =~ s{alternate.host}{$althost};
+    push @arguments, "--header", $arg;
+  };
+
+  $line =~ /^\s*URL\s*=\s*(\S.*)$/ && do {
+    $url=$1;
+    $url =~ s{regression.host}{$webhost};
+    $url =~ s{alternate.host}{$althost};
+  };
+
+  $line =~ /^\s*SCRIPT\s*=\s*(\S.*)$/ && do {
+    $script=$1;
+    $script =~ s{regression.host}{$webhost};
+    $script =~ s{alternate.host}{$althost};
+    push @scripts, $script;
+  };
+
+}
+
+if ( !defined($url) && !defined($script) ) {
+  print <<EOERROR ;
+The .test file must contain either a URL or a SCRIPT.
+EOERROR
+  exit (2);
+}
+
+push @arguments, "--head" if ( $is_head_request );
+
+push @arguments, @auth;
+
+if ( -f $datafile ) {
+  push @arguments, "--data-binary", "\@$datafile";
+}
+elsif ( defined($data_binary) ) {
+  push @arguments, "--data-binary", $data_binary;
+}
+else {
+  undef($datafile);
+}
+
+
+if ( defined($url) ) {
+  push @arguments, $url;
+
+  print STDERR join " ", "curl", @arguments, "\n" if ( $debug );
+
+  open RESULTS, "-|", "curl", @arguments;
+  while( <RESULTS> ) {
+    my $line = $_;
+    foreach my $replacement ( @$replacements ) {
+      $line =~ s/$replacement->{'pattern'}/$replacement->{'replacement'}/;
+    }
+    print $line;
+  }
+}
+
+if ( defined($script) ) {
+  foreach $script ( @scripts ) {
+    open RESULTS, "-|", $script;
+    while( <RESULTS> ) {
+      my $line = $_;
+      foreach my $replacement ( @$replacements ) {
+        $line =~ s/$replacement->{'pattern'}/$replacement->{'replacement'}/;
+      }
+      print $line;
+    }
+  }
+}
+
+if ( defined($queries) && @{$queries} ) {
+  opendb() unless defined($dbh);
+  print "\n";
+  print STDERR "Processing special queries\n" if ( $debug );
+  foreach $sql_statement ( @$queries ) {
+    # run SQL statement and dump results, into array of hashes
+    my $results = $dbh->selectall_arrayref($sql_statement, { Slice => {} } );
+    if ( $dbh->err ) {
+      print $dbh->errstr, "\n";
+      next;
+    }
+    foreach my $row ( @$results ) {
+      print "Query result ================================================\n" if ( $debug );
+      my $sep = "";
+      foreach my $name ( sort keys %$row ) {
+        my $value = $row->{$name};
+        $value = 'NULL' unless ( defined($value) );
+        printf("%17.17s: >%s<\n", $name, $value );
+      }
+      print "\n";
+    }
+  }
+}
+
+exit(0);
+
+
+=item do_sql( $sql_statement )
+Queries the database using the specified statement and
+ignores the result.
+=cut
+sub do_sql {
+  my $sql = shift;
+
+  opendb() unless defined($dbh);
+  $dbh->do($sql);
+  if ( $dbh->err ) {
+    print $dbh->errstr, "\n";
+    return;
+  }
+  print "SQL executed successfully.\n";
+  print $sql, "\n";
+}
+
+
+=item get_sql_value( $sql_variable, $sql_values, $sql_statement )
+Queries the database using the specified statement and puts
+the first column of the first row returned into the
+hash referenced $sql_values->{$sql_variable} for replacement
+later in the parsing process.
+=cut
+sub get_sql_value {
+  my $varname = shift;
+  my $values  = shift;
+  my $sql = shift;
+
+  opendb() unless defined($dbh);
+  my $results = $dbh->selectall_arrayref($sql);
+  if ( $dbh->err ) {
+    print $dbh->errstr, "\n";
+    return;
+  }
+  print STDERR "RESULT for $varname is ", $results->[0][0], "\n" if ( $debug );
+  $values->{$varname} = (defined($results->[0][0]) ? $results->[0][0] : "");
+}
+
+=item opendb()
+Opens the database connection to the global $dbh handle.
+Note that the standard PostgreSQL environment variables will also work
+with DBD::Pg.
+=cut
+sub opendb {
+  $dsn = "dbi:Pg:dbname=$dsn";
+  $dbh = DBI->connect($dsn, $dbuser, $dbpass, { AutoCommit => 1 } ) or die "Can't connect to database $dsn";
+  $dbh->do("SET TIMEZONE TO 'Pacific/Auckland'");
+}
+
+
+sub usage {
+  print <<EOERROR ;
+
+Usage:
+  dav_test [DB opts] [--suite <testsuite> --case <testname>] | [--test <filename>]
+
+This program will read the file 'tests/<testsuite>/<testname>.test
+and follow the instructions there.
+
+The following options are available for controlling the database, for
+those test cases which might require it:
+  --dsn <database>[;port=NNNN][;host=example.com]
+  --dbuser <user>
+  --dbpass <password>
+
+
+The test instructions will include lines defining the test like:
+=================================================
+# This is an example
+URL=http://mycaldav/caldav.php/andrew/
+HEADER=Depth: 0
+HEADER=Content-type: text/xml
+TYPE=PROPFIND
+HEAD
+DATA=OTHERTEST
+# This will let you use ##somename## for this value after this
+GETSQL=somename
+SELECT column FROM table WHERE criteria
+ENDSQL
+# The data can be included in line
+BEGINDATA
+... data content ...
+ENDDATA
+# The result could be some SQL output
+QUERY
+SELECT something, or, other FROM table ...
+ENDQUERY
+
+REPLACE=/pattern/replacement/options
+=================================================
+
+URL      The URL to request from.
+HEADER   An additional header for the request
+TYPE     The type of request (e.g. GET/PUT/POST/REPORT/...)
+HEAD     Whether to include the headers in the recorded response
+VERBOSE  Whether to provide the full request / response headers.
+DATA     The name of a different test in this suite to use data from.
+REPLACE  A perl regex replacement to post-process the result through.
+
+Additionally, if a file 'tests/<testsuite>/<testname>.data' exists
+the contents of that file will be sent in the body of the request.
+
+EOERROR
+  exit(1);
+}

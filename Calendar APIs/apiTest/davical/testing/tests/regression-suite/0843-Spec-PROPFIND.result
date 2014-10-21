@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<multistatus xmlns="DAV:" xmlns:D="urn:mcmillan:bogus:xml:ns:davical">
+ <response>
+  <href>/caldav.php/user1/home/</href>
+  <propstat>
+   <prop>
+    <owner>
+     <href>/caldav.php/user1/</href>
+    </owner>
+    <displayname>User One's Transparent Calendar</displayname>
+   </prop>
+   <status>HTTP/1.1 200 OK</status>
+  </propstat>
+  <propstat>
+   <prop>
+    <D:arbitrary/>
+   </prop>
+   <status>HTTP/1.1 404 Not Found</status>
+  </propstat>
+ </response>
+</multistatus>

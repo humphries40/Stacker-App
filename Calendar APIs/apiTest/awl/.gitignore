@@ -1,0 +1,11 @@
+awl.bfproject
+build
+awl.session
+built-docs
+build-stamp
+*~
+.*.swp
+*.webprj
+.buildpath
+.project
+.settings

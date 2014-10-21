@@ -1,0 +1,59 @@
+HTTP/1.1 207 Multi-Status
+Date: Dow, 01 Jan 2000 00:00:00 GMT
+DAV: 1, 2, 3, access-control, calendar-access, calendar-schedule
+DAV: extended-mkcol, bind, addressbook, calendar-auto-schedule, calendar-proxy
+ETag: "8d5e76c5b7b5676fc36e38cfad77c5db"
+Content-Length: 1277
+Content-Type: text/xml; charset="utf-8"
+
+<?xml version="1.0" encoding="utf-8" ?>
+<multistatus xmlns="DAV:" xmlns:C="urn:ietf:params:xml:ns:caldav">
+ <response>
+  <href>/caldav.php/</href>
+  <propstat>
+   <prop>
+    <displayname>DAViCal CalDAV Server</displayname>
+    <resourcetype>
+     <collection/>
+    </resourcetype>
+    <supported-method-set>
+     <supported-method name="OPTIONS"/>
+     <supported-method name="PROPFIND"/>
+     <supported-method name="REPORT"/>
+    </supported-method-set>
+    <supported-report-set>
+     <supported-report>
+      <report>
+       <principal-property-search/>
+      </report>
+     </supported-report>
+     <supported-report>
+      <report>
+       <principal-search-property-set/>
+      </report>
+     </supported-report>
+     <supported-report>
+      <report>
+       <expand-property/>
+      </report>
+     </supported-report>
+     <supported-report>
+      <report>
+       <sync-collection/>
+      </report>
+     </supported-report>
+    </supported-report-set>
+    <current-user-principal>
+     <href>/caldav.php/user1/</href>
+    </current-user-principal>
+   </prop>
+   <status>HTTP/1.1 200 OK</status>
+  </propstat>
+  <propstat>
+   <prop>
+    <C:supported-calendar-component-set/>
+   </prop>
+   <status>HTTP/1.1 404 Not Found</status>
+  </propstat>
+ </response>
+</multistatus>

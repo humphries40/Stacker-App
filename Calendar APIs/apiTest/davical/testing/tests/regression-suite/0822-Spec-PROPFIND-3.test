@@ -1,0 +1,33 @@
+#
+# Spec compliant test for all properties.  Depth infinity this time
+#
+TYPE=PROPFIND
+URL=http://regression.host/caldav.php/user1/home/
+HEADER=User-Agent: RFC2518 Spec Tests
+HEADER=Depth: infinity
+HEADER=Content-Type: application/xml
+
+# REPLACE=#<creationdate>2\d{3}-\d\d-\d\dT\d\d:\d\d:\d\d[+-]\d\d:\d\d</creationdate>#<creationdate>YYYY-MM-DDThh:mm:ss+ZZ:ZZ</creationdate>#
+
+BEGINDATA
+<?xml version="1.0" encoding="utf-8"?>
+<propfind xmlns="DAV:">
+ <prop>
+  <creationdate/>
+  <displayname/>
+  <getcontentlanguage/>
+  <getcontentlength/>
+  <getcontenttype/>
+  <getetag/>
+  <getlastmodified/>
+  <lockdiscovery/>
+  <resourcetype/>
+  <source/>
+  <supportedlock/>
+  <checked-in/>
+  <checked-out/>
+ </prop>
+</propfind>
+ENDDATA
+
+# REPLACE=/<get.tag>"[0-9a-f]{32}"<.get.tag>/<get?tag>"deadbeefcafef00ddeadbeefcafefeed"<.get?tag>/

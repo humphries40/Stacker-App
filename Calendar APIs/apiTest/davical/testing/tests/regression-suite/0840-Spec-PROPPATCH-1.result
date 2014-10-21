@@ -1,0 +1,68 @@
+HTTP/1.1 207 Multi-Status
+Date: Dow, 01 Jan 2000 00:00:00 GMT
+DAV: 1, 2, 3, access-control, calendar-access, calendar-schedule
+DAV: extended-mkcol, bind, addressbook, calendar-auto-schedule, calendar-proxy
+Content-Length: 709
+Content-Type: text/xml; charset="utf-8"
+
+<?xml version="1.0" encoding="utf-8" ?>
+<multistatus xmlns="DAV:" xmlns:D="urn:mcmillan:bogus:xml:ns:davical">
+ <response>
+  <href>/caldav.php/user1/home/</href>
+  <responsedescription>Some properties were not able to be changed.</responsedescription>
+  <propstat>
+   <prop>
+    <resourcetype/>
+   </prop>
+   <status>HTTP/1.1 409 Conflict</status>
+   <responsedescription>DAV::resourcetype may only be set to a new value, it may not be removed.</responsedescription>
+   <error>
+    <cannot-modify-protected-property/>
+   </error>
+  </propstat>
+  <propstat>
+   <prop>
+    <D:arbitrary/>
+    <displayname/>
+   </prop>
+   <status>HTTP/1.1 424 Failed Dependency</status>
+  </propstat>
+ </response>
+</multistatus>
+
+ changed_recently: >1<
+  dav_displayname: >user1 home<
+      is_calendar: >1<
+    resourcetypes: ><DAV::collection/><urn:ietf:params:xml:ns:caldav:calendar/><
+
+       changed_by: >10<
+ changed_recently: >1<
+         dav_name: >/user1/home/<
+    property_name: >http://apple.com/ns/ical/:calendar-color<
+   property_value: >#0252D4FF<
+
+       changed_by: >10<
+ changed_recently: >1<
+         dav_name: >/user1/home/<
+    property_name: >http://apple.com/ns/ical/:calendar-order<
+   property_value: >1<
+
+       changed_by: >10<
+ changed_recently: >1<
+         dav_name: >/user1/home/<
+    property_name: >urn:ietf:params:xml:ns:caldav:schedule-default-calendar-URL<
+   property_value: >
+ <href xmlns="DAV:">/caldav.php/user1/home/</href>
+<
+
+       changed_by: >10<
+ changed_recently: >1<
+         dav_name: >/user1/home/<
+    property_name: >urn:org:davical:outer<
+   property_value: >
+ <middle xmlns="urn:org:davical">
+  <inner xmlns="urn:org:davical">inside</inner>
+  <inner xmlns="urn:org:davical">inside2</inner>
+ </middle>
+<
+

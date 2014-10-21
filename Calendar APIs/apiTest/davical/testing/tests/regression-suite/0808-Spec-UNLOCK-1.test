@@ -1,0 +1,18 @@
+#
+# Test specification compliance for LOCK/UNLOCK request
+#  - This should succeed because the actual lock was deleted
+#    when the resource was deleted, regardless that the
+#    token we supply here is bogus.
+#
+# The response to this should really be 409 precondition
+# failed 'lock-token-matches-request-uri'
+#
+TYPE=UNLOCK
+URL=http://regression.host/caldav.php/user1/home/i1278618276.ics
+
+HEADER=Lock-Token: <opaquelocktoken:cafefeed-c001-b055-ea75-deadbeef4a11>
+HEAD
+
+#
+# There is no data for an UNLOCK request
+#
