@@ -139,8 +139,35 @@ Things to consider : Multi-day events
 
 function convertToStandardTime(time)
 	{
-		//switch statement/if statements to determine what timezone/calendar is being used.	
+		//Make last element of time strings contain TIMEZONE
+		switch(time[time.length-1) {
+			case "AT":
+				//do nothing
+			case "EST":
+				time  = changeTime(time, 60);
+				break;
+			case "CT":
+				time  = changeTime(time, 120);
+				break;
+			case "MT":
+				time  = changeTime(time, 180);
+				break;
+			case "PA":
+				time  = changeTime(time, 240);
+				break;
+			case "AL":
+				time  = changeTime(time, 300);
+				break;
+			case "HW":
+				time  = changeTime(time, 360);
+				break;
+			case "SAM":
+				time  = changeTime(time, 420);
+				break;
+			}
+		
 	}
+
 
 function findOpen(events, filters) {
 		console.log(filters);
@@ -308,6 +335,66 @@ function findOpen(events, filters) {
 		  curTimeMinute = "0" + curTimeMinute;
 		}
 		
+		curTime[3] = curTimeHour + ":" + curTimeMinute + " " + curTimeAM;
+		return curTime;
+	}
+	
+	function changeTime(curTime, minToAdd) 	{
+		var curTimeHour = curTime[3].substring(0,2);
+		curTimeHour = parseInt(curTimeHour);
+		var curTimeMinute = curTime[3].substring(3,5);
+		curTimeMinute = parseInt(curTimeMinute);
+		var curTimeAM = false;
+		if(curTime[3].substring(curTime[3].length-2,curTime[3].length) == "AM") {
+			curTimeAM = true;
+		}
+		//Incrementing curTime
+		while(minToAdd > 0){
+		{
+		curTimeMinute += 1;
+		if (curTimeMinute >= 60) {
+			curTimeMinute %= 60;
+			curTimeHour++;
+			if(curTimeHour == 13)	{
+			  curTimeHour = 1 ;
+			}
+			if (curTimeHour == 12) {
+				curTimeAM = !curTimeAM;
+				if(curTimeAM){
+					curTime[1] = curTime[1] + 1;
+					//check for leap year
+					if(curTime[1] == 29 && curTime[0] == 2 && curTime[2]%4 == 0 && (curTime%100 != 0 || (curTime%100 == 0 && curTime%400 == 0))) {
+						curTime[1] = 1;
+						curTime[0] = 3;
+					}
+					else if (curTime[1] == 31 && (curTime[0] == (4 || 6 || 9 || 11)) ){
+						curTime[0]++;
+						curTime[1] = 1;
+					}
+					else if (curTime[1] == 32) {
+						curTime[0]++;
+						curTime[1] = 1;
+					}
+					if(curTime[0] == 13) {
+						curTime[0] = 1;
+					}
+				}
+			}
+		}
+		if(curTimeAM)	{
+		  curTimeAM = "AM";
+		}
+		else{
+		  curTimeAM = "PM";
+		}
+		if(curTimeHour < 10){
+		  curTimeHour = "0"+ curTimeHour;
+		}
+		if(curTimeMinute < 10){
+		  curTimeMinute = "0" + curTimeMinute;
+		}
+		minToAdd--;
+		}
 		curTime[3] = curTimeHour + ":" + curTimeMinute + " " + curTimeAM;
 		return curTime;
 	}
