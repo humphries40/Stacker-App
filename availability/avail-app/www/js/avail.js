@@ -28,7 +28,6 @@ Things to consider : Multi-day events
 * javascript for the availability reporting features
 *
 *
-
 */
 
 	//This function would compare schedules and return possible meeting times
@@ -141,28 +140,26 @@ function convertToStandardTime(time)
 	{
 		//Make last element of time strings contain TIMEZONE
 		switch(time[time.length-1) {
-			case "AT":
-				//do nothing
 			case "EST":
-				time  = changeTime(time, 60);
+				//do nothing
 				break;
 			case "CT":
-				time  = changeTime(time, 120);
+				time  = changeTime(time, 60);
 				break;
 			case "MT":
-				time  = changeTime(time, 180);
+				time  = changeTime(time, 120);
 				break;
 			case "PA":
-				time  = changeTime(time, 240);
+				time  = changeTime(time, 180);
 				break;
 			case "AL":
-				time  = changeTime(time, 300);
+				time  = changeTime(time, 240);
 				break;
 			case "HW":
-				time  = changeTime(time, 360);
+				time  = changeTime(time, 300);
 				break;
 			case "SAM":
-				time  = changeTime(time, 420);
+				time  = changeTime(time, 360);
 				break;
 			}
 		
