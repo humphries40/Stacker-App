@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.4/jquery.mobile-1.4.4.min.css">
+<script src="js/jquery-1.11.1.min.js"></script>
+<script src="js/jquery.mobile-1.4.4.min.js"></script>
+<script>
+function init() {
+document.addEventListener("deviceready", deviceReady, true);
+delete init;
+}
+
+$(document).ready(function(){
+var user = {name:"",status:"",session:""};
+$(document).on("pagecontainerloadfailed",function(event,data){
+});
+
+  $("#submitlogin").click(function(){
+    //jQuery.post( url [, data ] [, success ] [, dataType ] )
+    $.post("http://localhost/test/login.php",
+     {
+      name:$("#username").val(),
+      password:$("#password").val()
+    },
+    function(data){
+	var obj = $.parseJSON(data);
+	user.name=obj.user;
+	user.status=obj.status;
+	user.session=obj.session;
+	  if(user.name=='invalid') {
+	     alert("please try again");
+		 $.mobile.pageContainer.pagecontainer("change","index.html#login", {transition: 'flow',reloadPage: false});
+		 }
+	  else
+	     {
+		 alert("success");
+		 $.mobile.pageContainer.pagecontainer("change","#mainpage", {transition: 'flow',reloadPage: false});
+		 }
+    });
+  });
+
+	$(document).on("pagebeforeshow","#mainpage",function(){ // When entering mainpage
+	  alert(user.session);
+	  //check if user is set else send to loginpage
+	  if(!user.name)
+	    $.mobile.pageContainer.pagecontainer("change","#login", {transition: 'flow',reloadPage: false});
+	  //fetch the values from database
+	   $.post("http://localhost/test/main.php",
+     {
+      session:user.session,
+    },
+    function(data){
+	var obj =data;
+    document.getElementById("main_header").innerHTML=obj;
+    });
+	  
+	});
+	  
+  });
+
+
+</script>
+<style type="text/css">
+body {
+   
+	margin:0;
+	padding:0;
+	width:100%;
+	height:100%;
+	display:table;
+	
+}
+.ui-page {
+    background: transparent;
+}
+.ui-content{
+    background: transparent;
+}
+
+
+</style>
+</head>
+<body>
+
+<div data-role="page" id="welcome" style="background: url(img/logo.png); background-repeat:no-repeat; background-position:center top; background-attachment:scroll; background-size:50% 50%;">
+<!-- WELCOME PAGE- Contains the login and register -->
+			  <div data-role="header" data-theme="b">
+				<h1>Stacker</h1>
+			  </div>
+
+			  <div data-role="main" class="ui-content" style="position:fixed; top:50%; left:25%">
+				
+				<a href="#login" class="ui-btn ui-btn-inline ui-mini ui-shadow ui-btn-corner-all ui-btn-b">Login</a>
+				<a href="#signup" class="ui-btn ui-btn-inline ui-mini ui-shadow ui-btn-corner-all ui-btn-b" >Sign Up</a>
+			  </div>
+
+			  <div data-role="footer" data-position="fixed" data-theme="b">
+				<h1>Footer Text</h1>
+			  </div>
+</div> 
+
+
+<!-- LOGIN -->
+<div data-role="page" id="login">
+
+			  <div data-role="header" data-theme="b">
+				<h1>Stacker - Login</h1> <a href="#welcome" class="ui-btn ui-btn-inline ui-mini ui-icon-back ui-btn-icon-left ui-btn-corner-all">Go back</a>
+			  </div>
+
+			 <div data-role="main" class="ui-content" style="position:fixed; top:30%; left:25%; background:#fff; ">
+			  <div>
+			
+				  <form id="loginform" method="POST">
+						<label for="username">username:</label>         <input type="text" id="username" data-mini="true"></input>
+						<label for="password">password:</label>         <input type="text" id="password" data-mini="true"></input>
+						<input type="submit" id="submitlogin" value="submit" data-theme="b"/>
+						
+				  </form>
+			  </div>
+				
+			  </div>
+			  
+			  <div data-role="footer" data-position="fixed" data-theme="b">
+				<h1>Footer Text</h1>
+			  </div>
+			 
+  
+</div> 
+
+<!-- SIGNUP -->
+<div data-role="page" id="signup">
+		
+			  <div data-role="header" data-theme="b">
+				<h1>Stacker - Sign Up</h1> <a href="#welcome" class="ui-btn ui-btn-inline ui-mini ui-icon-back ui-btn-icon-left ui-btn-corner-all">Go back</a>
+			  </div>
+
+			 <div data-role="main" class="ui-content" style="position:fixed; top:30%; left:25%; background:#fff; ">
+			  <div>
+			
+				  <form id="loginform" method="POST">
+						<label for="username">username:</label>         <input type="text" id="username" data-mini="true"></input>
+						<label for="password">password:</label>         <input type="text" id="password" data-mini="true"></input>
+						<label for="phone number">Phone:</label>         <input type="text" id="phoneno" data-mini="true"></input>
+						<label for="password">password:</label>         <input type="text" id="password" data-mini="true"></input>
+						<input type="submit" id="submitreg" value="submit" data-theme="b"/>
+				  </form>
+			  </div>
+				
+			  </div>
+			  
+			  <div data-role="footer" data-position="fixed" data-theme="b">
+				<h1>Footer Text</h1>
+			  </div>
+
+ 
+</div> 
+	
+	
+<!-- MAINPAGE -->
+<div data-role="page" id="mainpage">
+			<div data-role="navbar" id="test">
+				<ul>
+				  <li><a href="#anylink">Home</a></li>
+				  <li><a href="#anylink">Page Two</a></li>
+				  <li><a href="#anylink">Search</a></li>
+				</ul>
+			  </div>
+			    <div data-role="header" data-theme="b">
+				<h1>Stacker - Main Page</h1> 
+			  </div>
+
+			 <div data-role="main" class="ui-content" style="position:fixed; top:30%; left:25%; background:#fff; ">
+			  <div id="main_header">
+			       
+				 <!--Main Page Design -->
+			  </div>
+				
+			  </div>
+			  
+			  <div data-role="footer" data-position="fixed" data-theme="b">
+				<h1>Footer Text</h1>
+			  </div>
+
+ 
+</div> 	
+</body>
+</html>
