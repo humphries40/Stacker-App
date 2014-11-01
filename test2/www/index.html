@@ -1,14 +1,20 @@
-<!--TODO::
+<!--
+TO DO::
 1. Leave Group
-2. Add member to group
-3. Remove member from group
-4. Create view after availability report is generated
-5. add event to calendar
-6. remove event from calendar
-7. schedule meeting from the view in (4)
-8. Add Calendar
-9. Remove Calendar
-10. Add coleader
+2. Create view after availability report is generated
+3. add event to calendar
+4. remove event from calendar
+5. schedule meeting from the view in (4)
+6. Add Calendar
+7. Remove Calendar
+8. Getting real-time calendar values for personal calendar
+9. Getting real-time calendar values for group calendar
+10. Adding different colours for each user in group calendar
+11. Accept/Decline meeting (Part of notifications)
+12. Confirm meeting
+13. Delete group
+14. User Settings
+15. See Users
 
 Improve::
 1. handle reloads in notifications
@@ -25,6 +31,7 @@ Improve::
 <script type="text/javascript" src="js/jquery-1.11.1.min.js"></script>
 <script type="text/javascript" src="js/jquery.mobile-1.4.4.min.js"></script>
 <script type="text/javascript" src="js/jw-jqm-cal.js"></script>
+<script type="text/javascript" src="js/avail.js"></script>
 <script>
 function init() {
 document.addEventListener("deviceready", deviceReady, true);
@@ -48,6 +55,7 @@ $(document).ready(function(){
 
 var user = {name:"",status:"",session:"",uid:""};
 var group ={gid:"",gname:""};
+var groupcalendar;
 $(document).on("pagecontainerloadfailed",function(event,data){
 //If some page fails to load
 });
@@ -59,6 +67,7 @@ $(document).on("pagecontainerloadfailed",function(event,data){
 	 refreshPage();
 	}
 	else {
+	user.email=$("#email").val();
     $.post("http://server8.ies.cse.ohio-state.edu/stacker/login.php",
      {
       email:$("#email").val(),
@@ -70,14 +79,14 @@ $(document).on("pagecontainerloadfailed",function(event,data){
 	user.status=obj.status;
 	user.session=obj.session;
 	user.uid=obj.uid;
-		
+	
 	  if(obj.err) {
 	     alert(obj.err);
 		 $.mobile.pageContainer.pagecontainer("change","#login", {transition: 'none',reloadPage: false});
 		 }
 	  else
 	     {
-		 alert(user.status);
+		 alert(user.uid);
 		 $.mobile.pageContainer.pagecontainer("change","#mainpage", {transition: 'flow',reloadPage: false});
 		 }
     });
@@ -114,13 +123,13 @@ $(document).on("pagecontainerloadfailed",function(event,data){
 	}); 
 	
 
-
 	
 	  
 	//Create Group
 	 $("#submitcreategroup").click(function(){
     //jQuery.post( url [, data ] [, success ] [, dataType ] )
 		//TODO:: Make sure that all emails are unique and not equal to user creating the group
+	
 		 $.post("http://server8.ies.cse.ohio-state.edu/stacker/create_group.php",
 		{
 		uid:user.uid,
@@ -160,11 +169,11 @@ $(document).on("pagecontainerloadfailed",function(event,data){
 				var gname=obj[index+1];
 				var level=obj[index+2];
 				 if(level==2) {
-				 var $something="<div style='border-radius: 3px; border-bottom: solid #ccc;' class='ui-grid-d' gid='"+gid+"'><div class='ui-block-a'><h1>"+gname+"</h1></div><div class='ui-block-b'><button gid='"+gid+"' gname='"+gname+"' class='viewgroupcalendarbutton ui-btn ui-mini ui-btn-corner-all ui-icon-calendar ui-btn-icon-left'>View Calendar</button></div><div class='ui-block-c'><button gid='"+gid+"' gname='"+gname+"' class='managegroupbutton ui-disabled ui-btn ui-mini ui-btn-corner-all ui-icon-edit ui-btn-icon-left'>Manage</button></div><div class='ui-block-d'><button gid='"+gid+"' gname='"+gname+"' class='generateavailreport ui-disabled ui-btn ui-mini uui-btn-corner-all ui-icon-grid ui-btn-icon-left'>Generate Availability Report</button></div><div class='ui-block-e'><button gid='"+gid+"' class='leavegroupbutton ui-btn ui-mini uui-btn-corner-all ui-icon-delete ui-btn-icon-left'>Leave</button></div></div>";
+				 var $something="<div style='border-radius: 3px; border-bottom: solid #ccc;' class='ui-grid-b' gid='"+gid+"'><div class='ui-block-a'><h1>"+gname+"</h1></div></br><div class='ui-block-b'><button gid='"+gid+"' gname='"+gname+"' class='viewgroupcalendarbutton ui-btn ui-btn-corner-all ui-icon-calendar ui-btn-icon-notext'></button></div><div class='ui-block-c'><button gid='"+gid+"' class='leavegroupbutton ui-btn  ui-btn-corner-all ui-icon-delete ui-btn-icon-notext'></button></div></div>";
 				$("#viewgroups").append($something);
 				 }
 				 else if(level==3) {
-				 var $something="<div style='border-radius: 3px; border-bottom: solid #ccc;' class='ui-grid-d' gid='"+gid+"'><div class='ui-block-a'><h1>"+gname+"</h1></div><div class='ui-block-b'><button gid='"+gid+"' gname='"+gname+"' class='viewgroupcalendarbutton ui-btn ui-mini ui-btn-corner-all ui-icon-calendar ui-btn-icon-left'>View Calendar</button></div><div class='ui-block-c'><button gid='"+gid+"' gname='"+gname+"' class='managegroupbutton ui-btn ui-mini ui-btn-corner-all ui-icon-edit ui-btn-icon-left'>Manage</button></div><div class='ui-block-d'><button gid='"+gid+"'  gname='"+gname+"' class='generateavailreport ui-btn ui-mini uui-btn-corner-all ui-icon-grid ui-btn-icon-left'>Generate Availability Report</button></div><div class='ui-block-e'><button gid='"+gid+"' class='leavegroupbutton ui-btn ui-mini uui-btn-corner-all ui-icon-delete ui-btn-icon-left'>Leave</button></div></div>";
+				 var $something="<div style='border-radius: 3px; border-bottom: solid #ccc;' class='ui-grid-d' gid='"+gid+"'><div class='ui-block-a'><h1>"+gname+"</h1></div></br><div class='ui-block-b'><button gid='"+gid+"' gname='"+gname+"' class='viewgroupcalendarbutton ui-btn  ui-btn-corner-all ui-icon-calendar ui-btn-icon-notext'></button></div><div class='ui-block-c'><button gid='"+gid+"' gname='"+gname+"' class='managegroupbutton ui-btn ui-btn-corner-all ui-icon-edit ui-btn-icon-notext'></button></div><div class='ui-block-d'><button gid='"+gid+"'  gname='"+gname+"' class='generateavailreport ui-btn ui-btn-corner-all ui-icon-grid ui-btn-icon-notext'></button></div><div class='ui-block-e'><button gid='"+gid+"' class='leavegroupbutton ui-btn ui-btn-corner-all ui-icon-delete  ui-btn-icon-notext'></button></div></div>";
 				$("#viewgroups").append($something);
 				 }
 				}
@@ -233,7 +242,7 @@ $(document).on("pagecontainerloadfailed",function(event,data){
 						function(data){
 						var obj = $.parseJSON(data);
 						  alert(obj.err);
-						  $.mobile.pageContainer.pagecontainer("change","#notifications", {transition: 'flow',reloadPage: true, allowSamePageTransition: true});
+						  $.mobile.pageContainer.pagecontainer("change","#mainpage", {transition: 'flow',reloadPage: false, allowSamePageTransition: false});
 						});
 					});	
 				
@@ -250,7 +259,7 @@ $(document).on("pagecontainerloadfailed",function(event,data){
 						function(data){
 						var obj = $.parseJSON(data);
 						  alert(obj.err);
-						  $.mobile.pageContainer.pagecontainer("change","#notifications", {transition: 'flow',reloadPage: true, allowSamePageTransition: true});
+						  $.mobile.pageContainer.pagecontainer("change","#mainpage", {transition: 'flow',reloadPage: true, allowSamePageTransition: true});
 						});
 					});	
 				
@@ -262,23 +271,31 @@ $(document).on("pagecontainerloadfailed",function(event,data){
 	$(document).on("pagebeforeshow","#view-calendar",function(){
   $("#calendar").jqmCalendar({
       events : [ 
-	  { "summary" : "Test event 1", "begin" : new Date("2013-02-05 00:00:00"), "end" : new Date("2013-02-07 00:00:00") }, 
-	  { "summary" : "Test event 2", "begin" : new Date(), "end" : new Date() }, 
-	  { "summary" : "Test event 3", "begin" : new Date("2014-10-14 11:45:00"), "end" : new Date("2014-10-15 10:45:00") },
-	  { "summary" : "Test event 3", "begin" : new Date("2014-10-22 09:45:00"), "end" : new Date("2014-10-22 10:45:00") } ],
+	  { "summary" : "Test event 1",  "url" : "cid1" , "begin" : new Date("2013-02-05 00:00:00"), "end" : new Date("2013-02-07 00:00:00") }, 
+	  { "summary" : "Test event 2",  "url" : "cid2", "begin" : new Date(), "end" : new Date() }, 
+	  { "summary" : "Test event 3",  "url" : "cid3", "begin" : new Date("2014-10-14 11:45:00"), "end" : new Date("2014-10-15 10:45:00") },
+	  { "summary" : "Test event 4",  "url" : "cid4nt", "begin" : new Date("2014-10-14 9:45:00"), "end" : new Date("2014-10-15 10:15:00") },
+	  { "summary" : "Test event 5",  "url" : "cid5", "begin" : new Date("2014-10-22 09:45:00"), "end" : new Date("2014-10-22 10:45:00") } ],
       months : ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
       days : ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"],
       startOfWeek : 0
    });
+   
+   
+	
+
     });
 	
 	
 	
 	//VIEW GROUP CALENDAR
 	$(document).on("pagebeforeshow","#view-group-calendar",function(e,data){
+	
+	groupcalendar= [ new Date("2013-02-05 00:00:00") , new Date("2013-02-07 00:00:00") , new Date("2014-10-14 11:45:00"), new Date("2014-10-15 10:45:00") ];
+	 
+	
   $("#groupcalendar").jqmCalendar({
-      events : [ 
-	  { "summary" : "Test event 1", "begin" : new Date("2013-02-05 00:00:00"), "end" : new Date("2013-02-07 00:00:00") }, 
+      events : [ { "summary" : "Test event 1", "begin" : new Date("2013-02-05 00:00:00"), "end" : new Date("2013-02-07 00:00:00") }, 
 	  { "summary" : "Test event 2", "begin" : new Date(), "end" : new Date() }, 
 	  { "summary" : "Test event 3", "begin" : new Date("2014-10-14 11:45:00"), "end" : new Date("2014-10-15 10:45:00") },
 	  { "summary" : "Test event 3", "begin" : new Date("2014-10-22 09:45:00"), "end" : new Date("2014-10-22 10:45:00") } ],
@@ -303,7 +320,9 @@ $(document).on("pagecontainerloadfailed",function(event,data){
 		var starttime=$("#availrepstarttime").val();
 		var endtime=$("#availrependtime").val();
 		var gid=$("#availrepgroupid").val();
-		alert("generate an avail report for group"+ gid +" with the following parameters" + startdate +" "+ enddate+ " "+ starttime+ " "+ endtime);
+		var result=compareTimes();
+		alert(result);
+		//alert("generate an avail report for group"+ gid +"having events"+ groupcalendar + " with the following parameters" + startdate +" "+ enddate+ " "+ starttime+ " "+ endtime);
 		});
 	
 		//ADD MEMBER TO GROUP
@@ -514,8 +533,8 @@ body {
 				</div>
 
 			<!--Create Group Design -->
-			 <div data-role="main" class="ui-content" style="background:#fff; margin-top:2%;">
-				  
+			 <div data-role="main" class="ui-content" style="background:#fff;">
+				 <div class="ui-grid-a"> <div class="ui-block-a"> <h1>Create Group </h1></div></div>
 				<form id="creategroupform" method="POST" data-mini="true">
 				        <input type="text" id="creategroupname" data-mini="true" placeholder="Group Name"></input>
 						</br>
@@ -742,7 +761,7 @@ body {
 					<input type="text" Placeholder="Email" id="addmembervalue" data-mini="true"/>
 					</div>
 					<div class="ui-block-b">
-					<input type="submit" value="Add to group" data-mini="true" data-icon="plus" id="addmemberbutton" class="ui-btn ui-btn-inline"/>
+					<input type="submit" value="Add Member" data-mini="true" data-icon="plus" id="addmemberbutton" class="ui-btn ui-btn-inline"/>
 					</div>
 					<div class="ui-block-c">
 					</div>
@@ -855,7 +874,8 @@ body {
 
  
 </div> 
-
+<div id="emtpydiv">
+</div>
 
 	
 <div id="logout">

@@ -15,7 +15,6 @@
            getEventsOnDay : getEventsOnDay
          },
          // Default properties for events
-		 eventid : "id",
          begin : "begin",
          end : "end",
          summary : "summary",
@@ -49,8 +48,7 @@
           $table,
           $header,
           $tbody,
-          $listview,
-		  $button;
+          $listview;
 
       function init() {
          plugin.settings = $.extend({}, defaults, options);
@@ -85,7 +83,7 @@
          $tbody = $("<tbody/>").appendTo($table);
          
          $table.appendTo($element);
-         $listview = $("<ul data-role='listview' />").insertAfter($table);
+         $listview = $("<ul data-role='listview'/>").insertAfter($table);
          
          // Call refresh to fill the calendar with dates
          refresh(plugin.settings.date);      
@@ -250,32 +248,20 @@
                    endTime    = (( event[plugin.settings.end] < end ) ? event[plugin.settings.end] : end ).toTimeString().substr(0,5),
                    timeString = beginTime + "-" + endTime,
                    $listItem  = $("<li></li>").appendTo($listview);
-                   $(summary).appendTo($listview);
+                   
                plugin.settings.listItemFormatter( $listItem, timeString, summary, event );
             }
             $listview.trigger('create').filter(".ui-listview").listview('refresh');
          });
-      
-	  
-	    $('.deleteevent').click(function(){
-			alert("remove" + $(this).attr('cid'));
-		});
-	  
-	  });
+      });
       
       function listItemFormatter($listItem, timeString, summary, event) {
-         
-		 var text = ( ( timeString != "00:00-00:00" ) ? timeString : plugin.settings.allDayTimeString ) + " " + summary;
-		 
+         var text = ( ( timeString != "00:00-00:00" ) ? timeString : plugin.settings.allDayTimeString ) + " " + summary;
          if (event[plugin.settings.icon]) {
             $listItem.attr('data-icon', event.icon);
          }
          if (event[plugin.settings.url]) {
-            $eventattr=$('<a></a>').text( text ).attr( 'href','#deleteevent');
-			$eventattr.attr('cid',event[plugin.settings.url]);
-			$eventattr.attr('class','deleteevent ui-btn ui-icon-delete ui-btn-icon-right');
-			$eventattr.appendTo($listItem);
-			$
+            $('<a></a>').text( text ).attr( 'href', event[plugin.settings.url] ).appendTo($listItem);
          } else {
             $listItem.text( text );
          }
@@ -284,9 +270,7 @@
       
       $element.bind('refresh', function(event, date) {
          refresh(date);
-      
-	
-	  });
+      });
 
       init();
    };

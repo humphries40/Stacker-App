@@ -33,11 +33,18 @@ C:\test2\platforms\android\assets\www\cordova.js \
 C:\test2\platforms\android\assets\www\cordova_plugins.js \
 C:\test2\platforms\android\assets\www\css \
 C:\test2\platforms\android\assets\www\img \
+C:\test2\platforms\android\assets\www\index - Copy.html \
 C:\test2\platforms\android\assets\www\index.html \
 C:\test2\platforms\android\assets\www\js \
+C:\test2\platforms\android\assets\www\css\images \
 C:\test2\platforms\android\assets\www\css\index.css \
+C:\test2\platforms\android\assets\www\css\jquery.mobile-1.4.4.min.css \
+C:\test2\platforms\android\assets\www\css\jw-jqm-cal.css \
+C:\test2\platforms\android\assets\www\css\jw-jqm-cal.ios7.css \
+C:\test2\platforms\android\assets\www\css\images\ajax-loader.gif \
 C:\test2\platforms\android\assets\www\img\logo.png \
 C:\test2\platforms\android\assets\www\js\index.js \
 C:\test2\platforms\android\assets\www\js\jquery-1.11.1.min.js \
 C:\test2\platforms\android\assets\www\js\jquery.mobile-1.4.4.min.js \
+C:\test2\platforms\android\assets\www\js\jw-jqm-cal.js \
 C:\test2\platforms\android\ant-build\AndroidManifest.xml \
