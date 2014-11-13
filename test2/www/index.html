@@ -53,7 +53,7 @@ $( document ).ajaxError(function() {
 
 $(document).ready(function(){
 
-var user = {name:"",status:"",session:"",uid:""};
+var user = {name:"",status:"",session:"",uid:"",email:""};
 var group ={gid:"",gname:""};
 var groupcalendar;
 $(document).on("pagecontainerloadfailed",function(event,data){
@@ -122,7 +122,11 @@ $(document).on("pagecontainerloadfailed",function(event,data){
 	    $.mobile.pageContainer.pagecontainer("change","#login", {transition: 'flow',reloadPage: false});
 	}); 
 	
-
+	
+	//Add Google Calendar
+	$("#addgooglecalendar").click(function () {
+	window.open("http://server8.ies.cse.ohio-state.edu/stacker/google/auth.php?email="+user.email, '_system');
+	});
 	
 	  
 	//Create Group
@@ -309,7 +313,7 @@ $(document).on("pagecontainerloadfailed",function(event,data){
 	//GENERATE AVAILABILITY REPORT FORM
 	$(document).on("pagebeforeshow","#generateavailreportform",function(){
 	   $("#generateavailreportheader").empty();
-	   $("#generateavailreportheader").append("<h1>"+group.gname.toUpperCase()+" Availability Report"+"</h1>");
+	   $("#generateavailreportheader").append(group.gname.toUpperCase()+" Availability Report");
 	   $("#availrepgroupid").val(group.gid);
     });
 	
@@ -438,7 +442,7 @@ body {
 				 
 				  <form id="loginform" method="POST">
 						   <input type="text" id="email" data-mini="true" placeholder="Username"></input>
-						   <input type="password" id="password" data-mini="true" placeholder="Password"></input>
+						     <input type="password" id="password" data-mini="true" placeholder="Password"></input>
 						<input type="submit" id="submitlogin" value="submit" data-theme="b"/>
 						
 				  </form>
@@ -559,7 +563,7 @@ body {
 <!-- GENERATE AVAILABILITY REPORT FORM -->
 <div data-role="page" id="generateavailreportform">
 			
-			    <div data-role="header" data-theme="b">
+			    <div data-role="header" data-theme="b" data-position="fixed">
 					<div data-role="navbar" id="mainnavbar" data-theme="a">
 					<ul>
 					  <li><a href="#mygroups"  data-icon="back">Back</a></li>
@@ -575,10 +579,10 @@ body {
 			 <div id="generateavailreportheader"></div>
 				<form id="generateavailreportform" data-mini="true">
 						<input type="hidden" id="availrepgroupid"></input>	
-						<h3>Meeting Start Date:</h3><input type="date" id="availrepstartdate" data-mini="true" value="2013-01-01"></input>
-						<h3>Meeting Start Time:</h3><input type="time" id="availrepstarttime" data-mini="true" ></input>
-						<h3>Meeting End Date:</h3><input type="date" id="availrependdate" data-mini="true" value="2016-01-01"></input>
-					    <h3>Meeting End Time:</h3><input type="time" id="availrependtime" data-mini="true" ></input>
+						<h5>Meeting Start Date:</h5><input type="date" id="availrepstartdate" data-mini="true" value="2013-01-01"></input>
+						<h5>Meeting Start Time:</h5><input type="time" id="availrepstarttime" data-mini="true" ></input>
+						<h5>Meeting End Date:</h5><input type="date" id="availrependdate" data-mini="true" value="2016-01-01"></input>
+					    <h5>Meeting End Time:</h5><input type="time" id="availrependtime" data-mini="true" ></input>
 						<input type="submit" id="generateavailreportbutton" data-mini="true" value="Generate Report"></input>						
 				 </form>
 			  </div>
