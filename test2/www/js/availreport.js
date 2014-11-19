@@ -46,21 +46,19 @@ function findOpen(events, filters) {
 	var curTime = new Date(filters[0].valueOf());
 	var startFreeTime = new Date(filters[0].valueOf());
 	//While events isn't empty or past our filter values we want to keep iterating
-	while(count < events.length) {
-		if(compareDay(filters[0], events[count]) < 1 && compareDay(filters[1], events[count]) > -1) {
-			while(compareDay(curTime, events[count]) < 0 ) {
-				curTime = new Date(incrementTime(curTime));
-			}			
+	while(count < events.length && compareDay(curTime < filters[1]) {
+		if( compareDay(curTime, events[count]) < 1)
+		{
 			//push event to freeTime1
 			freeTime.push(new Date(startFreeTime));
 			//push end of free Time to array
-			freeTime.push(new Date(curTime));
+			freeTime.push(new Date(events[count]));
 			//then increment curTime to end of event
-			if(count+1 < events.length)
-			{
+		{
+		if(count+1 < events.length)
+		{
 				curTime = new Date(events[count+1]);
 				startFreeTime = new Date(curTime.getTime());
-			}
 		}
 		count += 2;
 	}
@@ -122,12 +120,11 @@ function findOpen(events, filters) {
 			new Date(2014, 7, 8, 13, 0),
 			new Date(2014, 7, 8, 19, 0));
 		*/
-		int calCount = 0;
-		var openTimes = []
+		var calCount = 0;
+		var openTimes = [];
 		while(calCount < arrOfCalendarEvents.length)
 		{
 			openTimes.push(findOpen(arrOfCalendarEvents[calCount], filters));
-			}
 			calCount++;
 		}
 		/*var openTimes = new Array (
