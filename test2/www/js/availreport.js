@@ -87,11 +87,14 @@ function findOpen(events, filters) {
 //Entry 2 is the end of the time to search through
 //other elements may be added later
 //arrOfCalendarEvents : This is an array of arrays. The arrays are arrays of date events that correspond to the even numbers being the 
-//start of an event and the odds being the end of an event.
+//start of an event and the odds being the end of an event. 
 	function compareCalendars(filters, arrOfCalendarEvents) {
 		/*var filters = new Array(
 			new Date(2014, 7, 7, 0, 0),
-			new Date(2014, 7, 8, 23, 59));
+			new Date(2014, 7, 8, 23, 59),
+			8,
+			20,
+			60);
 		var person1Events = new Array(
 			new Date(2014, 7, 7, 13, 0),
 			new Date(2014, 7, 7, 14, 0),
@@ -124,7 +127,12 @@ function findOpen(events, filters) {
 			new Date(2014, 7, 7, 18, 0),
 			new Date(2014, 7, 8, 13, 0),
 			new Date(2014, 7, 8, 19, 0));
-		*/
+		
+		arrOfCalendarEvents = new Array(
+			person1Events,
+			person2Events,
+			person3Events);
+			*/
 		var calCount = 0;
 		var openTimes = []
 		while(calCount < arrOfCalendarEvents.length)
@@ -145,16 +153,34 @@ function findOpen(events, filters) {
 		var endMeetingTime = new Date(curTime.valueOf());
 		var allCouldMeet = false;
 		var quitLoop = 0;
+		var duration = 0;
 		while(compareDay(curTime, filters[1]) < 1) {
 			var canMeet = true;
 			var count = 0;
 			var curEventCount = 0;
+			//This sets the current time to be within the meeting range
+			if(curTime.getHours() < filters[2])
+			{
+				curTime.setHours(filters[2]);
+			//	console.log("Current Time, filter 2 ="+ curTime);
+			}
+			if(curTime.getHours() >= filters[3])
+			{
+				//increments the time to the lower end of the filters and adds 24 hours so it's the next day. 
+				curTime.setHours(filters[2] + 24);
+			//	console.log("Current Time, filter 3 ="+ curTime);
+			}
+			if(compareDay(curTime, filters[1]) == 1)
+			{
+				break;
+			}
 			startMeetingTime = new Date(curTime.valueOf());
+			duration = 0;
 			while(canMeet && openTimes.length > count)
 			{
 				curEventCount = 0;
 				//This while loop increments us to the current free time block in the current calendar.
-				// If the current free time blocks ending is before the current time then we want to increment to the next block. 
+				// If the current free time blocks end is before the current time then we want to increment to the next block. 
 				while(curEventCount < openTimes[count].length){
 				  if(compareDay(curTime, openTimes[count][curEventCount+1]) > 0){
 					    curEventCount += 2;
@@ -174,6 +200,7 @@ function findOpen(events, filters) {
 					  if(compareDay(startMeetingTime, endMeetingTime) !== 0){
 						meetingTimes.push(new Date(startMeetingTime.valueOf()));
 						meetingTimes.push(new Date(endMeetingTime.valueOf()));
+						duration = 0;
 					  }
 					allCouldMeet = false;
 					}
@@ -186,6 +213,7 @@ function findOpen(events, filters) {
 					  if(compareDay(startMeetingTime, endMeetingTime) !== 0){
 						meetingTimes.push(new Date(startMeetingTime.valueOf()));
 						meetingTimes.push(new Date(endMeetingTime.valueOf()));
+						duration = 0;
 					  }
 					allCouldMeet = false;
 					}
@@ -199,19 +227,48 @@ function findOpen(events, filters) {
 					count = 0;
 					allCouldMeet = true;
 					endMeetingTime = new Date(curTime.valueOf());
-					curTime = new Date(incrementTime(curTime));
-					if(compareDay(curTime, filters[1]) >0)
-					 {if(compareDay(startMeetingTime, endMeetingTime) !== 0){
+					duration++;
+					if(duration > filters[4]){
+						//console.log("Duration Meeting");
 						meetingTimes.push(new Date(startMeetingTime.valueOf()));
 						meetingTimes.push(new Date(endMeetingTime.valueOf()));
-					  }
-					  allCouldMeet = false;
-					  canMeet = false;
+						allCouldMeet = false;
+						canMeet = false;
+						duration = 0;
 					}
+					else if(curTime.getHours() == filters[3])	{
+						//console.log("Outside Limit Meeting");
+						meetingTimes.push(new Date(startMeetingTime.valueOf()));
+						meetingTimes.push(new Date(endMeetingTime.valueOf()));
+						allCouldMeet = false;
+						canMeet = false;
+						duration = 0;
+						if(curTime.getHours() >= filters[3])
+						{
+							//increments the time to the lower end of the filters and adds 24 hours so it's the next day. 
+							curTime.setHours(filters[2] + 24);
+						}
+						
+					}
+					else {
+						curTime = new Date(incrementTime(curTime));
+						if(compareDay(curTime, filters[1]) >0)
+							{if(compareDay(startMeetingTime, endMeetingTime) !== 0){
+								//console.log("Normal Meeting");
+								meetingTimes.push(new Date(startMeetingTime.valueOf()));
+								meetingTimes.push(new Date(endMeetingTime.valueOf()));
+							}
+						allCouldMeet = false;
+						canMeet = false;
+						duration = 0;
+						}
+					}
+					
 				}
 							
 			}
-			curTime = new Date(incrementTime(curTime));			 
+			curTime = new Date(incrementTime(curTime));	
+			
 		}
 		return meetingTimes;	
 }
