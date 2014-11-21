@@ -1,7 +1,0 @@
-#
-# Doing a GET on an entire collection that we
-# just added with a PUT.
-#
-TYPE=GET
-URL=http://regression.host/caldav.php/user1/anotherone/
-HEAD

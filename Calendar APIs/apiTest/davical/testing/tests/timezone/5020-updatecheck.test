@@ -1,5 +1,0 @@
-#
-# Request the timezone server update itself
-#
-SCRIPT=../scripts/tz-update.php regression.host ../zonedb/vtimezones
-

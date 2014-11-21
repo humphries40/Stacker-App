@@ -1,6 +1,0 @@
-#
-# So we should now make a calendar that we will use for some
-# testing.
-TYPE=MKCALENDAR
-URL=http://regression.host/caldav.php/user1/home/
-HEAD
