@@ -346,7 +346,7 @@ $(document).ready(function(){
 	});	
 	
 	//LOGOUT
-	$(document).on("	pagebeforeshow","#logout",function(){
+	$(document).on("pagebeforeshow","#logout",function(){
 		alert(user.session);
 		user.name=null;
 		user.uid=null;
