@@ -502,17 +502,22 @@ $(document).ready(function () {
                 var i = 0;
                 var j = 0;
                 var length = obj.length
-                for (index = 0; index < length; index = index + 4) {
+                for (index = obj.length-1; index > 0; index = index - 4) {
                     // index -> uid
                     // index + 1 -> starttime
                     // index + 2 -> endtime
-                    gcalendar.push(new Date(obj[index + 1].replace(/-/g, "/")));
-                    gcalendar.push(new Date(obj[index + 2].replace(/-/g, "/")));
+					// 
+					console.log(obj[index-2]);
+					console.log(obj[index-1]);
+                    gcalendar.push(new Date(obj[index - 2].replace(/-/g, "/")));
+                    gcalendar.push(new Date(obj[index - 1].replace(/-/g, "/")));
                 }
             },
             async: false
         });
-		gcalendar.sort();
+		console.log(gcalendar);
+		console.log("Unsorted");
+		//gcalendar.sort();
         var finalcal = new Array(gcalendar, []);
 		console.log(finalcal);
         var result = compareCalendars(filters, finalcal);
