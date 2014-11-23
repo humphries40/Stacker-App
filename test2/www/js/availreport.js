@@ -136,7 +136,7 @@ function findOpen(events, filters) {
 		var calCount = 0;
 		var openTimes = []
 		while(calCount < arrOfCalendarEvents.length)
-		{
+		{   
 			openTimes.push(findOpen(arrOfCalendarEvents[calCount], filters));
 			calCount++;
 		}
