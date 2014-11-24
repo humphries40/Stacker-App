@@ -467,6 +467,7 @@ $(document).ready(function () {
         var enddate = $("#availrependdate").val();
         var starttime = $("#availrepstarttime").val();
         var endtime = $("#availrependtime").val();
+		var duration = $("#availrepduration").val();
         /**
 			1st = start date
 			2nd = end date
@@ -486,6 +487,8 @@ $(document).ready(function () {
         if (isNaN(filter4)) {
             filter4 = 20;
         }
+		filter5 = parseInt(duration);
+		
         var filters = new Array(filter1, filter2, filter3, filter4, filter5);
         console.log(filters);
         var gcalendar = new Array();
@@ -494,7 +497,8 @@ $(document).ready(function () {
             type: 'POST',
             url: 'http://server8.ies.cse.ohio-state.edu/stacker/retrieve_group_calendars.php',
             data: {
-                gid: gid
+                gid: gid,
+
             },
             success: function (data) {
                 var obj = $.parseJSON(data);
@@ -507,8 +511,8 @@ $(document).ready(function () {
                     // index + 1 -> starttime
                     // index + 2 -> endtime
 					// 
-					console.log(obj[index-2]);
-					console.log(obj[index-1]);
+					//console.log(obj[index-2]);
+					//console.log(obj[index-1]);
                     gcalendar.push(new Date(obj[index - 2].replace(/-/g, "/")));
                     gcalendar.push(new Date(obj[index - 1].replace(/-/g, "/")));
                 }
@@ -542,7 +546,51 @@ $(document).ready(function () {
         //alert("generate an avail report for group"+ gid +"having events"+ groupcalendar + " with the following parameters" + startdate +" "+ enddate+ " "+ starttime+ " "+ endtime);
     });
 	
+	 // VIEW AVAILABILITY REPORT
+    $(document).on("pagebeforeshow", "#availreportresult", function () {
+	  $(availreportresultcontainer).empty();
+	  
+	 if(availreport.length==0) {
+	    alert("no meeting times available");
+	  }
+	  var something =$(" <table data-role='table' data-mode='columntoggle' class='ui-responsive' id='availreporttable'> <thead> <tr> <th>Start Time</th> <th>End Time</th> <th></th> </tr> </thead> <tbody>");
+	  for(index=0;index<availreport.length;index++) {
+	   something2 = $("<tr><td>" + new Date(availreport[index]).toDateString() +" "+ new Date(availreport[index]).toLocaleTimeString() + "</td><td>" + new Date(availreport[index+1]).toDateString() +" " + new Date(availreport[index+1]).toLocaleTimeString() +"</td><td>"+"<input data-role='button' type='button' class='createmeeting' value='Create' starttime='"+ new Date(availreport[index])  +"' endtime='"+ new Date(availreport[index+1])  +"'>" +"</td></tr>");
+	  $(something).append(something2);
+	   something3 = $("</tr></tbody> </table>");
+	  $(something).append(something3);
+	  something.table();
+	  $(".createmeeting").button().button("refresh");
+	  $("#availreportresultcontainer").append(something);
+	  }
+    
+	//CREATE MEETING
+	 $(".createmeeting").click(function () {
+        var st = new Date($(this).attr("starttime"));
+		var et = new Date($(this).attr("endtime"));
+		var gid = group.gid;
+		var meeting_notes =group.gname + " meeting:  " + st + " To " + et;  
+		alert(meeting_notes);
+		 $.post("http://server8.ies.cse.ohio-state.edu/stacker/add_meeting.php", {
+            gid: gid,
+            start_time: st,
+            end_time: et,
+			notes: meeting_notes
+        },
+
+        function (data) {
+            var obj = $.parseJSON(data);
+            console.log(obj);
+			//alert(obj);
+            $.mobile.pageContainer.pagecontainer("change", "#mainpage", {
+                transition: 'flow',
+                reloadPage: false
+            });
+        });
 	
+	});
+	
+	});
 	
     //ADD MEMBER TO GROUP
     $("#addmemberbutton").click(function () {
@@ -623,7 +671,16 @@ body {
     background: transparent;
 }
 
-
+/* Add alternating row stripes */
+.createmeeting tbody tr:nth-child(odd) td,
+.createmeeting tbody tr:nth-child(odd) th {
+  background-color: rgba(0,0,0,0.04);
+}
+/* Add stroke to the header and last item */
+.createmeeting thead th,
+.createmeeting tbody tr:last-child {
+  border-bottom: 1px solid rgba(0, 0, 0, .1);
+}
 </style>
 </head>
 <body>
@@ -799,6 +856,7 @@ body {
 						<h5>Meeting Start Time:</h5><input type="time" id="availrepstarttime" data-mini="true" ></input>
 						<h5>Meeting End Date:</h5><input type="date" id="availrependdate" data-mini="true" value="2016-01-01"></input>
 					    <h5>Meeting End Time:</h5><input type="time" id="availrependtime" data-mini="true" ></input>
+						<h5>Duration:</h5><input type="number" id="availrepduration" data-mini="true" placeholder="min"></input>
 						<input type="submit" id="generateavailreportbutton" data-mini="true" value="Generate Report"></input>						
 				 </form>
 			  </div>

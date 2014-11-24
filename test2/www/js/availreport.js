@@ -228,7 +228,7 @@ function findOpen(events, filters) {
 					allCouldMeet = true;
 					endMeetingTime = new Date(curTime.valueOf());
 					duration++;
-					if(duration > filters[4]-1){
+					if(duration > filters[4]){
 						//console.log("Duration Meeting");
 						meetingTimes.push(new Date(startMeetingTime.valueOf()));
 						meetingTimes.push(new Date(endMeetingTime.valueOf()));
