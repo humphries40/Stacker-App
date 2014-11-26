@@ -21,7 +21,6 @@ Improve::
 <script type="text/javascript" src="js/jw-jqm-cal.js"></script>
 <script type="text/javascript" src="js/availreport.js"></script>
 <script>
-
 function init() {
     document.addEventListener("deviceready", deviceReady, true);
     delete init;
@@ -41,16 +40,16 @@ $(document).ajaxError(function () {
 
 $(document).ready(function () {
 
-function twoDigits(d) {
-    if(0 <= d && d < 10) return "0" + d.toString();
-    if(-10 < d && d < 0) return "-0" + (-1*d).toString();
-    return d.toString();
-}
+    function twoDigits(d) {
+        if (0 <= d && d < 10) return "0" + d.toString();
+        if (-10 < d && d < 0) return "-0" + (-1 * d).toString();
+        return d.toString();
+    }
 
-// To Convert JavaScript Date Object to Mysql format
-Date.prototype.toMysqlFormat = function() {
-    return this.getFullYear() + "-" + twoDigits(1 + this.getMonth()) + "-" + twoDigits(this.getDate()) + " " + twoDigits(this.getHours()) + ":" + twoDigits(this.getMinutes()) + ":" + twoDigits(this.getSeconds());
-};
+    // To Convert JavaScript Date Object to Mysql format
+    Date.prototype.toMysqlFormat = function () {
+        return this.getFullYear() + "-" + twoDigits(1 + this.getMonth()) + "-" + twoDigits(this.getDate()) + " " + twoDigits(this.getHours()) + ":" + twoDigits(this.getMinutes()) + ":" + twoDigits(this.getSeconds());
+    };
 
     var user = {
         name: "",
@@ -65,10 +64,10 @@ Date.prototype.toMysqlFormat = function() {
     };
     var personalcalendar = [];
     var availreport = [];
-	$(document).on("pagecontainerloadfailed", function (event, data) {
+    $(document).on("pagecontainerloadfailed", function (event, data) {
         //If some page fails to load
     });
-	
+
 
     //Login
     $("#submitlogin").click(function (event, data) {
@@ -256,21 +255,78 @@ Date.prototype.toMysqlFormat = function() {
             });
         });
     });
-	
-	
-	//Manage group - TODO
-	$(document).on("pagebeforeshow","#managegroups",function(){   
-		$.post("http://server8.ies.cse.ohio-state.edu/stacker/view_group_members.php", {
-			session:user.session,
-			uid:user.uid
-		}, function(data) {
-			var obj = $.parseJSON(data);
-			$("#groupmembers").empty();
-			for(index=0;index<obj.length;index++) {
-			
+
+
+    //Manage group
+    $(document).on("pagebeforeshow", "#managegroups", function () {
+        $.post("http://server8.ies.cse.ohio-state.edu/stacker/view_mem.php", {
+            session: user.session,
+            gid: group.gid
+        }, function (data) {
+            var obj = $.parseJSON(data);
+			var something;
+            $("#groupmembers").empty();
+			//users.uid,  users.name , users.email, users.status,group_info.level
+            for (index = 0; index < obj.length; index=index + 5) {
+			if(obj[index+4]==2) {
+			something = "<div class='ui-grid-b' style='border-bottom:3px #ccc;' class='memberswrapper'> <div class='ui-block-a'>" + obj[index+1] +" - "+ obj[index+3]+"</div> <div class='ui-block-b'> <button  usemail="+obj[index+2]+" class='removememberbutton ui-btn ui-btn-inline ui-btn-mini ui-btn-icon-notext ui-icon-forbidden ui-btn-corner-all'/> <button usemail="+obj[index+2]+" class='addcoleaderbutton ui-btn ui-btn-inline ui-btn-mini ui-btn-icon-notext ui-icon-user ui-btn-corner-all'/></div></div><br>";
+			$("#groupmembers").append(something);
+			} else {
+			if(obj[index]==user.uid) {
 			}
+			else {
+			something = "<div class='ui-grid-b' style='border-bottom:3px #ccc;' class='memberswrapper'> <div class='ui-block-a'>" + obj[index+1] +" - "+ obj[index+3]+"</div> <div class='ui-block-b'> <button usemail="+obj[index+2]+" class='removememberbutton ui-btn ui-btn-inline ui-btn-mini ui-btn-icon-notext ui-icon-forbidden ui-btn-corner-all'/> </div></div><br>";
+			$("#groupmembers").append(something);
+			}
+			}
+            }
+        
+			//REMOVE MEMBER FROM GROUP
+			$(".removememberbutton").click(function () { 
+				$.post("http://server8.ies.cse.ohio-state.edu/stacker/delete_member.php", {
+					email: $(this).attr("usemail"),
+					gid: group.gid
+				},
+
+				function (data) {
+					var obj = $.parseJSON(data);
+					alert(obj.err);
+					$.mobile.pageContainer.pagecontainer("change", "#refreshmanagegroups", {
+                        transition: 'none',
+                        reloadPage: false
+                    });
+				});
+			});
+
+			//ADD CO-LEADER
+			$(".addcoleaderbutton").click(function () {
+			alert('setcoleader ' +$(this).attr("usemail")) ;
+				$.post("http://server8.ies.cse.ohio-state.edu/stacker/set_coleader.php", {
+					email: $(this).attr("usemail"),
+					gid: group.gid
+				},
+
+				function (data) {
+					var obj = $.parseJSON(data);
+					alert(obj.err);
+					$.mobile.pageContainer.pagecontainer("change", "#refreshmanagegroups", {
+                        transition: 'none',
+                        reloadPage: false
+                    });
+				});
+			});
+		
+		
 		});
-	});
+    });
+	// REFRESH MANAGE GROUPS
+    $(document).on("pagebeforeshow", "#refreshmanagegroups", function () {
+        $.mobile.pageContainer.pagecontainer("change", "#managegroups", {
+            transition: 'none',
+            reloadPage: false
+        });
+    });
+	
     // REFRESH GROUPS
     $(document).on("pagebeforeshow", "#refreshgroups", function () {
         $.mobile.pageContainer.pagecontainer("change", "#mygroups", {
@@ -281,7 +337,7 @@ Date.prototype.toMysqlFormat = function() {
 
     //NOTIFICATIONS
     $(document).on("pagebeforeshow", "#notifications", function () {
-	var numnotifi=1;
+        var numnotifi = 1;
         $.post("http://server8.ies.cse.ohio-state.edu/stacker/group_requests.php", {
             session: user.session,
             uid: user.uid
@@ -289,7 +345,7 @@ Date.prototype.toMysqlFormat = function() {
             var obj = $.parseJSON(data);
             $("#groupnotifications").empty();
             if (obj.length == 0) {
-                numnotifi=2;
+                numnotifi = 2;
             }
             for (index = 0; index < obj.length; index = index + 2) {
                 var gid = obj[index];
@@ -297,7 +353,7 @@ Date.prototype.toMysqlFormat = function() {
                 var $something = " <div class='ui-grid-b' > <div class='ui-block-a' style='text-align:center'> <h4> Join Group: " + gname + "</h4> </div> <div  class='ui-block-b'> <button class='acceptgroupinvitebutton ui-btn ui-btn-inline ui-mini ui-btn-corner-all ui-icon-check ui-btn-icon-right' groupname='" + gname + "' gid='" + gid + "'>Accept</button> </div> <div class='ui-block-c'> <button class='declinegroupinvitebutton ui-btn ui-btn-inline ui-mini ui-btn-corner-all ui-icon-delete ui-btn-icon-right' groupname='" + gname + "'gid='" + gid + "'>Decline</button> </div></div>";
                 $("#groupnotifications").append($something);
             }
-			
+
             //ACCEPT GROUP INVITATION
             $(".acceptgroupinvitebutton").click(function () {
                 var gid = $(this).attr("gid");
@@ -338,40 +394,40 @@ Date.prototype.toMysqlFormat = function() {
                 });
             });
 
-        
-		
-		
-		});
-		
 
-		 $.post("http://server8.ies.cse.ohio-state.edu/stacker/meeting_requests.php", {
+
+
+        });
+
+
+        $.post("http://server8.ies.cse.ohio-state.edu/stacker/meeting_requests.php", {
             uid: user.uid,
         },
 
         function (data) {
-           var obj = $.parseJSON(data);
-            
+            var obj = $.parseJSON(data);
+
             if (obj.length == 0) {
-                if(numnotifi==2) {
-				alert("no new notifications");
-				}
+                if (numnotifi == 2) {
+                    alert("no new notifications");
+                }
             }
             for (index = 0; index < obj.length; index = index + 4) {
                 var mid = obj[index];
                 var mname = obj[index + 1];
-				var st = obj[index + 2];
-				st = new Date(st).toLocaleDateString() +" "+ new Date(st).toLocaleTimeString();
-				var et = obj[index + 3];
-				et = new Date(et).toLocaleDateString() +" "+ new Date(et).toLocaleTimeString();
-				mname = mname +": "+ st +" to "+ et;
+                var st = obj[index + 2];
+                st = new Date(st).toLocaleDateString() + " " + new Date(st).toLocaleTimeString();
+                var et = obj[index + 3];
+                et = new Date(et).toLocaleDateString() + " " + new Date(et).toLocaleTimeString();
+                mname = mname + ": " + st + " to " + et;
                 var $something = " <div class='ui-grid-b' > <div class='ui-block-a' style='text-align:center'> <h4>" + mname + "</h4> </div> <div  class='ui-block-b'> <button class='acceptmeetingbutton ui-btn ui-btn-inline ui-mini ui-btn-corner-all ui-icon-check ui-btn-icon-right' mname='" + mname + "' mid='" + mid + "'>Accept</button> </div> <div class='ui-block-c'> <button class='declinemeetingbutton ui-btn ui-btn-inline ui-mini ui-btn-corner-all ui-icon-delete ui-btn-icon-right' mname='" + mname + "'mid='" + mid + "'>Decline</button> </div></div>";
                 $("#groupnotifications").append($something);
             }
-		   
-		     //ACCEPT MEETING
+
+            //ACCEPT MEETING
             $(".acceptmeetingbutton").click(function () {
                 var mid = $(this).attr("mid");
-				$.post("http://server8.ies.cse.ohio-state.edu/stacker/meeting_request_response.php", {
+                $.post("http://server8.ies.cse.ohio-state.edu/stacker/meeting_request_response.php", {
                     session: user.session,
                     uid: user.uid,
                     mid: mid,
@@ -387,11 +443,11 @@ Date.prototype.toMysqlFormat = function() {
                     });
                 });
             });
-			
-			 //DECLINE MEETING
+
+            //DECLINE MEETING
             $(".declinemeetingbutton").click(function () {
                 var mid = $(this).attr("mid");
-				$.post("http://server8.ies.cse.ohio-state.edu/stacker/meeting_request_response.php", {
+                $.post("http://server8.ies.cse.ohio-state.edu/stacker/meeting_request_response.php", {
                     session: user.session,
                     uid: user.uid,
                     mid: mid,
@@ -407,12 +463,12 @@ Date.prototype.toMysqlFormat = function() {
                     });
                 });
             });
-		});
-		
-		
+        });
+
+
     });
-	
-	
+
+
 
     // REFRESH NOTIFICATIONS
     $(document).on("pagebeforeshow", "#refreshnotifications", function () {
@@ -442,9 +498,9 @@ Date.prototype.toMysqlFormat = function() {
                 for (index = 0; index < length; index = index + 4) {
                     personalcalendar.push({
                         "summary": obj[index + 3].replace(/[!"#$%&'()*+,.\/:;<=>?@[\\\]^`{|}~]/g, " "),
-                        "url": obj[index],
-                        "begin": new Date(new Date(obj[index + 1]).toUTCString()),
-                        "end": new Date(new Date(obj[index + 2]).toUTCString())
+                            "url": obj[index],
+                            "begin": new Date(new Date(obj[index + 1]).toUTCString()),
+                            "end": new Date(new Date(obj[index + 2]).toUTCString())
                     });
                 }
             },
@@ -494,8 +550,8 @@ Date.prototype.toMysqlFormat = function() {
             for (index = 0; index < length; index = index + 4) {
                 groupcalendartable.push({
                     "summary": obj[index + 3],
-                    "begin": new Date(obj[index + 1]),
-                    "end": new Date(obj[index + 2])
+                        "begin": new Date(obj[index + 1]),
+                        "end": new Date(obj[index + 2])
                 });
             }
         });
@@ -549,13 +605,14 @@ Date.prototype.toMysqlFormat = function() {
 
     //GENERATE AVAILABILITY BUTTON SUBMIT
     $("#generateavailreportbutton").click(function () {
+		$.mobile.loading('show');
         var filter5 = 60;
         var gid = $("#availrepgroupid").val();
         var startdate = $("#availrepstartdate").val();
         var enddate = $("#availrependdate").val();
         var starttime = $("#availrepstarttime").val();
         var endtime = $("#availrependtime").val();
-		var duration = $("#availrepduration").val();
+        var duration = $("#availrepduration").val();
         /**
 			1st = start date
 			2nd = end date
@@ -575,8 +632,8 @@ Date.prototype.toMysqlFormat = function() {
         if (isNaN(filter4)) {
             filter4 = 20;
         }
-		filter5 = parseInt(duration);
-		
+        filter5 = parseInt(duration);
+
         var filters = new Array(filter1, filter2, filter3, filter4, filter5);
         console.log(filters);
         var gcalendar = new Array();
@@ -594,93 +651,86 @@ Date.prototype.toMysqlFormat = function() {
                 var i = 0;
                 var j = 0;
                 var length = obj.length
-                for (index = obj.length-1; index > 0; index = index - 4) {
+                for (index = obj.length - 1; index > 0; index = index - 4) {
                     // index -> uid
                     // index + 1 -> starttime
                     // index + 2 -> endtime
-					// 
-					//console.log(obj[index-2]);
-					//console.log(obj[index-1]);
+                    // 
+                    //console.log(obj[index-2]);
+                    //console.log(obj[index-1]);
                     gcalendar.push(new Date(obj[index - 2].replace(/-/g, "/")));
                     gcalendar.push(new Date(obj[index - 1].replace(/-/g, "/")));
                 }
             },
             async: false
         });
-		console.log(gcalendar);
-		console.log("Unsorted");
-		//gcalendar.sort();
+        console.log(gcalendar);
+        console.log("Unsorted");
+        //gcalendar.sort();
         var finalcal = new Array(gcalendar, []);
-		console.log(finalcal);
+        console.log(finalcal);
         var result = compareCalendars(filters, finalcal);
-		if(result.length==0) {
-			alert('Sorry, There is no available meeting time for these filters, please try again');
-			 $.mobile.pageContainer.pagecontainer("change", "#generateavailreportform", {
+        if (result.length == 0) {
+            alert('Sorry, There is no available meeting time for these filters, please try again');
+            $.mobile.pageContainer.pagecontainer("change", "#generateavailreportform", {
                 transition: 'flow',
                 reloadPage: false
             });
-		}
-		else {
-		availreport = [];
-		availreport = result;
-		console.log(result);
-		 $.mobile.pageContainer.pagecontainer("change", "#availreportresult", {
+        } else {
+            availreport = [];
+            availreport = result;
+            console.log(result);
+            $.mobile.pageContainer.pagecontainer("change", "#availreportresult", {
                 transition: 'flow',
                 reloadPage: false
             });
-		}
-        
-        //alert(result);
-        //alert("generate an avail report for group"+ gid +"having events"+ groupcalendar + " with the following parameters" + startdate +" "+ enddate+ " "+ starttime+ " "+ endtime);
+        }
     });
-	
-	 // VIEW AVAILABILITY REPORT
-    $(document).on("pagebeforeshow", "#availreportresult", function () {
-	  $(availreportresultcontainer).empty();
-	  
-	 if(availreport.length==0) {
-	    alert("no meeting times available");
-	  }
-	  var something =$(" <table data-role='table' data-mode='columntoggle' class='ui-responsive' id='availreporttable'> <thead> <tr> <th>Start Time</th> <th>End Time</th> <th></th> </tr> </thead> <tbody>");
-	  for(index=0;index<availreport.length;index++) {
-	   something2 = $("<tr><td>" + new Date(availreport[index]).toDateString() +" "+ new Date(availreport[index]).toLocaleTimeString() + "</td><td>" + new Date(availreport[index+1]).toDateString() +" " + new Date(availreport[index+1]).toLocaleTimeString() +"</td><td>"+"<input data-role='button' type='button' class='createmeeting' value='Create' starttime='"+ new Date(availreport[index])  +"' endtime='"+ new Date(availreport[index+1])  +"'>" +"</td></tr>");
-	  $(something).append(something2);
-	   something3 = $("</tr></tbody> </table>");
-	  $(something).append(something3);
-	  something.table();
-	  $(".createmeeting").button().button("refresh");
-	  $("#availreportresultcontainer").append(something);
-	  }
-    
-	//CREATE MEETING
-	 $(".createmeeting").click(function () {
-        var st = new Date($(this).attr("starttime")).toMysqlFormat();
-		var et = new Date($(this).attr("endtime")).toMysqlFormat();
-		var gid = group.gid;
-		alert(st);
-		var meeting_notes =group.gname + " meeting ";  
-		alert(meeting_notes);
-		 $.post("http://server8.ies.cse.ohio-state.edu/stacker/add_meeting.php", {
-            gid: gid,
-            start_time: st,
-            end_time: et,
-			notes: meeting_notes
-        },
 
-        function (data) {
-            var obj = $.parseJSON(data);
-            console.log(obj);
-			//alert(obj);
-            $.mobile.pageContainer.pagecontainer("change", "#mainpage", {
-                transition: 'flow',
-                reloadPage: false
+    // VIEW AVAILABILITY REPORT
+    $(document).on("pagebeforeshow", "#availreportresult", function () {
+        $(availreportresultcontainer).empty();
+        if (availreport.length == 0) {
+            alert("no meeting times available");
+        }
+        var something = $(" <table data-role='table' data-mode='columntoggle' class='ui-responsive' id='availreporttable'> <thead> <tr> <th>Start Time</th> <th>End Time</th> <th></th> </tr> </thead> <tbody>");
+        for (index = 0; index < availreport.length; index++) {
+            something2 = $("<tr><td>" + new Date(availreport[index]).toDateString() + " " + new Date(availreport[index]).toLocaleTimeString() + "</td><td>" + new Date(availreport[index + 1]).toDateString() + " " + new Date(availreport[index + 1]).toLocaleTimeString() + "</td><td>" + "<input data-role='button' type='button' class='createmeeting' value='Create' starttime='" + new Date(availreport[index]) + "' endtime='" + new Date(availreport[index + 1]) + "'>" + "</td></tr>");
+            $(something).append(something2);
+            something3 = $("</tr></tbody> </table>");
+            $(something).append(something3);
+            something.table();
+            $(".createmeeting").button().button("refresh");
+            $("#availreportresultcontainer").append(something);
+        }
+
+        //CREATE MEETING
+        $(".createmeeting").click(function () {
+            var st = new Date($(this).attr("starttime")).toMysqlFormat();
+            var et = new Date($(this).attr("endtime")).toMysqlFormat();
+            var gid = group.gid;
+            var meeting_notes = group.gname + " meeting ";
+            $.post("http://server8.ies.cse.ohio-state.edu/stacker/add_meeting.php", {
+                gid: gid,
+                start_time: st,
+                end_time: et,
+                notes: meeting_notes
+            },
+
+            function (data) {
+                var obj = $.parseJSON(data);
+                console.log(obj);
+                //alert(obj);
+                $.mobile.pageContainer.pagecontainer("change", "#mainpage", {
+                    transition: 'flow',
+                    reloadPage: false
+                });
             });
+
         });
-	
-	});
-	
-	});
-	
+
+    });
+
     //ADD MEMBER TO GROUP
     $("#addmemberbutton").click(function () {
         $.post("http://server8.ies.cse.ohio-state.edu/stacker/add_member.php", {
@@ -694,52 +744,28 @@ Date.prototype.toMysqlFormat = function() {
         });
     });
 
-    //REMOVE MEMBER FROM GROUP
-    $("#removememberbutton").click(function () {
-        $.post("http://server8.ies.cse.ohio-state.edu/stacker/delete_member.php", {
-            email: $("#removemembervalue").val(),
-            gid: group.gid
-        },
+   
 
-        function (data) {
-            var obj = $.parseJSON(data);
-            alert(obj.err);
-        });
-    });
 
-    //ADD CO-LEADER
-    $("#addcoleaderbutton").click(function () {
-        $.post("http://server8.ies.cse.ohio-state.edu/stacker/set_coleader.php", {
-            email: $("#addcoleadervalue").val(),
-            gid: group.gid
-        },
 
-        function (data) {
-            var obj = $.parseJSON(data);
-            alert(obj.err);
-        });
-    });
-	
-	
-	
-	  //INVITE A FRIEND
+    //INVITE A FRIEND
     $("#submitinvite").click(function () {
         $.post("http://server8.ies.cse.ohio-state.edu/stacker/invite_friend.php", {
             email: $("#inviteemail").val(),
-			invitee: user.name
+            invitee: user.name
         },
 
         function (data) {
             var obj = $.parseJSON(data);
             alert(obj.err);
-			$.mobile.pageContainer.pagecontainer("change", "#mainpage", {
+            $.mobile.pageContainer.pagecontainer("change", "#mainpage", {
                 transition: 'flow',
                 reloadPage: false
             });
         });
     });
-	
-	
+
+
     //LOGOUT
     $(document).on("pagebeforeshow", "#logout", function () {
         user.name = null;
@@ -755,7 +781,7 @@ Date.prototype.toMysqlFormat = function() {
                 transition: 'flow',
                 reloadPage: false
             });
-			
+
         });
     });
 
@@ -1166,34 +1192,14 @@ body {
 				
 			<!--Manage groups Design -->
 			 <div data-role="main" class="ui-content" style="background:#fff;">
-				 <div class="ui-grid-b" id="addmemberwrapper">
+				<div id="groupmembers">
+				</div>
+				<div class="ui-grid-b" id="addmemberwrapper">
 					<div class="ui-block-a">
 					<input type="text" Placeholder="Email" id="addmembervalue" data-mini="true"/>
 					</div>
 					<div class="ui-block-b">
-					<input type="submit" value="Add Member" data-mini="true" data-icon="plus" id="addmemberbutton" class="ui-btn ui-btn-inline"/>
-					</div>
-					<div class="ui-block-c">
-					</div>
-				</div>
-				<div class="ui-grid-b" id="removememberwrapper">
-					<div id="groupmembers">
-					</div>
-					<div class="ui-block-a">
-					<input type="text" Placeholder="Email" id="removemembervalue" data-mini="true"/>
-					</div>
-					<div class="ui-block-b">
-					<input type="submit" value="Remove from group" id="removememberbutton" data-icon="forbidden" data-mini="true" class="ui-btn ui-btn-inline"/>
-					</div>
-					<div class="ui-block-c">
-					</div>
-				</div>
-				<div class="ui-grid-b" id="addcoleaderwrapper">
-					<div class="ui-block-a">
-					<input type="text" Placeholder="Email"  id="addcoleadervalue" data-mini="true"/>
-					</div>
-					<div class="ui-block-b">
-					<input type="submit" value="Add Co-leader" id="addcoleaderbutton" data-icon="user" data-mini="true" class="ui-btn ui-btn-inline"/>
+					<input type="button" value="Add Member" data-mini="true" data-icon="plus" id="addmemberbutton" class="ui-btn ui-btn-inline ui-btn-icon-notext"/>
 					</div>
 					<div class="ui-block-c">
 					</div>
@@ -1327,6 +1333,8 @@ body {
 <div id="refreshcalendar">
 </div>
 
+<div id="refreshmanagegroups">
+</div>
 <div id="logout">
 </div>
 </body>
