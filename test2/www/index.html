@@ -1,14 +1,10 @@
 <!--
 TO DO::
-1. Create view after availability report is generated
-2. schedule meeting from the view in (4)
-3. Remove Calendar
-4. Adding different colours for each user in group calendar
-5. Accept/Decline meeting (Part of notifications)
-6. Confirm meeting
-7. User Settings
-8. See Users
-
+2. Remove Calendar
+3. Adding different colours for each user in group calendar
+5. User Settings
+6. See Users (Integrate Dan's Code)
+9. Split into seperate files
 Improve::
 1. Make sure that all emails in create group are unique
 2. draw groups in a better way. they are not looking very beautiful
@@ -25,6 +21,7 @@ Improve::
 <script type="text/javascript" src="js/jw-jqm-cal.js"></script>
 <script type="text/javascript" src="js/availreport.js"></script>
 <script>
+
 function init() {
     document.addEventListener("deviceready", deviceReady, true);
     delete init;
@@ -43,6 +40,17 @@ $(document).ajaxError(function () {
 });
 
 $(document).ready(function () {
+
+function twoDigits(d) {
+    if(0 <= d && d < 10) return "0" + d.toString();
+    if(-10 < d && d < 0) return "-0" + (-1*d).toString();
+    return d.toString();
+}
+
+// To Convert JavaScript Date Object to Mysql format
+Date.prototype.toMysqlFormat = function() {
+    return this.getFullYear() + "-" + twoDigits(1 + this.getMonth()) + "-" + twoDigits(this.getDate()) + " " + twoDigits(this.getHours()) + ":" + twoDigits(this.getMinutes()) + ":" + twoDigits(this.getSeconds());
+};
 
     var user = {
         name: "",
@@ -91,7 +99,6 @@ $(document).ready(function () {
                         reloadPage: false
                     });
                 } else {
-                    alert(user.uid);
                     $.mobile.pageContainer.pagecontainer("change", "#mainpage", {
                         transition: 'flow',
                         reloadPage: false
@@ -249,7 +256,21 @@ $(document).ready(function () {
             });
         });
     });
-
+	
+	
+	//Manage group - TODO
+	$(document).on("pagebeforeshow","#managegroups",function(){   
+		$.post("http://server8.ies.cse.ohio-state.edu/stacker/view_group_members.php", {
+			session:user.session,
+			uid:user.uid
+		}, function(data) {
+			var obj = $.parseJSON(data);
+			$("#groupmembers").empty();
+			for(index=0;index<obj.length;index++) {
+			
+			}
+		});
+	});
     // REFRESH GROUPS
     $(document).on("pagebeforeshow", "#refreshgroups", function () {
         $.mobile.pageContainer.pagecontainer("change", "#mygroups", {
@@ -260,28 +281,23 @@ $(document).ready(function () {
 
     //NOTIFICATIONS
     $(document).on("pagebeforeshow", "#notifications", function () {
+	var numnotifi=1;
         $.post("http://server8.ies.cse.ohio-state.edu/stacker/group_requests.php", {
             session: user.session,
             uid: user.uid
-        },
-
-        function (data) {
+        }, function (data) {
             var obj = $.parseJSON(data);
             $("#groupnotifications").empty();
             if (obj.length == 0) {
-                alert("you have no new notifications");
-                $.mobile.pageContainer.pagecontainer("change", "#mainpage", {
-                    transition: 'flow',
-                    reloadPage: false
-                });
+                numnotifi=2;
             }
             for (index = 0; index < obj.length; index = index + 2) {
                 var gid = obj[index];
                 var gname = obj[index + 1];
-                var $something = " <div class='ui-grid-b' > <div class='ui-block-a' style='text-align:center'> <h1>" + gname + "</h1> </div> <div  class='ui-block-b'> <button class='acceptgroupinvitebutton ui-btn ui-btn-inline ui-mini ui-btn-corner-all ui-icon-check ui-btn-icon-right' groupname='" + gname + "' gid='" + gid + "'>Accept</button> </div> <div class='ui-block-c'> <button class='declinegroupinvitebutton ui-btn ui-btn-inline ui-mini ui-btn-corner-all ui-icon-delete ui-btn-icon-right' groupname='" + gname + "'gid='" + gid + "'>Decline</button> </div></div>";
+                var $something = " <div class='ui-grid-b' > <div class='ui-block-a' style='text-align:center'> <h4> Join Group: " + gname + "</h4> </div> <div  class='ui-block-b'> <button class='acceptgroupinvitebutton ui-btn ui-btn-inline ui-mini ui-btn-corner-all ui-icon-check ui-btn-icon-right' groupname='" + gname + "' gid='" + gid + "'>Accept</button> </div> <div class='ui-block-c'> <button class='declinegroupinvitebutton ui-btn ui-btn-inline ui-mini ui-btn-corner-all ui-icon-delete ui-btn-icon-right' groupname='" + gname + "'gid='" + gid + "'>Decline</button> </div></div>";
                 $("#groupnotifications").append($something);
             }
-
+			
             //ACCEPT GROUP INVITATION
             $(".acceptgroupinvitebutton").click(function () {
                 var gid = $(this).attr("gid");
@@ -322,9 +338,81 @@ $(document).ready(function () {
                 });
             });
 
-        });
+        
+		
+		
+		});
+		
 
+		 $.post("http://server8.ies.cse.ohio-state.edu/stacker/meeting_requests.php", {
+            uid: user.uid,
+        },
+
+        function (data) {
+           var obj = $.parseJSON(data);
+            
+            if (obj.length == 0) {
+                if(numnotifi==2) {
+				alert("no new notifications");
+				}
+            }
+            for (index = 0; index < obj.length; index = index + 4) {
+                var mid = obj[index];
+                var mname = obj[index + 1];
+				var st = obj[index + 2];
+				st = new Date(st).toLocaleDateString() +" "+ new Date(st).toLocaleTimeString();
+				var et = obj[index + 3];
+				et = new Date(et).toLocaleDateString() +" "+ new Date(et).toLocaleTimeString();
+				mname = mname +": "+ st +" to "+ et;
+                var $something = " <div class='ui-grid-b' > <div class='ui-block-a' style='text-align:center'> <h4>" + mname + "</h4> </div> <div  class='ui-block-b'> <button class='acceptmeetingbutton ui-btn ui-btn-inline ui-mini ui-btn-corner-all ui-icon-check ui-btn-icon-right' mname='" + mname + "' mid='" + mid + "'>Accept</button> </div> <div class='ui-block-c'> <button class='declinemeetingbutton ui-btn ui-btn-inline ui-mini ui-btn-corner-all ui-icon-delete ui-btn-icon-right' mname='" + mname + "'mid='" + mid + "'>Decline</button> </div></div>";
+                $("#groupnotifications").append($something);
+            }
+		   
+		     //ACCEPT MEETING
+            $(".acceptmeetingbutton").click(function () {
+                var mid = $(this).attr("mid");
+				$.post("http://server8.ies.cse.ohio-state.edu/stacker/meeting_request_response.php", {
+                    session: user.session,
+                    uid: user.uid,
+                    mid: mid,
+                    response: 1
+                },
+
+                function (data) {
+                    var obj = $.parseJSON(data);
+                    alert(obj.err);
+                    $.mobile.pageContainer.pagecontainer("change", "#refreshnotifications", {
+                        transition: 'none',
+                        reloadPage: false
+                    });
+                });
+            });
+			
+			 //DECLINE MEETING
+            $(".declinemeetingbutton").click(function () {
+                var mid = $(this).attr("mid");
+				$.post("http://server8.ies.cse.ohio-state.edu/stacker/meeting_request_response.php", {
+                    session: user.session,
+                    uid: user.uid,
+                    mid: mid,
+                    response: 0
+                },
+
+                function (data) {
+                    var obj = $.parseJSON(data);
+                    alert(obj.err);
+                    $.mobile.pageContainer.pagecontainer("change", "#refreshnotifications", {
+                        transition: 'none',
+                        reloadPage: false
+                    });
+                });
+            });
+		});
+		
+		
     });
+	
+	
 
     // REFRESH NOTIFICATIONS
     $(document).on("pagebeforeshow", "#refreshnotifications", function () {
@@ -353,10 +441,10 @@ $(document).ready(function () {
                 var length = obj.length
                 for (index = 0; index < length; index = index + 4) {
                     personalcalendar.push({
-                        "summary": obj[index + 3],
+                        "summary": obj[index + 3].replace(/[!"#$%&'()*+,.\/:;<=>?@[\\\]^`{|}~]/g, " "),
                         "url": obj[index],
-                        "begin": new Date(obj[index + 1]),
-                        "end": new Date(obj[index + 2])
+                        "begin": new Date(new Date(obj[index + 1]).toUTCString()),
+                        "end": new Date(new Date(obj[index + 2]).toUTCString())
                     });
                 }
             },
@@ -388,7 +476,7 @@ $(document).ready(function () {
         //INPUT IS IF THE FORM - uid,start_time,end_time,event_name
         //TODO: Add colours to calendar based on users
         groupcalendartable = [];
-        var something = "<div id='testing'> </div>";
+        var something = "<div id='testing2'> </div>";
         $("#groupcalendar").empty();
         $("#groupcalendar").append(something);
         $.post("http://server8.ies.cse.ohio-state.edu/stacker/retrieve_group_calendars.php", {
@@ -412,7 +500,7 @@ $(document).ready(function () {
             }
         });
 
-        $("#testing").jqmCalendar({
+        $("#testing2").jqmCalendar({
             events: groupcalendartable,
             months: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
             days: ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"],
@@ -566,10 +654,11 @@ $(document).ready(function () {
     
 	//CREATE MEETING
 	 $(".createmeeting").click(function () {
-        var st = new Date($(this).attr("starttime"));
-		var et = new Date($(this).attr("endtime"));
+        var st = new Date($(this).attr("starttime")).toMysqlFormat();
+		var et = new Date($(this).attr("endtime")).toMysqlFormat();
 		var gid = group.gid;
-		var meeting_notes =group.gname + " meeting:  " + st + " To " + et;  
+		alert(st);
+		var meeting_notes =group.gname + " meeting ";  
 		alert(meeting_notes);
 		 $.post("http://server8.ies.cse.ohio-state.edu/stacker/add_meeting.php", {
             gid: gid,
@@ -630,10 +719,29 @@ $(document).ready(function () {
             alert(obj.err);
         });
     });
+	
+	
+	
+	  //INVITE A FRIEND
+    $("#submitinvite").click(function () {
+        $.post("http://server8.ies.cse.ohio-state.edu/stacker/invite_friend.php", {
+            email: $("#inviteemail").val(),
+			invitee: user.name
+        },
 
+        function (data) {
+            var obj = $.parseJSON(data);
+            alert(obj.err);
+			$.mobile.pageContainer.pagecontainer("change", "#mainpage", {
+                transition: 'flow',
+                reloadPage: false
+            });
+        });
+    });
+	
+	
     //LOGOUT
     $(document).on("pagebeforeshow", "#logout", function () {
-        alert(user.session);
         user.name = null;
         user.uid = null;
         user.session = null;
@@ -647,6 +755,7 @@ $(document).ready(function () {
                 transition: 'flow',
                 reloadPage: false
             });
+			
         });
     });
 
@@ -713,7 +822,7 @@ body {
 			 <div data-role="main" class="ui-content" style="position:fixed; top:20%; left:20%; background:#fff; ">
 			  <div>
 				 
-				  <form id="loginform" method="POST">
+				  <form id="loginform" action="javascript:void(0);" method="POST">
 						   <input type="text" id="email" data-mini="true" placeholder="Username"></input>
 						     <input type="password" id="password" data-mini="true" placeholder="Password"></input>
 						<input type="submit" id="submitlogin" value="submit" data-theme="b"/>
@@ -739,7 +848,7 @@ body {
 			 <div data-role="main" class="ui-content" style="position:fixed; top:20%; left:20%; background:#fff; ">
 			  <div>
 			
-				  <form id="loginform" method="POST">
+				  <form id="regform" action="javascript:void(0);" method="POST">
 						    <input type="text" id="regname" data-mini="true" placeholder="Name"></input>
 						    <input type="text" id="regemail" data-mini="true" placeholder="Email"></input>
 						    <input type="text" id="regpassword" data-mini="true" placeholder="Password"></input>
@@ -772,19 +881,18 @@ body {
 					</div>
 				</div>
 			<!--Main Page Design -->
-			 <div data-role="main" class="ui-content ui-grid-a" style="margin:0 auto; background:#fff;">
+			 <div data-role="main" class="ui-content" style="margin:0 auto; background:#fff;">
 				  
-			<div class="ui-block-a">	     
+			<div class="ui-grid-a">	     
 			 <a href="#creategroup" data-role="button" data-mini="true">Create Group</a>
 			 <a href="#mygroups" data-role="button" data-mini="true">My Groups</a>
-			 <a href="#" data-role="button" data-mini="true">Invite a Friend</a>
-			</div>		 
-			<div class="ui-block-b">	     
 			 <a href="#managecalendars" data-role="button" data-mini="true">Manage Calendars</a>
 			 <a href="#addcalendarevent" data-role="button" data-mini="true">New Calendar Event</a>
 			 <a href="#notifications" data-role="button" data-mini="true">Notifications</a>
-			</div>		
-				
+			 <a href="#invite" data-role="button" data-mini="true">Invite a Friend</a>
+			 
+			</div>		 
+		
 			  </div>
 			  
 			  <div data-role="footer" data-position="fixed" data-theme="b">
@@ -811,8 +919,8 @@ body {
 
 			<!--Create Group Design -->
 			 <div data-role="main" class="ui-content" style="background:#fff;">
-				 <div class="ui-grid-a"> <div class="ui-block-a"> <h1>Create Group </h1></div></div>
-				<form id="creategroupform" method="POST" data-mini="true">
+				 <div class="ui-grid-a"> <div class="ui-block-a"> <h4>Create Group </h4></div></div>
+				<form id="creategroupform" action="javascript:void(0);" method="POST" data-mini="true">
 				        <input type="text" id="creategroupname" data-mini="true" placeholder="Group Name"></input>
 						</br>
 						 <input type="text" id="creategroupmem1" data-mini="true" placeholder="Member 1:"></input>
@@ -850,7 +958,7 @@ body {
 			<!--Generate Avail report Design -->
 			 <div data-role="main" class="ui-content" style="background:#fff;  margin-top:2%;">
 			 <div id="generateavailreportheader"></div>
-				<form id="generateavailreportform" data-mini="true">
+				<form id="generateavailreportform" action="javascript:void(0);" data-mini="true">
 						<input type="hidden" id="availrepgroupid"></input>	
 						<h5>Meeting Start Date:</h5><input type="date" id="availrepstartdate" data-mini="true" value="2013-01-01"></input>
 						<h5>Meeting Start Time:</h5><input type="time" id="availrepstarttime" data-mini="true" ></input>
@@ -911,7 +1019,7 @@ body {
 			<!--Generate Avail report Design -->
 			 <div data-role="main" class="ui-content" style="background:#fff;  margin-top:2%;">
 		
-				<form id="addcalendareventform" data-mini="true">	
+				<form id="addcalendareventform" action="javascript:void(0);" data-mini="true">	
 						<div data-role="fieldcontain">
 						<input type="text" id="caleventdesc" Placeholder="Description"></input>	
 						</div>
@@ -1069,6 +1177,8 @@ body {
 					</div>
 				</div>
 				<div class="ui-grid-b" id="removememberwrapper">
+					<div id="groupmembers">
+					</div>
 					<div class="ui-block-a">
 					<input type="text" Placeholder="Email" id="removemembervalue" data-mini="true"/>
 					</div>
@@ -1164,10 +1274,41 @@ body {
 
 			 <div data-role="main" class="ui-content" style="position:fixed; top:30%; left:25%; background:#fff; ">
 				  <div id="main_header">
-					   settings
+					  
 					 <!--Main Page Design -->
 				  </div>
 				
+			  </div>
+			  
+			  <div data-role="footer" data-position="fixed" data-theme="b">
+				<h1>Footer Text</h1>
+			  </div>
+
+ 
+</div> 
+
+<!-- INVITE A FRIEND -->
+<div data-role="page" id="invite">
+			
+			   <div data-role="header" data-theme="b">
+					<div data-role="navbar" id="mainnavbar" data-theme="a">
+					<ul>
+					  <li><a href="#mainpage"  data-icon="home">Home</a></li>
+					  <li><a href="#view-calendar" data-icon="grid">Calendars</a></li>
+					  <li><a href="#settings" data-icon="gear" >Settings</a></li>
+					  <li><a href="#logout" data-icon="power">Logout</a></li>
+					</ul>
+					</div>
+				</div>
+
+			 <div data-role="main" class="ui-content" style="margin-top:5%; margin-left:5%; background:#fff; ">
+				Tell A Friend About Stacker!!!
+				</br>
+				</br>
+				<form id="inviteform" action="javascript:void(0);" method="POST">
+						   <input type="text" id="inviteemail" data-mini="true" placeholder="Email"></input>
+						   <input type="submit" id="submitinvite" value="Invite" data-theme="b"/>
+				</form>
 			  </div>
 			  
 			  <div data-role="footer" data-position="fixed" data-theme="b">
