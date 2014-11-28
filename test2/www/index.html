@@ -125,6 +125,8 @@ $(document).on("pagecontainerloadfailed",function(event,data){
   //Manage Calendars
   $(document).on("pagebeforeshow","#managecalendars",function(){
     $("#mancalendarlist").empty();
+
+    //Show synced Google Calendars
     $.post("http://server8.ies.cse.ohio-state.edu/stacker/view_calendars.php",
     {
       session:user.session,
@@ -139,6 +141,23 @@ $(document).on("pagecontainerloadfailed",function(event,data){
         $("#mancalendarlist").append("<tr><td>" + calArray[i] + "</td><td><button cid='"+calArray[i+1]+"' class='deleteCalBtn ui-btn ui-btn-corner-all ui-icon-delete ui-btn-icon-notext'></td></tr>");
       }
 
+      //Delete calendar
+      $(".deleteCalBtn").click(function(e){
+        var cid = $(this).attr("cid");
+        $.post("http://server8.ies.cse.ohio-state.edu/stacker/google/delete_calendar.php",
+        {
+          session:user.session,
+          uid:user.uid,
+          cid:cid
+        },
+        function(data) {
+          var deletedCal = $.parseJSON(data);
+          alert(deletedCal + " deleted from db.");
+        });
+        $.mobile.pageContainer.pagecontainer("change","#managecalendars",{reloadPage: false});
+      });
+
+      //Show unsynced Google Calendars
       $.post("http://server8.ies.cse.ohio-state.edu/stacker/google/list_calendars.php",
       {
       session:user.session,
