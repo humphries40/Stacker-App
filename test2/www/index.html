@@ -194,12 +194,21 @@ $(document).on("pagecontainerloadfailed",function(event,data){
 
 
       });
+
+      //Synchronize events for calendars
+      $("#syncgooglecalendars").click(function () {
+        for (var k = 1; k < calArray.length; k += 2) {
+          $.post("http://server8.ies.cse.ohio-state.edu/stacker/google/get_events.php",
+          {
+            session:user.session,
+            uid:user.uid,
+            cid:calArray[k]
+          },
+          function(data) {
+          });
+        }
+      });
     });
-  });
-
-  //Synchronize events for calendars
-  $("#syncgooglecalendars").click(function () {
-
   });
   
   //Authorize access to Google Calendar
