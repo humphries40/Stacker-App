@@ -87,7 +87,7 @@ $(document).on("pagecontainerloadfailed",function(event,data){
     else
        {
      alert(user.uid);
-     $.mobile.pageContainer.pagecontainer("change","#mainpage", {transition: 'flow',reloadPage: false});
+     $.mobile.pageContainer.pagecontainer("change","#mainpage", {reloadPage: false});
      }
     });
   }
@@ -107,11 +107,11 @@ $(document).on("pagecontainerloadfailed",function(event,data){
   var obj = $.parseJSON(data);
   if(obj.err) {
     alert(obj.err);
-    $.mobile.pageContainer.pagecontainer("change","#signup", {transition: 'flow',reloadPage: false});
+    $.mobile.pageContainer.pagecontainer("change","#signup", {reloadPage: false});
     }
    else {
      alert("Thank you for signing up. Please login to continue");
-     $.mobile.pageContainer.pagecontainer("change","#login", {transition: 'flow',reloadPage: false});
+     $.mobile.pageContainer.pagecontainer("change","#login", {reloadPage: false});
     }  
     });
   });
@@ -119,7 +119,7 @@ $(document).on("pagecontainerloadfailed",function(event,data){
     //To check if the user is valid or not Else send to main page
   $(document).on("pagebeforeshow","#mainpage",function(){ // When entering mainpage
     if(!user.name)
-      $.mobile.pageContainer.pagecontainer("change","#login", {transition: 'flow',reloadPage: false});
+      $.mobile.pageContainer.pagecontainer("change","#login", {reloadPage: false});
   }); 
   
   //Manage Calendars
@@ -136,7 +136,7 @@ $(document).on("pagecontainerloadfailed",function(event,data){
       for (var i = 0; i < obj.length; i += 2) {
         calArray[i] = obj[i];
         calArray[i+1] = obj[i+1];
-        $("#mancalendarlist").append("<tr><td>" + calArray[i] + "</td></tr>");
+        $("#mancalendarlist").append("<tr><td>" + calArray[i] + "</td><td><button cid='"+calArray[i+1]+"' class='deleteCalBtn ui-btn ui-btn-corner-all ui-icon-delete ui-btn-icon-notext'></td></tr>");
       }
 
       $.post("http://server8.ies.cse.ohio-state.edu/stacker/google/list_calendars.php",
@@ -152,10 +152,28 @@ $(document).on("pagecontainerloadfailed",function(event,data){
           if ($.inArray(obj2[j], calArray) < 0) {
             gCalArray[i] = obj2[j];
             gCalArray[i+1] = obj2[j+1];
-            $("#mancalendarlist").append("<tr><td style='background:#ddd'>" + gCalArray[i] + "</td></tr>");
+            $("#mancalendarlist").append("<tr style='background:#ddd'><td>" + gCalArray[i] + "</td><td><button cid='"+gCalArray[i+1]+"' class='addCalBtn ui-btn ui-btn-corner-all ui-icon-plus ui-btn-icon-notext'></td></tr>");
             i += 2;
           }
         }
+
+        //Add calendar
+        $(".addCalBtn").click(function(e){
+          var cid = $(this).attr("cid");
+          $.post("http://server8.ies.cse.ohio-state.edu/stacker/google/add_calendar.php",
+          {
+            session:user.session,
+            uid:user.uid,
+            cid:cid
+          },
+          function(data) {
+            var addedCal = $.parseJSON(data);
+            alert(addedCal + " added to db.");
+          });
+          $.mobile.pageContainer.pagecontainer("change","#managecalendars",{reloadPage: false});
+        });
+
+
       });
     });
   });
@@ -189,7 +207,7 @@ $(document).on("pagecontainerloadfailed",function(event,data){
     function(data){
     var obj = $.parseJSON(data);
     alert(obj.err);
-    $.mobile.pageContainer.pagecontainer("change","#mainpage", {transition: 'flow',reloadPage: false});
+    $.mobile.pageContainer.pagecontainer("change","#mainpage", {reloadPage: false});
     });
     });
   
@@ -208,7 +226,7 @@ $(document).on("pagecontainerloadfailed",function(event,data){
         $("#viewgroups").empty();
         if(obj.length==0) {
           alert("You are not part of any groups.");
-          $.mobile.pageContainer.pagecontainer("change","#creategroup",{transitiion: 'flow', reloadPage: false});
+          $.mobile.pageContainer.pagecontainer("change","#creategroup",{reloadPage: false});
           }
         for(index=0;index<obj.length;index=index+3) {
         var gid=obj[index];
@@ -228,21 +246,21 @@ $(document).on("pagecontainerloadfailed",function(event,data){
         $(".viewgroupcalendarbutton").click(function(e,data){
         group.gid=$(this).attr("gid");
         group.gname=$(this).attr("gname");
-        $.mobile.pageContainer.pagecontainer("change","#view-group-calendar",{transitiion: 'flow', reloadPage: false});
+        $.mobile.pageContainer.pagecontainer("change","#view-group-calendar",{reloadPage: false});
         });
         
         //MANAGE GROUP
         $(".managegroupbutton").click(function(){
         group.gid=$(this).attr("gid");
         group.gname=$(this).attr("gname");
-        $.mobile.pageContainer.pagecontainer("change","#managegroups",{transitiion: 'flow', reloadPage: false});
+        $.mobile.pageContainer.pagecontainer("change","#managegroups",{reloadPage: false});
         });
         
         //VIEW GENERATE AVAIL REPORT FORM
         $(".generateavailreport").click(function(){
         group.gid=$(this).attr("gid");
         group.gname=$(this).attr("gname");
-        $.mobile.pageContainer.pagecontainer("change","#generateavailreportform",{transitiion: 'flow', reloadPage: false});
+        $.mobile.pageContainer.pagecontainer("change","#generateavailreportform",{reloadPage: false});
         });
         
         //LEAVE GROUP - TODO
@@ -266,7 +284,7 @@ $(document).on("pagecontainerloadfailed",function(event,data){
         $("#groupnotifications").empty();
         if(obj.length==0) {
         alert("you have no new notifications");
-        $.mobile.pageContainer.pagecontainer("change","#mainpage", {transition: 'flow',reloadPage: false});
+        $.mobile.pageContainer.pagecontainer("change","#mainpage", {reloadPage: false});
         }
           for(index=0;index<obj.length;index=index+2) {
             var gid=obj[index];
@@ -288,7 +306,7 @@ $(document).on("pagecontainerloadfailed",function(event,data){
             function(data){
             var obj = $.parseJSON(data);
               alert(obj.err);
-              $.mobile.pageContainer.pagecontainer("change","#mainpage", {transition: 'flow',reloadPage: false, allowSamePageTransition: false});
+              $.mobile.pageContainer.pagecontainer("change","#mainpage", {reloadPage: false, allowSamePageTransition: false});
             });
           }); 
         
@@ -305,7 +323,7 @@ $(document).on("pagecontainerloadfailed",function(event,data){
             function(data){
             var obj = $.parseJSON(data);
               alert(obj.err);
-              $.mobile.pageContainer.pagecontainer("change","#mainpage", {transition: 'flow',reloadPage: true, allowSamePageTransition: true});
+              $.mobile.pageContainer.pagecontainer("change","#mainpage", {reloadPage: true, allowSamePageTransition: true});
             });
           }); 
         
@@ -422,7 +440,7 @@ $(document).on("pagecontainerloadfailed",function(event,data){
     },
     function(data){ 
     var obj = $.parseJSON(data);
-      $.mobile.pageContainer.pagecontainer("change","#welcome", {transition: 'flow',reloadPage: false});
+      $.mobile.pageContainer.pagecontainer("change","#welcome", {reloadPage: false});
     });
     });
   
