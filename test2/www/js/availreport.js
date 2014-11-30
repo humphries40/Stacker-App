@@ -174,6 +174,7 @@ function findOpen(events, filters) {
 			{
 				break;
 			}
+			//NEED TO ADD A CHANGE START TIME TO END TIME IF A MEETING WAS JUST SCHEDULED!
 			startMeetingTime = new Date(curTime.valueOf());
 			duration = 0;
 			while(canMeet && openTimes.length > count)
@@ -200,7 +201,9 @@ function findOpen(events, filters) {
 					  if(compareDay(startMeetingTime, endMeetingTime) !== 0){
 						meetingTimes.push(new Date(startMeetingTime.valueOf()));
 						meetingTimes.push(new Date(endMeetingTime.valueOf()));
+						meetingTimes.push("Current Time After all free Time");
 						duration = 0;
+						
 					  }
 					allCouldMeet = false;
 					}
@@ -213,6 +216,7 @@ function findOpen(events, filters) {
 					  if(compareDay(startMeetingTime, endMeetingTime) !== 0){
 						meetingTimes.push(new Date(startMeetingTime.valueOf()));
 						meetingTimes.push(new Date(endMeetingTime.valueOf()));
+						meetingTimes.push("Before start of free Time");
 						duration = 0;
 					  }
 					allCouldMeet = false;
@@ -232,6 +236,7 @@ function findOpen(events, filters) {
 						//console.log("Duration Meeting");
 						meetingTimes.push(new Date(startMeetingTime.valueOf()));
 						meetingTimes.push(new Date(endMeetingTime.valueOf()));
+						meetingTimes.push("Duration Time");
 						allCouldMeet = false;
 						canMeet = false;
 						duration = 0;
@@ -240,6 +245,7 @@ function findOpen(events, filters) {
 						//console.log("Outside Limit Meeting");
 						meetingTimes.push(new Date(startMeetingTime.valueOf()));
 						meetingTimes.push(new Date(endMeetingTime.valueOf()));
+						meetingTimes.push("Outside limit");
 						allCouldMeet = false;
 						canMeet = false;
 						duration = 0;
@@ -257,6 +263,7 @@ function findOpen(events, filters) {
 								//console.log("Normal Meeting");
 								meetingTimes.push(new Date(startMeetingTime.valueOf()));
 								meetingTimes.push(new Date(endMeetingTime.valueOf()));
+								meetingTimes.push("Normal Meeting");
 							}
 						allCouldMeet = false;
 						canMeet = false;
