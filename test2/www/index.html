@@ -616,8 +616,8 @@ $(document).ready(function () {
                     personalcalendar.push({
                         "summary": obj[index + 3].replace(/[!"#$%&'()*+,.\/:;<=>?@[\\\]^`{|}~]/g, " "),
                             "url": obj[index],
-                            "begin": new Date(new Date(obj[index + 1]).toUTCString()),
-                            "end": new Date(new Date(obj[index + 2]).toUTCString())
+                            "begin": new Date(obj[index + 1].replace(/-/g, "/")),
+                            "end": new Date(obj[index + 2].replace(/-/g, "/"))
                     });
                 }
             },
@@ -669,8 +669,8 @@ $(document).ready(function () {
             for (index = 0; index < length; index = index + 4) {
                 groupcalendartable.push({
                     "summary": obj[index + 3],
-                        "begin": new Date(obj[index + 1]),
-                        "end": new Date(obj[index + 2])
+                        "begin": new Date(obj[index + 1].replace(/-/g, "/")),
+                        "end": new Date(obj[index + 2].replace(/-/g, "/"))
                 });
             }
         });
@@ -679,7 +679,7 @@ $(document).ready(function () {
             events: groupcalendartable,
             months: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
             days: ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"],
-            startOfWeek: 4
+            startOfWeek: 0
         });
 
         $("#testing").trigger('refresh');
