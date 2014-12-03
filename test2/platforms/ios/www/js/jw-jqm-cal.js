@@ -258,7 +258,16 @@
       
 	  
 	    $('.deleteevent').click(function(){
-			alert("remove" + $(this).attr('cid'));
+		
+			$.post("http://server8.ies.cse.ohio-state.edu/stacker/delete_event.php",
+						{
+						sno:$(this).attr('cid')
+						},
+						function(data){
+						  var obj = $.parseJSON(data);
+						  alert(obj.err);				  
+						});
+		$.mobile.pageContainer.pagecontainer("change","#refreshcalendar", {transition: 'none',reloadPage: false});
 		});
 	  
 	  });
@@ -275,7 +284,6 @@
 			$eventattr.attr('cid',event[plugin.settings.url]);
 			$eventattr.attr('class','deleteevent ui-btn ui-icon-delete ui-btn-icon-right');
 			$eventattr.appendTo($listItem);
-			$
          } else {
             $listItem.text( text );
          }
