@@ -1,0 +1,818 @@
+<!--
+TO DO::
+1. Leave Group
+2. Create view after availability report is generated
+3. add event to calendar
+4. remove event from calendar
+5. schedule meeting from the view in (4)
+6. Add Calendar
+7. Remove Calendar
+8. Getting real-time calendar values for personal calendar
+9. Getting real-time calendar values for group calendar
+10. Adding different colours for each user in group calendar
+11. Accept/Decline meeting (Part of notifications)
+12. Confirm meeting
+13. Delete group
+14. User Settings
+15. See Users
+
+Improve::
+1. handle reloads in notifications
+2. Make sure that all emails in create group are unique
+3. draw groups in a better way. they are not looking very beautiful
+-->
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.4/jquery.mobile-1.4.4.min.css">
+<link rel="stylesheet" href="css/jw-jqm-cal.css" />
+<script type="text/javascript" src="js/jquery-1.11.1.min.js"></script>
+<script type="text/javascript" src="js/jquery.mobile-1.4.4.min.js"></script>
+<script type="text/javascript" src="js/jw-jqm-cal.js"></script>
+<script type="text/javascript" src="js/avail.js"></script>
+<script>
+function init() {
+	document.addEventListener("deviceready", deviceReady, true);
+	delete init;
+}
+
+function refreshPage() {
+	jQuery.mobile.changePage(window.location.href, {
+  	allowSamePageTransition: true,
+  	transition: 'none',
+  	reloadPage: true
+	});
+}
+
+$( document ).ajaxError(function() {
+	alert("No internet or our server is down!!");
+});
+
+$(document).ready(function(){
+	var user = {name:"",status:"",session:"",uid:"",email:""};
+	var group ={gid:"",gname:""};
+	var groupcalendar;
+
+	$(document).on("pagecontainerloadfailed",function(event,data){
+	//If some page fails to load
+	});
+
+   //Login
+  $("#submitlogin").click(function(event,data){
+  
+	  //jQuery.post( url [, data ] [, success ] [, dataType ] )
+		if(!$("#email").val()|| !$("#password").val()) {
+			alert("Please fill up the details");
+			refreshPage();
+		} else {
+			user.email=$("#email").val();
+			$.post("http://server8.ies.cse.ohio-state.edu/stacker/login.php", {
+				email:$("#email").val(),
+				password:$("#password").val()
+			}, function(data){
+				var obj = $.parseJSON(data);
+				user.name=obj.user;
+				user.status=obj.status;
+				user.session=obj.session;
+				user.uid=obj.uid;
+	  
+	  		if(obj.err) {
+					alert(obj.err);
+					$.mobile.pageContainer.pagecontainer("change","#login", {transition: 'none',reloadPage: false});
+				} else {
+					alert(user.uid);
+					$.mobile.pageContainer.pagecontainer("change","#mainpage", {transition: 'flow',reloadPage: false});
+				}
+			});
+		}
+  });
+   
+	//Register
+	$("#submitreg").click(function(){
+
+		//jQuery.post( url [, data ] [, success ] [, dataType ] )
+		$.post("http://server8.ies.cse.ohio-state.edu/stacker/register.php", {
+			name:$("#regname").val(),
+			password:$("#regpassword").val(),
+			email:$("#regemail").val(),
+			phone:$("#regphone").val()
+		}, function(data){
+			var obj = $.parseJSON(data);
+			
+			if(obj.err) {
+				alert(obj.err);
+				$.mobile.pageContainer.pagecontainer("change","#signup", {transition: 'flow',reloadPage: false});
+			} else {
+				alert("Thank you for signing up. Please login to continue");
+				$.mobile.pageContainer.pagecontainer("change","#login", {transition: 'flow',reloadPage: false});
+			}
+		});
+  });
+   
+  //To check if the user is valid or not Else send to main page
+	$(document).on("pagebeforeshow","#mainpage",function(){ // When entering mainpage
+		if(!user.name) {
+			$.mobile.pageContainer.pagecontainer("change","#login", {transition: 'flow',reloadPage: false});
+		}
+	}); 
+	
+	//Add Google Calendar
+	$("#addgooglecalendar").click(function () {
+		window.open("http://server8.ies.cse.ohio-state.edu/stacker/google/auth.php?email="+user.email, '_system');
+	});
+  
+	//Create Group
+	//TODO:: Make sure that all emails are unique and not equal to user creating the group
+	$("#submitcreategroup").click(function(){
+
+		//jQuery.post( url [, data ] [, success ] [, dataType ] )
+		$.post("http://server8.ies.cse.ohio-state.edu/stacker/create_group.php", {
+			uid:user.uid,
+			session:user.session,
+			groupname:$("#creategroupname").val(),
+			mem1:$("#creategroupmem1").val(),
+			mem2:$("#creategroupmem2").val(),
+			mem3:$("#creategroupmem3").val(),
+			mem4:$("#creategroupmem4").val()
+		}, function(data){
+			var obj = $.parseJSON(data);
+			alert(obj.err);
+			$.mobile.pageContainer.pagecontainer("change","#mainpage", {transition: 'flow',reloadPage: false});
+		});
+	});
+
+	//My Groups
+	$(document).on("pagebeforeshow","#mygroups",function(){   
+		$.post("http://server8.ies.cse.ohio-state.edu/stacker/view_groups.php", {
+			session:user.session,
+			uid:user.uid
+		}, function(data) {
+			var obj = $.parseJSON(data);
+			$("#viewgroups").empty();
+
+			if(obj.length==0) {
+				alert("You are not part of any groups.");
+				$.mobile.pageContainer.pagecontainer("change","#creategroup",{transitiion: 'flow', reloadPage: false});
+			}
+			
+			for(index=0;index<obj.length;index=index+3) {
+				var gid=obj[index];
+				var gname=obj[index+1];
+				var level=obj[index+2];
+
+				if(level==2) {
+					var $something="<div style='border-radius: 3px; border-bottom: solid #ccc;' class='ui-grid-b' gid='"+gid+"'><div class='ui-block-a'><h1>"+gname+"</h1></div></br><div class='ui-block-b'><button gid='"+gid+"' gname='"+gname+"' class='viewgroupcalendarbutton ui-btn ui-btn-corner-all ui-icon-calendar ui-btn-icon-notext'></button></div><div class='ui-block-c'><button gid='"+gid+"' class='leavegroupbutton ui-btn  ui-btn-corner-all ui-icon-delete ui-btn-icon-notext'></button></div></div>";
+					$("#viewgroups").append($something);
+
+				} else if(level==3) {
+					var $something="<div style='border-radius: 3px; border-bottom: solid #ccc;' class='ui-grid-d' gid='"+gid+"'><div class='ui-block-a'><h1>"+gname+"</h1></div></br><div class='ui-block-b'><button gid='"+gid+"' gname='"+gname+"' class='viewgroupcalendarbutton ui-btn  ui-btn-corner-all ui-icon-calendar ui-btn-icon-notext'></button></div><div class='ui-block-c'><button gid='"+gid+"' gname='"+gname+"' class='managegroupbutton ui-btn ui-btn-corner-all ui-icon-edit ui-btn-icon-notext'></button></div><div class='ui-block-d'><button gid='"+gid+"'  gname='"+gname+"' class='generateavailreport ui-btn ui-btn-corner-all ui-icon-grid ui-btn-icon-notext'></button></div><div class='ui-block-e'><button gid='"+gid+"' class='leavegroupbutton ui-btn ui-btn-corner-all ui-icon-delete  ui-btn-icon-notext'></button></div></div>";
+					$("#viewgroups").append($something);
+				}
+			}
+				
+			//VIEW GROUP CALENDAR
+			$(".viewgroupcalendarbutton").click(function(e,data){
+				group.gid=$(this).attr("gid");
+				group.gname=$(this).attr("gname");
+				$.mobile.pageContainer.pagecontainer("change","#view-group-calendar",{transitiion: 'flow', reloadPage: false});
+			});
+
+			//MANAGE GROUP
+			$(".managegroupbutton").click(function(){
+				group.gid=$(this).attr("gid");
+				group.gname=$(this).attr("gname");
+				$.mobile.pageContainer.pagecontainer("change","#managegroups",{transitiion: 'flow', reloadPage: false});
+			});
+				
+			//VIEW GENERATE AVAIL REPORT FORM
+			$(".generateavailreport").click(function(){
+				group.gid=$(this).attr("gid");
+				group.gname=$(this).attr("gname");
+				$.mobile.pageContainer.pagecontainer("change","#generateavailreportform",{transitiion: 'flow', reloadPage: false});
+			});
+				
+			//LEAVE GROUP - TODO
+			$(".leavegroupbutton").click(function(){
+				alert($(this).attr("gid"));
+				group.gid=$(this).attr("gid");
+			});
+		});
+  });
+
+	//Manage group - TODO
+	$(document).on("pagebeforeshow","#managegroups",function(){   
+		$.post("http://server8.ies.cse.ohio-state.edu/stacker/***************************************.php", {
+			session:user.session,
+			uid:user.uid
+		}, function(data) {
+			var obj = $.parseJSON(data);
+			$("#viewgroups").empty();
+		});
+	});
+	
+	//NOTIFICATIONS
+	$(document).on("pagebeforeshow","#notifications",function(){
+		$.post("http://server8.ies.cse.ohio-state.edu/stacker/group_requests.php", {
+			session:user.session,
+			uid:user.uid
+		}, function(data) {
+			var obj = $.parseJSON(data);
+			$("#groupnotifications").empty();
+			if(obj.length==0) {
+				alert("you have no new notifications");
+				$.mobile.pageContainer.pagecontainer("change","#mainpage", {transition: 'flow',reloadPage: false});
+			}
+
+			for(index=0;index<obj.length;index=index+2) {
+				var gid=obj[index];
+				var gname=obj[index+1];
+				var $something=" <div class='ui-grid-b' > <div class='ui-block-a' style='text-align:center'> <h1>"+gname+"</h1> </div> <div  class='ui-block-b'> <button class='acceptgroupinvitebutton ui-btn ui-btn-inline ui-mini ui-btn-corner-all ui-icon-check ui-btn-icon-right' groupname='"+gname+"' gid='"+gid+"'>Accept</button> </div> <div class='ui-block-c'> <button class='declinegroupinvitebutton ui-btn ui-btn-inline ui-mini ui-btn-corner-all ui-icon-delete ui-btn-icon-right' groupname='"+gname+"'gid='"+gid+"'>Decline</button> </div></div>";
+				$("#groupnotifications").append($something);
+			}
+				
+			//ACCEPT GROUP INVITATION
+			$(".acceptgroupinvitebutton").click(function(){
+				var gid=$(this).attr("gid");
+				$.post("http://server8.ies.cse.ohio-state.edu/stacker/group_request_response.php", {
+					session:user.session,
+					uid:user.uid,
+					gid:gid,
+					response:1
+				}, function(data) {
+					var obj = $.parseJSON(data);
+					alert(obj.err);
+					$.mobile.pageContainer.pagecontainer("change","#mainpage", {transition: 'flow',reloadPage: false, allowSamePageTransition: false});
+				});
+			});	
+				
+			//DECLINE GROUP INVITATION
+			$(".declinegroupinvitebutton").click(function(){
+				var gid=$(this).attr("gid");
+				$.post("http://server8.ies.cse.ohio-state.edu/stacker/group_request_response.php", {
+					session:user.session,
+					uid:user.uid,
+					gid:gid,
+					response:0
+				}, function(data) {
+					var obj = $.parseJSON(data);
+					alert(obj.err);
+					$.mobile.pageContainer.pagecontainer("change","#mainpage", {transition: 'flow',reloadPage: true, allowSamePageTransition: true});
+				});
+			});	
+		});
+	});
+
+	//VIEW PERSONAL CALENDAR
+	$(document).on("pagebeforeshow","#view-calendar",function(){
+		$("#calendar").jqmCalendar({
+			events : [ 
+				{ "summary" : "Test event 1",  "url" : "cid1" , "begin" : new Date("2013-02-05 00:00:00"), "end" : new Date("2013-02-07 00:00:00") }, 
+				{ "summary" : "Test event 2",  "url" : "cid2", "begin" : new Date(), "end" : new Date() }, 
+				{ "summary" : "Test event 3",  "url" : "cid3", "begin" : new Date("2014-10-14 11:45:00"), "end" : new Date("2014-10-15 10:45:00") },
+				{ "summary" : "Test event 4",  "url" : "cid4nt", "begin" : new Date("2014-10-14 9:45:00"), "end" : new Date("2014-10-15 10:15:00") },
+				{ "summary" : "Test event 5",  "url" : "cid5", "begin" : new Date("2014-10-22 09:45:00"), "end" : new Date("2014-10-22 10:45:00") } ],
+			months : ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+			days : ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"],
+			startOfWeek : 0
+		});
+	});
+
+	//VIEW GROUP CALENDAR
+	$(document).on("pagebeforeshow","#view-group-calendar",function(e,data){
+		groupcalendar= [ new Date("2013-02-05 00:00:00") , new Date("2013-02-07 00:00:00") , new Date("2014-10-14 11:45:00"), new Date("2014-10-15 10:45:00") ];
+		$("#groupcalendar").jqmCalendar({
+			events : [ { "summary" : "Test event 1", "begin" : new Date("2013-02-05 00:00:00"), "end" : new Date("2013-02-07 00:00:00") }, 
+				{ "summary" : "Test event 2", "begin" : new Date(), "end" : new Date() }, 
+				{ "summary" : "Test event 3", "begin" : new Date("2014-10-14 11:45:00"), "end" : new Date("2014-10-15 10:45:00") },
+				{ "summary" : "Test event 3", "begin" : new Date("2014-10-22 09:45:00"), "end" : new Date("2014-10-22 10:45:00") } ],
+			months : ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+			days : ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"],
+			startOfWeek : 0
+		});
+	});
+
+	//GENERATE AVAILABILITY REPORT FORM
+	$(document).on("pagebeforeshow","#generateavailreportform",function(){
+		$("#generateavailreportheader").empty();
+		$("#generateavailreportheader").append(group.gname.toUpperCase()+" Availability Report");
+		$("#availrepgroupid").val(group.gid);
+  });
+	
+	//GENERATE AVAILABILITY BUTTON SUBMIT
+	$("#generateavailreportbutton").click(function(){
+		var startdate=$("#availrepstartdate").val();
+		var enddate=$("#availrependdate").val();
+		var starttime=$("#availrepstarttime").val();
+		var endtime=$("#availrependtime").val();
+		var gid=$("#availrepgroupid").val();
+		var result=compareTimes();
+		alert(result);
+		//alert("generate an avail report for group"+ gid +"having events"+ groupcalendar + " with the following parameters" + startdate +" "+ enddate+ " "+ starttime+ " "+ endtime);
+	});
+	
+	//ADD MEMBER TO GROUP
+	$("#addmemberbutton").click(function(){
+		$.post("http://server8.ies.cse.ohio-state.edu/stacker/add_member.php", {
+			email:$("#addmembervalue").val(),
+			gid:group.gid
+		}, function(data) {
+			var obj = $.parseJSON(data);
+			alert(obj.err);
+		});
+	});
+	
+	//REMOVE MEMBER FROM GROUP
+	$("#removememberbutton").click(function(){
+		$.post("http://server8.ies.cse.ohio-state.edu/stacker/delete_member.php", {
+			email:$("#removemembervalue").val(),
+			gid:group.gid
+		}, function(data) {
+			var obj = $.parseJSON(data);
+			alert(obj.err);
+		});
+	});
+		
+	//ADD CO-LEADER
+	$("#addcoleaderbutton").click(function(){
+		$.post("http://server8.ies.cse.ohio-state.edu/stacker/set_coleader.php", {
+			email:$("#addcoleadervalue").val(),
+			gid:group.gid
+		}, function(data) {
+			var obj = $.parseJSON(data);
+			alert(obj.err);
+		});
+	});	
+	
+	//LOGOUT
+	$(document).on("	pagebeforeshow","#logout",function(){
+		alert(user.session);
+		user.name=null;
+		user.uid=null;
+		user.session=null;
+    $.post("http://server8.ies.cse.ohio-state.edu/stacker/logout.php", {
+			session:user.session,
+		}, function(data) {
+			var obj = $.parseJSON(data);
+			$.mobile.pageContainer.pagecontainer("change","#welcome", {transition: 'flow',reloadPage: false});
+		});
+	});
+});
+
+</script>
+<style type="text/css">
+body {
+   
+	margin:0;
+	padding:0;
+	width:100%;
+	height:100%;
+	display:table;
+	
+}
+.ui-page {
+    background: transparent;
+}
+.ui-content{
+    background: transparent;
+}
+
+
+</style>
+</head>
+<body>
+<!-- WELCOME PAGE- Contains the  and register -->
+<div data-role="page" id="welcome" style="background: url(img/logo.png); background-repeat:no-repeat; background-position:center top; background-attachment:scroll; background-size:50% 50%;">
+
+  <div data-role="header" data-theme="b">
+		<h1>Stacker</h1>
+  </div>
+
+  <div data-role="main" class="ui-content" style="position:fixed; top:60%; left:25%">				
+		<a href="#login" class="ui-btn ui-btn-inline ui-mini ui-btn-corner-all ui-btn-b">Login</a>
+		<a href="#signup" class="ui-btn ui-btn-inline ui-mini ui-btn-corner-all ui-btn-b" >Sign Up</a>
+  </div>
+	<div data-role="footer" data-position="fixed" data-theme="b">
+		<h1></h1>
+  </div>
+</div> 
+
+
+<!-- LOGIN -->
+<div data-role="page" id="login">
+
+	<div data-role="header" data-theme="b" data-position="fixed">
+		<h1> Login</h1>
+		<a href="#welcome" class="ui-btn ui-btn-inline ui-mini ui-icon-back ui-btn-icon-left ui-btn-corner-all">Go back</a>
+	</div>
+
+	<div data-role="main" class="ui-content" style="position:fixed; top:20%; left:20%; background:#fff; ">
+  	<div>
+			<form id="loginform" method="POST">
+				<input type="text" id="email" data-mini="true" placeholder="Username"></input>
+				<input type="password" id="password" data-mini="true" placeholder="Password"></input>
+				<input type="submit" id="submitlogin" value="submit" data-theme="b"></input>
+			</form>
+		</div>
+	</div>
+
+	<div data-role="footer" data-position="fixed" data-theme="b">
+		<h1></h1>
+	</div>
+</div> 
+
+<!-- SIGNUP -->
+<div data-role="page" id="signup">
+		
+	<div data-role="header" data-theme="b">
+		<h1>Sign Up</h1>
+		<a href="#welcome" class="ui-btn ui-btn-inline ui-mini ui-icon-back ui-btn-icon-left ui-btn-corner-all">Go back</a>
+	</div>
+	<div data-role="main" class="ui-content" style="position:fixed; top:20%; left:20%; background:#fff; ">
+		<div>
+			<form id="loginform" method="POST">
+				<input type="text" id="regname" data-mini="true" placeholder="Name"></input>
+				<input type="text" id="regemail" data-mini="true" placeholder="Email"></input>
+				<input type="text" id="regpassword" data-mini="true" placeholder="Password"></input>
+				<input type="text" id="regphone" data-mini="true" placeholder="Phone #"></input>
+				<input type="submit" id="submitreg" value="submit" data-theme="b"></input>
+			</form>
+		</div>
+	</div>
+			  
+	<div data-role="footer" data-position="fixed" data-theme="b">
+		<h1></h1>
+	</div>
+</div> 
+
+
+<!-- MAINPAGE -->
+<div data-role="page" id="mainpage">
+			
+	<div data-role="header" data-theme="b">
+		<div data-role="navbar" id="mainnavbar" data-theme="a">
+			<ul>
+				<li><a data-icon="home" class="ui-active  ui-state-persist">Home</a></li>
+				<li><a href="#view-calendar" data-icon="grid">Calendar</a></li>
+				<li><a href="#settings" data-icon="gear">Settings</a></li>
+				<li><a href="#logout" data-icon="power">Logout</a></li>
+			</ul>
+		</div>
+	</div>
+
+	<!--Main Page Design -->
+	<div data-role="main" class="ui-content ui-grid-a" style="margin:0 auto; background:#fff;">
+
+		<div class="ui-block-a">	     
+			<a href="#creategroup" data-role="button" data-mini="true">Create Group</a>
+			<a href="#mygroups" data-role="button" data-mini="true">My Groups</a>
+			<a href="#" data-role="button" data-mini="true">Invite a Friend</a>
+		</div>		 
+
+		<div class="ui-block-b">
+			<a href="#managecalendars" data-role="button" data-mini="true">Manage Calendars</a>
+			<a href="#addcalendarevent" data-role="button" data-mini="true">New Calendar Event</a>
+			<a href="#notifications" data-role="button" data-mini="true">Notifications</a>
+		</div>
+	</div>
+			  
+	<div data-role="footer" data-position="fixed" data-theme="b">
+		<h1></h1>
+	</div>
+</div> 
+
+
+<!-- CREATE GROUP -->
+<div data-role="page" id="creategroup">
+			
+	<div data-role="header" data-theme="b">
+		<div data-role="navbar" id="mainnavbar" data-theme="a">
+			<ul>
+				<li><a href="#mainpage"  data-icon="back">Back</a></li>
+				<li><a href="#view-calendar" data-icon="calendar">Calendar</a></li>
+				<li><a href="#settings" data-icon="gear">Settings</a></li>
+				<li><a href="#logout" data-icon="power">Logout</a></li>
+			</ul>
+		</div>		
+	</div>
+
+	<!--Create Group Design -->
+	<div data-role="main" class="ui-content" style="background:#fff;">
+		<div class="ui-grid-a">
+			<div class="ui-block-a">
+				<h1>Create Group</h1>
+			</div>
+		</div>
+		<form id="creategroupform" method="POST" data-mini="true">
+			<input type="text" id="creategroupname" data-mini="true" placeholder="Group Name"></input>
+			<br />
+			<input type="text" id="creategroupmem1" data-mini="true" placeholder="Member 1:"></input>
+			<input type="text" id="creategroupmem2" data-mini="true" placeholder="Member 2:"></input>
+			<input type="text" id="creategroupmem3" data-mini="true" placeholder="Member 3:"></input>		
+			<input type="text" id="creategroupmem4" data-mini="true" placeholder="Member 4:"></input>							 
+			<input type="submit" id="submitcreategroup" value="submit" data-theme="b" data-mini="true"></input>
+		</form>
+	</div>
+			  
+	<div data-role="footer" data-position="fixed" data-theme="b">
+		<h1></h1>
+	</div>
+</div> 
+
+
+<!-- GENERATE AVAILABILITY REPORT FORM -->
+<div data-role="page" id="generateavailreportform">
+
+	<div data-role="header" data-theme="b" data-position="fixed">
+		<div data-role="navbar" id="mainnavbar" data-theme="a">
+			<ul>
+				<li><a href="#mygroups"  data-icon="back">Back</a></li>
+				<li><a href="#view-calendar" data-icon="calendar">Calendar</a></li>
+				<li><a href="#settings" data-icon="gear">Settings</a></li>
+				<li><a href="#logout" data-icon="power">Logout</a></li>
+			</ul>
+		</div>
+	</div>
+
+	<!--Generate Avail report Design -->
+	<div data-role="main" class="ui-content" style="background:#fff;  margin-top:2%;">
+		<div id="generateavailreportheader"></div>
+		<form id="generateavailreportform" data-mini="true">
+			<input type="hidden" id="availrepgroupid"></input>	
+			<h5>Meeting Start Date:</h5><input type="date" id="availrepstartdate" data-mini="true" value="2013-01-01"></input>
+			<h5>Meeting Start Time:</h5><input type="time" id="availrepstarttime" data-mini="true" ></input>
+			<h5>Meeting End Date:</h5><input type="date" id="availrependdate" data-mini="true" value="2016-01-01"></input>
+			<h5>Meeting End Time:</h5><input type="time" id="availrependtime" data-mini="true" ></input>
+			<input type="submit" id="generateavailreportbutton" data-mini="true" value="Generate Report"></input>						
+		</form>
+	</div>
+
+	<div data-role="footer" data-position="fixed" data-theme="b">
+		<h1></h1>
+	</div>
+</div> 
+
+
+
+<!-- GENERATE AVAILABILITY REPORT FORM -->
+<div data-role="page" id="addcalendarevent">
+
+	<div data-role="header" data-theme="b">
+		<div data-role="navbar" id="mainnavbar" data-theme="a">
+			<ul>
+				<li><a href="#mainpage"  data-icon="home">Home</a></li>
+				<li><a href="#view-calendar" data-icon="calendar">Calendar</a></li>
+				<li><a href="#settings" data-icon="gear">Settings</a></li>
+				<li><a href="#logout" data-icon="power">Logout</a></li>
+			</ul>
+		</div>
+	</div>
+				
+	<!--Generate Avail report Design -->
+	<div data-role="main" class="ui-content" style="background:#fff;  margin-top:2%;">
+		<form id="addcalendareventform" data-mini="true">
+			<input type="text" id="caleventtitle" Placeholder="Event Name"></input>	
+			<div data-role="fieldcontain">
+				<input type="text" id="caleventdesc" Placeholder="Description"></input>	
+			</div>
+			From:<input type="date" id="caleventstarttime" data-inline="true" data-mini="true" value="2013-01-01"></input>
+			Time:<input type="time" id="caleventstarttime" data-mini="true" ></input>
+			To:<input type="date" id="caleventstarttime" data-mini="true" value="2016-01-01"></input>
+			Time:<input type="time" id="caleventstarttime" data-mini="true" ></input>
+			<input type="submit" id="addcalendareventbutton" data-mini="true" data-theme="b" value="Create Event"></input>						
+		</form>
+	</div>
+</div> 
+
+
+<!-- MANAGE CALENDARS -->
+<div data-role="page" id="managecalendars">
+			
+	<div data-role="header" data-theme="b">
+		<div data-role="navbar" id="mainnavbar" data-theme="a">
+			<ul>
+				<li><a href="#mainpage"  data-icon="home">Home</a></li>
+				<li><a href="#view-calendar" data-icon="grid" class="ui-active  ui-state-persist">Calendars</a></li>
+				<li><a href="#settings" data-icon="gear" >Settings</a></li>
+				<li><a href="#logout" data-icon="power">Logout</a></li>
+			</ul>
+		</div>
+	</div>
+
+	<div data-role="main" class="ui-content" style="margin-top:5%; margin-left:5%; background:#fff; ">
+		<div id="main_header">
+			<a href="#addcalendar"  class="ui-btn ui-btn-inline ui-mini ui-btn-corner-all ui-icon-plus ui-btn-icon-right">Add Calendar</a>
+			<a href="#removecalendar" class="ui-btn ui-btn-inline  ui-mini ui-btn-corner-all ui-icon-edit ui-btn-icon-right">Remove Calendar</a>
+		</div>
+	</div>
+			  
+	<div data-role="footer" data-position="fixed" data-theme="b">
+		<h1></h1>
+	</div>
+</div> 	
+
+
+<!--ADD CALENDAR -->
+<div data-role="page" id="addcalendar">
+	<div data-role="header" data-theme="b">
+		<div data-role="navbar" id="mainnavbar" data-theme="a">
+			<ul>
+				<li><a href="#managecalendars"  data-icon="back">Back</a></li>
+				<li><a href="#view-calendar" data-icon="calendar">Calendar</a></li>
+				<li><a href="#settings" data-icon="gear">Settings</a></li>
+				<li><a href="#logout" data-icon="power">Logout</a></li>
+			</ul>
+		</div>
+	</div>
+
+	<!--Add Calendar Design -->
+	<div data-role="main" class="ui-content" style="background:#fff;  margin-top:2%;">
+		<h1>Google <button id="addgooglecalendar" class="ui-btn ui-btn-inline ui-btn-corner-all ui-mini ui-icon-plus ui-btn-icon-notext"></button></h1> 
+		<ul>
+			<li>Primary</li>
+			<li>Work</li>
+		</ul>
+		<br />
+		<h1>Apple <button id="addapplecalendar" class="ui-btn ui-btn-inline ui-btn-corner-all ui-mini ui-icon-plus ui-btn-icon-notext"></button></h1> 
+		<ul>
+			<li>My Calendar 1</li>
+			<li>School</li>
+		</ul>
+		<h1>Outlook <button id="addoutlookcalendar" class="ui-btn ui-btn-inline ui-btn-corner-all ui-mini ui-icon-plus ui-btn-icon-notext"></button></h1> 
+	</div>
+</div> 
+
+
+<!-- MY CALENDAR -->
+<div data-role="page" id="view-calendar" data-theme="a">
+	<div data-role="header" data-theme="b">
+		<div data-role="navbar" id="mainnavbar" data-theme="a">
+			<ul>
+				<li><a href="#mainpage"  data-icon="home">Home</a></li>
+				<li><a href="#view-calendar" data-icon="grid" class="ui-active  ui-state-persist">Calendar</a></li>
+				<li><a href="#settings" data-icon="gear" >Settings</a></li>
+				<li><a href="#logout" data-icon="power">Logout</a></li>
+			</ul>
+		</div>
+	</div>
+
+	<div data-role="content">
+		<div id="calendar"></div>
+	</div>
+</div>
+
+<!-- MY GROUPS -->
+<div data-role="page" id="mygroups">
+			
+	<div data-role="header" data-theme="b" data-position="fixed">
+		<div data-role="navbar" id="mainnavbar" data-theme="a">
+			<ul>
+				<li><a href="#mainpage"  data-icon="home">Home</a></li>
+				<li><a href="#view-calendar" data-icon="calendar">Calendar</a></li>
+				<li><a href="#settings" data-icon="gear">Settings</a></li>
+				<li><a href="#logout" data-icon="power">Logout</a></li>
+			</ul>
+		</div>
+	</div>
+
+	<!--My Groups Design -->
+	<div data-role="main" class="ui-content" style="font-size:8px; margin-top:2%;">			
+		<div id="viewgroups" class="overflow-y:scroll; margin:3px;"></div>
+	</div>
+
+	<div data-role="footer" data-position="fixed" data-theme="b">
+		<h1></h1>
+	</div>
+</div> 
+
+
+<!-- MANAGE GROUPS -->
+<div data-role="page" id="managegroups">
+
+	<div data-role="header" data-theme="b" data-position="fixed">
+		<div data-role="navbar" id="mainnavbar" data-theme="a">
+			<ul>
+				<li><a href="#mygroups"  data-icon="back">Back</a></li>
+				<li><a href="#view-calendar" data-icon="calendar">Calendar</a></li>
+				<li><a href="#settings" data-icon="gear">Settings</a></li>
+				<li><a href="#logout" data-icon="power">Logout</a></li>
+			</ul>
+		</div>
+	</div>
+				
+	<!--Manage groups Design -->
+	<div data-role="main" class="ui-content" style="background:#fff;">
+		<div class="ui-grid-b" id="addmemberwrapper">
+			<div class="ui-block-a">
+				<input type="text" Placeholder="Email" id="addmembervalue" data-mini="true"/>
+			</div>
+			<div class="ui-block-b">
+				<input type="submit" value="Add Member" data-mini="true" data-icon="plus" id="addmemberbutton" class="ui-btn ui-btn-inline"/>
+			</div>
+			<div class="ui-block-c"></div>
+		</div>
+
+		<div class="ui-grid-b" id="removememberwrapper">
+			<div class="ui-block-a">
+				<input type="text" Placeholder="Email" id="removemembervalue" data-mini="true"/>
+			</div>
+			<div class="ui-block-b">
+				<input type="submit" value="Remove from group" id="removememberbutton" data-icon="forbidden" data-mini="true" class="ui-btn ui-btn-inline"/>
+			</div>
+			<div class="ui-block-c"></div>
+		</div>
+
+		<div class="ui-grid-b" id="addcoleaderwrapper">
+			<div class="ui-block-a">
+				<input type="text" Placeholder="Email"  id="addcoleadervalue" data-mini="true"/>
+			</div>
+			<div class="ui-block-b">
+				<input type="submit" value="Add Co-leader" id="addcoleaderbutton" data-icon="user" data-mini="true" class="ui-btn ui-btn-inline"/>
+			</div>
+			<div class="ui-block-c"></div>
+		</div>
+	</div>
+
+	<div data-role="footer" data-position="fixed" data-theme="b">
+		<h1></h1>
+	</div>
+</div>
+
+
+<!-- VIEW GROUP CALENDAR -->
+<div data-role="page" id="view-group-calendar" data-theme="a">
+
+	<div data-role="header" data-theme="b">
+		<div data-role="navbar" id="mainnavbar" data-theme="a">
+			<ul>
+				<li><a href="#mygroups"  data-icon="back">Back</a></li>
+				<li><a href="#view-calendar" data-icon="grid" class="ui-active  ui-state-persist">Calendar</a></li>
+				<li><a href="#settings" data-icon="gear" >Settings</a></li>
+				<li><a href="#logout" data-icon="power">Logout</a></li>
+			</ul>
+		</div>
+	</div>
+
+	<div data-role="content">
+		<div id="groupcalendar"></div>
+	</div>
+</div>
+
+<!-- NOTIFICATIONS -->
+<div data-role="page" id="notifications">
+
+	<div data-role="header" data-theme="b" data-position="fixed">
+		<div data-role="navbar" id="mainnavbar" data-theme="a">
+			<ul>
+				<li><a href="#mainpage"  data-icon="back">Back</a></li>
+				<li><a href="#view-calendar" data-icon="calendar">Calendar</a></li>
+				<li><a href="#settings" data-icon="gear">Settings</a></li>
+				<li><a href="#logout" data-icon="power">Logout</a></li>
+			</ul>
+		</div>
+	</div>
+				
+	<!-- Notifications Main Design -->
+	<div data-role="main" class="ui-content" style="background:#fff; font-size:10px; margin-top:2%;">
+		<div id="groupnotifications"></div>
+	</div>
+			  
+	<div data-role="footer" data-position="fixed" data-theme="b">
+		<h1></h1>
+	</div>
+</div> 
+
+<!-- SETTINGS -->
+<div data-role="page" id="settings">
+
+	<div data-role="header" data-theme="b">
+		<div data-role="navbar" id="mainnavbar" data-theme="a">
+			<ul>
+				<li><a href="#mainpage"  data-icon="home">Home</a></li>
+				<li><a href="#view-calendar" data-icon="grid">Calendar</a></li>
+				<li><a href="#settings" data-icon="gear" class="ui-active  ui-state-persist">Settings</a></li>
+				<li><a href="#logout" data-icon="power">Logout</a></li>
+			</ul>
+		</div>
+	</div>
+
+	<!--Main Page Design -->
+	<div data-role="main" class="ui-content" style="position:fixed; top:30%; left:25%; background:#fff; ">
+		<div id="main_header">settings</div>
+	</div>
+
+	<div data-role="footer" data-position="fixed" data-theme="b">
+		<h1></h1>
+	</div>
+</div> 
+
+<div id="emtpydiv">
+</div>
+
+	
+<div id="logout">
+</div>
+
+</body>
+</html>

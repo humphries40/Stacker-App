@@ -21,6 +21,11 @@ Improve::
 <script type="text/javascript" src="js/jw-jqm-cal.js"></script>
 <script type="text/javascript" src="js/availreport.js"></script>
 <script>
+function isValidDate(d) {
+  if ( Object.prototype.toString.call(d) !== "[object Date]" )
+    return false;
+  return !isNaN(d.getTime());
+}
 function init() {
     document.addEventListener("deviceready", deviceReady, true);
     delete init;
@@ -71,20 +76,20 @@ $(document).ready(function () {
 
     //Login
     $("#submitlogin").click(function (event, data) {
-        $.mobile.loading('show');
+       
         //jQuery.post( url [, data ] [, success ] [, dataType ] )
         if (!$("#email").val() || !$("#password").val()) {
             alert("Please fill up the details");
-            refreshPage();
+         
         } else {
             user.email = $("#email").val();
+			 $.mobile.loading('show');
             $.post("http://server8.ies.cse.ohio-state.edu/stacker/login.php", {
                 email: $("#email").val(),
                 password: $("#password").val()
             },
-
             function (data) {
-                $.mobile.loading('show');
+                $.mobile.loading('hide');
                 var obj = $.parseJSON(data);
                 user.name = obj.user;
                 user.status = obj.status;
@@ -95,7 +100,7 @@ $(document).ready(function () {
                     alert(obj.err);
                     $.mobile.pageContainer.pagecontainer("change", "#login", {
                         transition: 'none',
-                        reloadPage: false
+                        reloadPage: true
                     });
                 } else {
                     $.mobile.pageContainer.pagecontainer("change", "#mainpage", {
@@ -110,6 +115,7 @@ $(document).ready(function () {
     //Register
     $("#submitreg").click(function () {
         //jQuery.post( url [, data ] [, success ] [, dataType ] )
+		$.mobile.loading('show');
         $.post("http://server8.ies.cse.ohio-state.edu/stacker/register.php", {
             name: $("#regname").val(),
             password: $("#regpassword").val(),
@@ -118,6 +124,7 @@ $(document).ready(function () {
         },
 
         function (data) {
+		$.mobile.loading('hide');
             var obj = $.parseJSON(data);
             if (obj.err) {
                 alert(obj.err);
@@ -174,8 +181,12 @@ $(document).ready(function () {
         function(data) {
           var deletedCal = $.parseJSON(data);
           alert(deletedCal + " deleted from db.");
+		   $.mobile.pageContainer.pagecontainer("change", "#refreshmanagecalendars", {
+                        transition: 'none',
+                        reloadPage: false
+                    });
         });
-        $.mobile.pageContainer.pagecontainer("change","#managecalendars",{reloadPage: false});
+      
       });
 
       //Show unsynced Google Calendars
@@ -209,8 +220,12 @@ $(document).ready(function () {
           function(data) {
             var addedCal = $.parseJSON(data);
             alert(addedCal + " added to db.");
+			$.mobile.pageContainer.pagecontainer("change", "#refreshmanagecalendars", {
+                        transition: 'none',
+                        reloadPage: false
+                    });
           });
-          $.mobile.pageContainer.pagecontainer("change","#managecalendars",{reloadPage: false});
+         
         });
 
 
@@ -227,7 +242,7 @@ $(document).ready(function () {
           },
           function(data) {
           });
-        }
+        };
       });
     });
   });
@@ -235,14 +250,25 @@ $(document).ready(function () {
     //Authorize access to Google Calendar
     $("#authgooglecalendar").click(function () {
         window.open("http://server8.ies.cse.ohio-state.edu/stacker/google/auth.php?email=" + user.email, '_system');
+		$.mobile.pageContainer.pagecontainer("change", "#refreshmanagecalendars", {
+                        transition: 'none',
+                        reloadPage: false
+                    });
     });
 
+	// REFRESH MANAGE CALENDARS
+    $(document).on("pagebeforeshow", "#refreshmanagecalendars", function () {
+        $.mobile.pageContainer.pagecontainer("change", "#managecalendars", {
+            transition: 'none',
+            reloadPage: false
+        });
+    });
 
     //Create Group
     $("#submitcreategroup").click(function () {
         //jQuery.post( url [, data ] [, success ] [, dataType ] )
         //TODO:: Make sure that all emails are unique and not equal to user creating the group
-
+		$.mobile.loading('show');
         $.post("http://server8.ies.cse.ohio-state.edu/stacker/create_group.php", {
             uid: user.uid,
             session: user.session,
@@ -254,6 +280,7 @@ $(document).ready(function () {
         },
 
         function (data) {
+			$.mobile.loading('hide');
             var obj = $.parseJSON(data);
             alert(obj.err);
             $.mobile.pageContainer.pagecontainer("change", "#mygroups", {
@@ -572,15 +599,15 @@ $(document).ready(function () {
         $("#calendar").empty();
         var something = "<div id = 'test'> </div> ";
         $("#calendar").append(something);
-        $.mobile.loading('show');
         personalcalendar = [];
-
+		$.mobile.loading('show');
         $.ajax({
             url: 'http://server8.ies.cse.ohio-state.edu/stacker/retrieve_user_calendar.php',
             data: {
                 uid: user.uid
             },
             success: function (data) {
+				$.mobile.loading('hide');
                 var obj = $.parseJSON(data);
                 var length = obj.length
                 for (index = 0; index < length; index = index + 4) {
@@ -619,10 +646,11 @@ $(document).ready(function () {
     $(document).on("pagebeforeshow", "#view-group-calendar", function (e, data) {
         //INPUT IS IF THE FORM - uid,start_time,end_time,event_name
         //TODO: Add colours to calendar based on users
-        groupcalendartable = [];
+        var groupcalendartable = [];
         var something = "<div id='testing2'> </div>";
         $("#groupcalendar").empty();
         $("#groupcalendar").append(something);
+		$.mobile.loading('show');
         $.post("http://server8.ies.cse.ohio-state.edu/stacker/retrieve_group_calendars.php", {
             session: user.session,
             uid: user.uid,
@@ -630,6 +658,7 @@ $(document).ready(function () {
         },
 
         function (data) {
+		$.mobile.loading('hide');
             var obj = $.parseJSON(data);
             var curr_user;
             var i = 0;
@@ -693,7 +722,6 @@ $(document).ready(function () {
 
     //GENERATE AVAILABILITY BUTTON SUBMIT
     $("#generateavailreportbutton").click(function () {
-		$.mobile.loading('show');
         var filter5 = 60;
         var gid = $("#availrepgroupid").val();
         var startdate = $("#availrepstartdate").val();
@@ -725,7 +753,7 @@ $(document).ready(function () {
         var filters = new Array(filter1, filter2, filter3, filter4, filter5);
         console.log(filters);
         var gcalendar = new Array();
-
+		$.mobile.loading('show');
         $.ajax({
             type: 'POST',
             url: 'http://server8.ies.cse.ohio-state.edu/stacker/retrieve_group_calendars.php',
@@ -758,6 +786,7 @@ $(document).ready(function () {
         var finalcal = new Array(gcalendar, []);
         console.log(finalcal);
         var result = compareCalendars(filters, finalcal);
+		$.mobile.loading('hide');
         if (result.length == 0) {
             alert('Sorry, There is no available meeting time for these filters, please try again');
             $.mobile.pageContainer.pagecontainer("change", "#generateavailreportform", {
@@ -1170,7 +1199,7 @@ body {
         <div><h1>Synced Calendars</h1></div>
         <table id="mancalendarlist">
         </table>
-        <button id="authgooglecalendar">Authorize Google Calendar Access</button>
+        <button id="addgooglecalendar">Authorize Google Calendar Access</button>
         <button id="syncgooglecalendars">Synchronize Calendar Events</button>
        </div>
         
@@ -1423,6 +1452,9 @@ body {
 </div>
 
 <div id="refreshmanagegroups">
+</div>
+
+<div id="refreshmanagecalendars">
 </div>
 <div id="logout">
 </div>

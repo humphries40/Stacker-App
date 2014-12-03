@@ -1,9 +1,23 @@
-C:\test2\platforms\android\ant-build\classes.dex : \
-C:\test2\platforms\android\ant-build\classes\com\test\test2\BuildConfig.class \
-C:\test2\platforms\android\ant-build\classes\com\test\test2\R$attr.class \
-C:\test2\platforms\android\ant-build\classes\com\test\test2\R$drawable.class \
-C:\test2\platforms\android\ant-build\classes\com\test\test2\R$string.class \
-C:\test2\platforms\android\ant-build\classes\com\test\test2\R$xml.class \
-C:\test2\platforms\android\ant-build\classes\com\test\test2\R.class \
-C:\test2\platforms\android\ant-build\classes\com\test\test2\test2.class \
-C:\test2\platforms\android\ant-build\dexedLibs\classes-209ce0115ed88f61cc639489844055b4.jar \
+F:\Stacker-App\test2\platforms\android\ant-build\classes.dex : \
+F:\Stacker-App\test2\platforms\android\ant-build\classes\com\test\test2\BuildConfig.class \
+F:\Stacker-App\test2\platforms\android\ant-build\classes\com\test\test2\R$attr.class \
+F:\Stacker-App\test2\platforms\android\ant-build\classes\com\test\test2\R$drawable.class \
+F:\Stacker-App\test2\platforms\android\ant-build\classes\com\test\test2\R$string.class \
+F:\Stacker-App\test2\platforms\android\ant-build\classes\com\test\test2\R$xml.class \
+F:\Stacker-App\test2\platforms\android\ant-build\classes\com\test\test2\R.class \
+F:\Stacker-App\test2\platforms\android\ant-build\classes\com\test\test2\test2.class \
+F:\Stacker-App\test2\platforms\android\ant-build\classes\org\apache\cordova\inappbrowser\InAppBrowser$1.class \
+F:\Stacker-App\test2\platforms\android\ant-build\classes\org\apache\cordova\inappbrowser\InAppBrowser$2.class \
+F:\Stacker-App\test2\platforms\android\ant-build\classes\org\apache\cordova\inappbrowser\InAppBrowser$3.class \
+F:\Stacker-App\test2\platforms\android\ant-build\classes\org\apache\cordova\inappbrowser\InAppBrowser$4$1.class \
+F:\Stacker-App\test2\platforms\android\ant-build\classes\org\apache\cordova\inappbrowser\InAppBrowser$4.class \
+F:\Stacker-App\test2\platforms\android\ant-build\classes\org\apache\cordova\inappbrowser\InAppBrowser$5$1.class \
+F:\Stacker-App\test2\platforms\android\ant-build\classes\org\apache\cordova\inappbrowser\InAppBrowser$5$2.class \
+F:\Stacker-App\test2\platforms\android\ant-build\classes\org\apache\cordova\inappbrowser\InAppBrowser$5$3.class \
+F:\Stacker-App\test2\platforms\android\ant-build\classes\org\apache\cordova\inappbrowser\InAppBrowser$5$4.class \
+F:\Stacker-App\test2\platforms\android\ant-build\classes\org\apache\cordova\inappbrowser\InAppBrowser$5.class \
+F:\Stacker-App\test2\platforms\android\ant-build\classes\org\apache\cordova\inappbrowser\InAppBrowser$InAppBrowserClient.class \
+F:\Stacker-App\test2\platforms\android\ant-build\classes\org\apache\cordova\inappbrowser\InAppBrowser.class \
+F:\Stacker-App\test2\platforms\android\ant-build\classes\org\apache\cordova\inappbrowser\InAppBrowserDialog.class \
+F:\Stacker-App\test2\platforms\android\ant-build\classes\org\apache\cordova\inappbrowser\InAppChromeClient.class \
+F:\Stacker-App\test2\platforms\android\ant-build\dexedLibs\classes-51a33951fcdd72920c473a874e4bd63d.jar \
