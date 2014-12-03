@@ -143,96 +143,8 @@ $(document).ready(function () {
         });
     });
 
-    //Manage Calendars
-    $(document).on("pagebeforeshow","#managecalendars",function(){
-        $("#mancalendarlist").empty();
 
-    //Show synced Google Calendars
-    $.post("http://server8.ies.cse.ohio-state.edu/stacker/view_calendars.php",
-    {
-      session:user.session,
-      uid:user.uid
-    },
-    function(data){
-      var calArray = new Array();
-      var obj = $.parseJSON(data);
-      for (var i = 0; i < obj.length; i += 2) {
-        calArray[i] = obj[i];
-        calArray[i+1] = obj[i+1];
-        $("#mancalendarlist").append("<tr><td>" + calArray[i] + "</td><td><button cid='"+calArray[i+1]+"' class='deleteCalBtn ui-btn ui-btn-corner-all ui-icon-delete ui-btn-icon-notext'></td></tr>");
-      }
-
-      //Delete calendar
-      $(".deleteCalBtn").click(function(e){
-        var cid = $(this).attr("cid");
-        $.post("http://server8.ies.cse.ohio-state.edu/stacker/google/delete_calendar.php",
-        {
-          session:user.session,
-          uid:user.uid,
-          cid:cid
-        },
-        function(data) {
-          var deletedCal = $.parseJSON(data);
-          alert(deletedCal + " deleted from db.");
-        });
-        $.mobile.pageContainer.pagecontainer("change","#managecalendars",{reloadPage: false});
-      });
-
-      //Show unsynced Google Calendars
-      $.post("http://server8.ies.cse.ohio-state.edu/stacker/google/list_calendars.php",
-      {
-      session:user.session,
-      uid:user.uid
-      },
-      function(data) {
-        var obj2 = $.parseJSON(data);
-        var gCalArray = new Array();
-        var i = 0;
-        for (var j = 0; j < obj2.length; j += 2) {
-          if ($.inArray(obj2[j], calArray) < 0) {
-            gCalArray[i] = obj2[j];
-            gCalArray[i+1] = obj2[j+1];
-            $("#mancalendarlist").append("<tr style='background:#ddd'><td>" + gCalArray[i] + "</td><td><button cid='"+gCalArray[i+1]+"' class='addCalBtn ui-btn ui-btn-corner-all ui-icon-plus ui-btn-icon-notext'></td></tr>");
-            i += 2;
-          }
-        }
-
-        //Add calendar
-        $(".addCalBtn").click(function(e){
-          var cid = $(this).attr("cid");
-          $.post("http://server8.ies.cse.ohio-state.edu/stacker/google/add_calendar.php",
-          {
-            session:user.session,
-            uid:user.uid,
-            cid:cid
-          },
-          function(data) {
-            var addedCal = $.parseJSON(data);
-            alert(addedCal + " added to db.");
-          });
-          $.mobile.pageContainer.pagecontainer("change","#managecalendars",{reloadPage: false});
-        });
-
-
-      });
-
-      //Synchronize events for calendars
-      $("#syncgooglecalendars").click(function () {
-        for (var k = 1; k < calArray.length; k += 2) {
-          $.post("http://server8.ies.cse.ohio-state.edu/stacker/google/get_events.php",
-          {
-            session:user.session,
-            uid:user.uid,
-            cid:calArray[k]
-          },
-          function(data) {
-          });
-        }
-      });
-    });
-  });
-  
-    //Authorize access to Google Calendar
+    //Add Google Calendar
     $("#addgooglecalendar").click(function () {
         window.open("http://server8.ies.cse.ohio-state.edu/stacker/google/auth.php?email=" + user.email, '_system');
     });
@@ -1154,36 +1066,35 @@ body {
 
 <!-- MANAGE CALENDARS -->
 <div data-role="page" id="managecalendars">
-      
-         <div data-role="header" data-theme="b">
-          <div data-role="navbar" id="mainnavbar" data-theme="a">
-          <ul>
-            <li><a href="#mainpage"  data-icon="home">Home</a></li>
-            <li><a href="#view-calendar" data-icon="grid" class="ui-active  ui-state-persist">Calendars</a></li>
-            <li><a href="#settings" data-icon="gear" >Settings</a></li>
-            <li><a href="#logout" data-icon="power">Logout</a></li>
-          </ul>
-          </div>
-        </div>
+			
+			   <div data-role="header" data-theme="b">
+					<div data-role="navbar" id="mainnavbar" data-theme="a">
+					<ul>
+					  <li><a href="#mainpage"  data-icon="home">Home</a></li>
+					  <li><a href="#view-calendar" data-icon="grid" class="ui-active  ui-state-persist">Calendars</a></li>
+					  <li><a href="#settings" data-icon="gear" >Settings</a></li>
+					  <li><a href="#logout" data-icon="power">Logout</a></li>
+					</ul>
+					</div>
+				</div>
 
-       <div data-role="main" class="ui-content" style="background:#fff;  margin-top:2%;">
-        <div><h1>Synced Calendars</h1></div>
-        <table id="mancalendarlist">
-        </table>
-        <button id="authgooglecalendar">Authorize Google Calendar Access</button>
-        <button id="syncgooglecalendars">Synchronize Calendar Events</button>
-       </div>
-        
-        <div data-role="footer" data-position="fixed" data-theme="b">
-        <h1>Footer Text</h1>
-        </div>
+			 <div data-role="main" class="ui-content" style="margin-top:5%; margin-left:5%; background:#fff; ">
+				  <div id="main_header">
+					 <a href="#addcalendar"  class="ui-btn ui-btn-inline ui-mini ui-btn-corner-all ui-icon-plus ui-btn-icon-right">Add Calendar</a>
+					 <a href="#removecalendar" class="ui-btn ui-btn-inline  ui-mini ui-btn-corner-all ui-icon-edit ui-btn-icon-right">Remove Calendar</a>
+				  </div>
+				
+			  </div>
+			  
+			  <div data-role="footer" data-position="fixed" data-theme="b">
+				<h1>Footer Text</h1>
+			  </div>
 
  
-</div> 
+</div> 	
 
 
 <!--ADD CALENDAR -->
-<!--
 <div data-role="page" id="addcalendar">
 			    <div data-role="header" data-theme="b">
 					<div data-role="navbar" id="mainnavbar" data-theme="a">
@@ -1196,6 +1107,7 @@ body {
 					</div>
 					
 				</div>
+			<!--Add Calendar Design -->
 			 <div data-role="main" class="ui-content" style="background:#fff;  margin-top:2%;">
 				        <h1>Google <button id="addgooglecalendar" class="ui-btn ui-btn-inline ui-btn-corner-all ui-mini ui-icon-plus ui-btn-icon-notext"></button></h1> 
 						<ul>
@@ -1210,8 +1122,7 @@ body {
 						</ul>
 						<h1>Outlook <button id="addoutlookcalendar" class="ui-btn ui-btn-inline ui-btn-corner-all ui-mini ui-icon-plus ui-btn-icon-notext"></button></h1> 
 			  </div>
-</div>
--->
+</div> 
 
 <!-- MY CALENDAR -->
 <div data-role="page" id="view-calendar" data-theme="a">
