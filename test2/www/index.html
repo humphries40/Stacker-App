@@ -507,8 +507,9 @@ Improve::
 					st = new Date(st).toLocaleDateString() + " " + new Date(st).toLocaleTimeString();
 					var et = obj[index + 3];
 					et = new Date(et).toLocaleDateString() + " " + new Date(et).toLocaleTimeString();
+					var gname = mname;
 					mname = mname + ": " + st + " to " + et;
-					var $something = " <div class='ui-grid-b' > <div class='ui-block-a' style='text-align:center'> <h4>" + mname + "</h4> </div> <div  class='ui-block-b'> <button class='acceptmeetingbutton ui-btn ui-btn-inline ui-mini ui-btn-corner-all ui-icon-check ui-btn-icon-right' mname='" + mname + "' mid='" + mid + "'>Accept</button> </div> <div class='ui-block-c'> <button class='declinemeetingbutton ui-btn ui-btn-inline ui-mini ui-btn-corner-all ui-icon-delete ui-btn-icon-right' mname='" + mname + "'mid='" + mid + "'>Decline</button> </div></div>";
+					var $something = " <div class='ui-grid-b' > <div class='ui-block-a' style='text-align:center'> <h4>" + mname + "</h4> </div> <div  class='ui-block-b'> <button class='acceptmeetingbutton ui-btn ui-btn-inline ui-mini ui-btn-corner-all ui-icon-check ui-btn-icon-right' mname='" + mname + "' mid='" + mid + "'  st='" + st + "'  et='" + et + "'  gname='" + gname + "'>Accept</button> </div> <div class='ui-block-c'> <button class='declinemeetingbutton ui-btn ui-btn-inline ui-mini ui-btn-corner-all ui-icon-delete ui-btn-icon-right' mname='" + mname + "'mid='" + mid + "'>Decline</button> </div></div>";
 					$("#groupnotifications").append($something);
 				}
 
@@ -520,6 +521,18 @@ Improve::
 						uid: user.uid,
 						mid: mid,
 						response: 1
+					},
+					function (data) {
+						var obj = $.parseJSON(data);
+						alert(obj.err);	
+					});
+					
+					// Add to google 
+					$.post("http://server8.ies.cse.ohio-state.edu/stacker/google/schedule_meeting.php", {
+						uid: user.uid,
+						st: st,
+						et: et,
+						notes: gname
 					},
 					function (data) {
 						var obj = $.parseJSON(data);
