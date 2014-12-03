@@ -57,9 +57,7 @@ F:\Stacker-App\test2\platforms\android\assets\www\cordova.js \
 F:\Stacker-App\test2\platforms\android\assets\www\cordova_plugins.js \
 F:\Stacker-App\test2\platforms\android\assets\www\css \
 F:\Stacker-App\test2\platforms\android\assets\www\img \
-F:\Stacker-App\test2\platforms\android\assets\www\index - Copy.html \
 F:\Stacker-App\test2\platforms\android\assets\www\index.html \
-F:\Stacker-App\test2\platforms\android\assets\www\index_test.html \
 F:\Stacker-App\test2\platforms\android\assets\www\js \
 F:\Stacker-App\test2\platforms\android\assets\www\plugins \
 F:\Stacker-App\test2\platforms\android\assets\www\css\images \

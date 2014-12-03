@@ -104,7 +104,7 @@ $(document).ready(function () {
                     });
                 } else {
                     $.mobile.pageContainer.pagecontainer("change", "#mainpage", {
-                        transition: 'flow',
+                        transition: 'none',
                         reloadPage: false
                     });
                 }
@@ -129,13 +129,13 @@ $(document).ready(function () {
             if (obj.err) {
                 alert(obj.err);
                 $.mobile.pageContainer.pagecontainer("change", "#signup", {
-                    transition: 'flow',
+                    transition: 'none',
                     reloadPage: false
                 });
             } else {
                 alert("Thank you for signing up. Please login to continue");
                 $.mobile.pageContainer.pagecontainer("change", "#login", {
-                    transition: 'flow',
+                    transition: 'none',
                     reloadPage: false
                 });
             }
@@ -145,7 +145,7 @@ $(document).ready(function () {
     //To check if the user is valid or not Else send to main page
     $(document).on("pagebeforeshow", "#mainpage", function () { // When entering mainpage
         if (!user.name) $.mobile.pageContainer.pagecontainer("change", "#login", {
-            transition: 'flow',
+            transition: 'none',
             reloadPage: false
         });
     });
@@ -248,9 +248,11 @@ $(document).ready(function () {
   });
   
     //Authorize access to Google Calendar
-    $("#addgooglecalendar").click(function () {
-        window.open("http://server8.ies.cse.ohio-state.edu/stacker/google/auth.php?email=" + user.email, '_system');
-		$.mobile.pageContainer.pagecontainer("change", "#refreshmanagecalendars", {
+    $("#authgooglecalendar").click(function () {
+        window.open("http://server8.ies.cse.ohio-state.edu/stacker/google/auth.php?email=" + user.email, "_system");
+
+    //Refresh manage calendars page
+	$.mobile.pageContainer.pagecontainer("change", "#refreshmanagecalendars", {
                         transition: 'none',
                         reloadPage: false
                     });
@@ -284,7 +286,7 @@ $(document).ready(function () {
             var obj = $.parseJSON(data);
             alert(obj.err);
             $.mobile.pageContainer.pagecontainer("change", "#mygroups", {
-                transition: 'flow',
+                transition: 'none',
                 reloadPage: false
             });
         });
@@ -306,7 +308,7 @@ $(document).ready(function () {
             if (obj.length == 0) {
                 alert("You are not part of any groups.");
                 $.mobile.pageContainer.pagecontainer("change", "#creategroup", {
-                    transitiion: 'flow',
+                    transitiion: 'none',
                     reloadPage: false
                 });
             }
@@ -328,7 +330,7 @@ $(document).ready(function () {
                 group.gid = $(this).attr("gid");
                 group.gname = $(this).attr("gname");
                 $.mobile.pageContainer.pagecontainer("change", "#view-group-calendar", {
-                    transitiion: 'flow'
+                    transitiion: 'none'
                 });
             });
 
@@ -337,7 +339,7 @@ $(document).ready(function () {
                 group.gid = $(this).attr("gid");
                 group.gname = $(this).attr("gname");
                 $.mobile.pageContainer.pagecontainer("change", "#managegroups", {
-                    transitiion: 'flow',
+                    transitiion: 'none',
                     reloadPage: false
                 });
             });
@@ -347,7 +349,7 @@ $(document).ready(function () {
                 group.gid = $(this).attr("gid");
                 group.gname = $(this).attr("gname");
                 $.mobile.pageContainer.pagecontainer("change", "#generateavailreportform", {
-                    transitiion: 'flow',
+                    transitiion: 'none',
                     reloadPage: false
                 });
             });
@@ -705,7 +707,7 @@ $(document).ready(function () {
             var obj = $.parseJSON(data);
             alert(obj.err);
             $.mobile.pageContainer.pagecontainer("change", "#mainpage", {
-                transition: 'flow',
+                transition: 'none',
                 reloadPage: false
             });
         });
@@ -790,7 +792,7 @@ $(document).ready(function () {
         if (result.length == 0) {
             alert('Sorry, There is no available meeting time for these filters, please try again');
             $.mobile.pageContainer.pagecontainer("change", "#generateavailreportform", {
-                transition: 'flow',
+                transition: 'none',
                 reloadPage: false
             });
         } else {
@@ -798,7 +800,7 @@ $(document).ready(function () {
             availreport = result;
             console.log(result);
             $.mobile.pageContainer.pagecontainer("change", "#availreportresult", {
-                transition: 'flow',
+                transition: 'none',
                 reloadPage: false
             });
         }
@@ -839,7 +841,7 @@ $(document).ready(function () {
                 console.log(obj);
                 //alert(obj);
                 $.mobile.pageContainer.pagecontainer("change", "#mainpage", {
-                    transition: 'flow',
+                    transition: 'none',
                     reloadPage: false
                 });
             });
@@ -861,9 +863,64 @@ $(document).ready(function () {
         });
     });
 
-   
+	//Before Settings
+    $(document).on("pagebeforeshow", "#settings", function () {
+	$("#settingsname").attr("placeholder","Name: "+user.name);
+	$("#settingsstatus").attr("placeholder","Status: "+user.status);
+    });
+	
+	 //UPDATE NAME
+    $("#updatename").click(function () {
+		var name = $("#settingsname").val();
+		user.name = name;
+        $.post("http://server8.ies.cse.ohio-state.edu/stacker/update_name.php", {
+            uid: user.uid,
+            name: name,
+        },
+        function (data) {
+            var obj = $.parseJSON(data);
+            alert(obj.err);
+            $.mobile.pageContainer.pagecontainer("change", "#mainpage", {
+                transition: 'none',
+                reloadPage: false
+            });
+        });
+    });
 
-
+	 //UPDATE PHONE
+    $("#updatephone").click(function () {
+		var phone = $("#settingsphone").val();
+        $.post("http://server8.ies.cse.ohio-state.edu/stacker/update_phone.php", {
+            uid: user.uid,
+            phone: phone,
+        },
+        function (data) {
+            var obj = $.parseJSON(data);
+            alert(obj.err);
+            $.mobile.pageContainer.pagecontainer("change", "#mainpage", {
+                transition: 'none',
+                reloadPage: false
+            });
+        });
+    });
+	
+	 //UPDATE STATUS
+    $("#updatestatus").click(function () {
+		var status = $("#settingsstatus").val();
+		user.status = status;
+        $.post("http://server8.ies.cse.ohio-state.edu/stacker/update_status.php", {
+            uid: user.uid,
+			status: status
+        },
+        function (data) {
+            var obj = $.parseJSON(data);
+            alert(obj.err);
+            $.mobile.pageContainer.pagecontainer("change", "#mainpage", {
+                transition: 'none',
+                reloadPage: false
+            });
+        });
+    });
 
     //INVITE A FRIEND
     $("#submitinvite").click(function () {
@@ -876,7 +933,7 @@ $(document).ready(function () {
             var obj = $.parseJSON(data);
             alert(obj.err);
             $.mobile.pageContainer.pagecontainer("change", "#mainpage", {
-                transition: 'flow',
+                transition: 'none',
                 reloadPage: false
             });
         });
@@ -895,7 +952,7 @@ $(document).ready(function () {
         function (data) {
             var obj = $.parseJSON(data);
             $.mobile.pageContainer.pagecontainer("change", "#welcome", {
-                transition: 'flow',
+                transition: 'none',
                 reloadPage: false
             });
 
@@ -950,7 +1007,7 @@ body {
 			  </div>
 
 			  <div data-role="footer" data-position="fixed" data-theme="b">
-				<h1>Footer Text</h1>
+				<h1>&copy; Stacker Team</h1>
 			  </div>
 </div> 
 
@@ -967,7 +1024,7 @@ body {
 				 
 				  <form id="loginform" action="javascript:void(0);" method="POST">
 						   <input type="text" id="email" data-mini="true" placeholder="Username"></input>
-						     <input type="password" id="password" data-mini="true" placeholder="Password"></input>
+						   <input type="password" id="password" data-mini="true" placeholder="Password"></input>
 						<input type="submit" id="submitlogin" value="submit" data-theme="b"/>
 						
 				  </form>
@@ -976,7 +1033,7 @@ body {
 			  </div>
 			  
 			  <div data-role="footer" data-position="fixed" data-theme="b">
-				<h1>Footer Text</h1>
+				<h1>&copy; Stacker Team</h1>
 			  </div>
 			 
   
@@ -1003,7 +1060,7 @@ body {
 			  </div>
 			  
 			  <div data-role="footer" data-position="fixed" data-theme="b">
-				<h1>Footer Text</h1>
+				<h1>&copy; Stacker Team</h1>
 			  </div>
 
  
@@ -1039,7 +1096,7 @@ body {
 			  </div>
 			  
 			  <div data-role="footer" data-position="fixed" data-theme="b">
-				<h1>Footer Text</h1>
+				<h1>&copy; Stacker Team</h1>
 			  </div>
 
  
@@ -1077,7 +1134,7 @@ body {
 			  </div>
 			  
 			  <div data-role="footer" data-position="fixed" data-theme="b">
-				<h1>Footer Text</h1>
+				<h1>&copy; Stacker Team</h1>
 			  </div>
 
  
@@ -1113,7 +1170,7 @@ body {
 			  </div>
 			  
 			  <div data-role="footer" data-position="fixed" data-theme="b">
-				<h1>Footer Text</h1>
+				<h1>&copy; Stacker Team</h1>
 			  </div>
 
 </div> 
@@ -1140,7 +1197,7 @@ body {
 			  </div>
 			  
 			  <div data-role="footer" data-position="fixed" data-theme="b">
-				<h1>Footer Text</h1>
+				<h1>&copy; Stacker Team</h1>
 			  </div>
 
 </div> 
@@ -1199,48 +1256,16 @@ body {
         <div><h1>Synced Calendars</h1></div>
         <table id="mancalendarlist">
         </table>
-        <button id="addgooglecalendar">Authorize Google Calendar Access</button>
+        <button id="authgooglecalendar">Authorize Google Calendar Access</button>
         <button id="syncgooglecalendars">Synchronize Calendar Events</button>
        </div>
         
         <div data-role="footer" data-position="fixed" data-theme="b">
-        <h1>Footer Text</h1>
+        <h1>&copy; Stacker Team</h1>
         </div>
 
  
 </div> 
-
-
-<!--ADD CALENDAR -->
-<!--
-<div data-role="page" id="addcalendar">
-			    <div data-role="header" data-theme="b">
-					<div data-role="navbar" id="mainnavbar" data-theme="a">
-					<ul>
-					  <li><a href="#managecalendars"  data-icon="back">Back</a></li>
-					  <li><a href="#view-calendar" data-icon="calendar">Calendar</a></li>
-					  <li><a href="#settings" data-icon="gear">Settings</a></li>
-					  <li><a href="#logout" data-icon="power">Logout</a></li>
-					</ul>
-					</div>
-					
-				</div>
-			 <div data-role="main" class="ui-content" style="background:#fff;  margin-top:2%;">
-				        <h1>Google <button id="addgooglecalendar" class="ui-btn ui-btn-inline ui-btn-corner-all ui-mini ui-icon-plus ui-btn-icon-notext"></button></h1> 
-						<ul>
-						<li>Primary</li>
-						<li>Work</li>
-						</ul>
-						</br>
-						<h1>Apple <button id="addapplecalendar" class="ui-btn ui-btn-inline ui-btn-corner-all ui-mini ui-icon-plus ui-btn-icon-notext"></button></h1> 
-						<ul>
-						<li>My Calendar 1</li>
-						<li>School</li>
-						</ul>
-						<h1>Outlook <button id="addoutlookcalendar" class="ui-btn ui-btn-inline ui-btn-corner-all ui-mini ui-icon-plus ui-btn-icon-notext"></button></h1> 
-			  </div>
-</div>
--->
 
 <!-- MY CALENDAR -->
 <div data-role="page" id="view-calendar" data-theme="a">
@@ -1281,13 +1306,13 @@ body {
 			<!--My Groups Design -->
 			 <div data-role="main" class="ui-content" style="font-size:8px; margin-top:2%;">
 				
-				<div id="viewgroups" class="overflow-y:scroll; margin:3px;">
+				<div id="viewgroups" class="overnone-y:scroll; margin:3px;">
 				</div>
 				
 			</div>
 			  
 			  <div data-role="footer" data-position="fixed" data-theme="b">
-				<h1>Footer Text</h1>
+				<h1>&copy; Stacker Team</h1>
 			  </div>
 
  
@@ -1325,7 +1350,7 @@ body {
 			</div>
 			  
 			  <div data-role="footer" data-position="fixed" data-theme="b">
-				<h1>Footer Text</h1>
+				<h1>&copy; Stacker Team</h1>
 			  </div>
 
  
@@ -1376,7 +1401,7 @@ body {
 			</div>
 			  
 			  <div data-role="footer" data-position="fixed" data-theme="b">
-				<h1>Footer Text</h1>
+				<h1>&copy; Stacker Team</h1>
 			  </div>
 
  
@@ -1396,16 +1421,35 @@ body {
 					</div>
 				</div>
 
-			 <div data-role="main" class="ui-content" style="position:fixed; top:30%; left:25%; background:#fff; ">
-				  <div id="main_header">
-					  
-					 <!--Main Page Design -->
-				  </div>
-				
+			 <div data-role="main" class="ui-content" style="margin:50px 50px; background:#fff; ">
+				<div class="ui-grid-a">
+					<div class="ui-block-a">
+				   <input type="text" id="settingsname" data-mini="true" placeholder="Name"></input>
+				   </div>
+				   <div class="ui-block-b">
+				   <button id="updatename" class="ui-btn ui-btn-inline ui-btn-mini ui-btn-icon-right ui-icon-edit ui-btn-corner-all">Update</button>
+				   </div>
+				</div>
+				<div class="ui-grid-a">
+					<div class="ui-block-a">
+				   <input type="text" id="settingsphone" data-mini="true" placeholder="Phone"></input>
+				   </div>
+				   <div class="ui-block-b">
+				   <button id="updatephone" class="ui-btn ui-btn-inline ui-btn-mini ui-btn-icon-right ui-icon-edit ui-btn-corner-all">Update</button>
+				   </div>
+				</div>
+				<div class="ui-grid-a">
+					<div class="ui-block-a">
+				   <input type="text" id="settingsstatus" data-mini="true" placeholder="Status"></input>
+				   </div>
+				   <div class="ui-block-b">
+				  <button id="updatestatus" class="ui-btn ui-btn-inline ui-btn-mini ui-btn-icon-right ui-icon-edit ui-btn-corner-all">Update</button>
+				   </div>
+				</div>
 			  </div>
 			  
 			  <div data-role="footer" data-position="fixed" data-theme="b">
-				<h1>Footer Text</h1>
+				<h1>&copy; Stacker Team</h1>
 			  </div>
 
  
@@ -1436,7 +1480,7 @@ body {
 			  </div>
 			  
 			  <div data-role="footer" data-position="fixed" data-theme="b">
-				<h1>Footer Text</h1>
+				<h1>&copy; Stacker Team</h1>
 			  </div>
 
  
