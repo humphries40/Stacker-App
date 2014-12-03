@@ -159,19 +159,18 @@ function findOpen(events, filters) {
 			var count = 0;
 			var curEventCount = 0;
 			//This sets the current time to be within the meeting range
-			if(curTime.getHours() < filters[2])
-			{
-				curTime.setHours(filters[2]);
+			if(curTime.getHours() < filters[2])			{
+				curTime = curTime.setHours(filters[2]);
+				startMeetingTime = new Date(curTime.valueOf());
 			//	console.log("Current Time, filter 2 ="+ curTime);
 			}
-			if(curTime.getHours() >= filters[3])
-			{
+			if(curTime.getHours() >= filters[3])			{
 				//increments the time to the lower end of the filters and adds 24 hours so it's the next day. 
-				curTime.setHours(filters[2] + 24);
+				curTime = curTime.setHours(filters[2] + 24);
+				startMeetingTime = new Date(curTime.valueOf());
 			//	console.log("Current Time, filter 3 ="+ curTime);
 			}
-			if(compareDay(curTime, filters[1]) == 1)
-			{
+			if(compareDay(curTime, filters[1]) == 1){
 				break;
 			}
 			//NEED TO ADD A CHANGE START TIME TO END TIME IF A MEETING WAS JUST SCHEDULED!
@@ -198,30 +197,32 @@ function findOpen(events, filters) {
 				//This means the current time is after all of the free time in this calendar.
 				else if(curEventCount > openTimes[count].length){
 					if(allCouldMeet){
-					  if(compareDay(startMeetingTime, endMeetingTime) !== 0){
+					  if(compareDay(startMeetingTime, endMeetingTime) == -1){
 						meetingTimes.push(new Date(startMeetingTime.valueOf()));
 						meetingTimes.push(new Date(endMeetingTime.valueOf()));
-						meetingTimes.push("Current Time After all free Time");
+						//meetingTimes.push("Current Time After all free Time");
 						duration = 0;
 						
 					  }
 					allCouldMeet = false;
 					}
 					canMeet = false;
+					duration = 0;
 				}		
 				//if the current time is before the start of free time that means they can't meet
 				else if(compareDay(curTime, openTimes[count][curEventCount]) < 0) {
 					if(allCouldMeet)
 					{
-					  if(compareDay(startMeetingTime, endMeetingTime) !== 0){
+					  if(compareDay(startMeetingTime, endMeetingTime) == -1){
 						meetingTimes.push(new Date(startMeetingTime.valueOf()));
 						meetingTimes.push(new Date(endMeetingTime.valueOf()));
-						meetingTimes.push("Before start of free Time");
+						//meetingTimes.push("Before start of free Time");
 						duration = 0;
 					  }
 					allCouldMeet = false;
 					}
 					canMeet = false;
+					duration = 0;
 				}
 				//The current time works in this calendar. It's possible for them to meet. 
 				
@@ -231,21 +232,27 @@ function findOpen(events, filters) {
 					count = 0;
 					allCouldMeet = true;
 					endMeetingTime = new Date(curTime.valueOf());
-					duration++;
-					if(duration > filters[4]){
+					if(duration == filters[4]){
 						//console.log("Duration Meeting");
-						meetingTimes.push(new Date(startMeetingTime.valueOf()));
-						meetingTimes.push(new Date(endMeetingTime.valueOf()));
-						meetingTimes.push("Duration Time");
+						if(compareDay(startMeetingTime, endMeetingTime) == -1){
+								//console.log("Normal Meeting");
+								meetingTimes.push(new Date(startMeetingTime.valueOf()));
+								meetingTimes.push(new Date(endMeetingTime.valueOf()));
+								//meetingTimes.push("Normal Meeting");
+						}
 						allCouldMeet = false;
 						canMeet = false;
 						duration = 0;
 					}
 					else if(curTime.getHours() == filters[3])	{
 						//console.log("Outside Limit Meeting");
-						meetingTimes.push(new Date(startMeetingTime.valueOf()));
-						meetingTimes.push(new Date(endMeetingTime.valueOf()));
-						meetingTimes.push("Outside limit");
+						if(compareDay(startMeetingTime, endMeetingTime) == -1){
+								//console.log("Normal Meeting");
+								meetingTimes.push(new Date(startMeetingTime.valueOf()));
+								meetingTimes.push(new Date(endMeetingTime.valueOf()));
+								//meetingTimes.push("Normal Meeting");
+						}
+						//meetingTimes.push("Outside limit");
 						allCouldMeet = false;
 						canMeet = false;
 						duration = 0;
@@ -259,18 +266,18 @@ function findOpen(events, filters) {
 					else {
 						curTime = new Date(incrementTime(curTime));
 						if(compareDay(curTime, filters[1]) >0)
-							{if(compareDay(startMeetingTime, endMeetingTime) !== 0){
+							{if(compareDay(startMeetingTime, endMeetingTime) == -1){
 								//console.log("Normal Meeting");
 								meetingTimes.push(new Date(startMeetingTime.valueOf()));
 								meetingTimes.push(new Date(endMeetingTime.valueOf()));
-								meetingTimes.push("Normal Meeting");
+								//meetingTimes.push("Normal Meeting");
 							}
 						allCouldMeet = false;
 						canMeet = false;
 						duration = 0;
 						}
 					}
-					
+					duration++;
 				}
 							
 			}

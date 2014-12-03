@@ -781,7 +781,7 @@ Improve::
 				alert("no meeting times available");
 			}
 			var something = $(" <table data-role='table' data-mode='columntoggle' class='ui-responsive' id='availreporttable'> <thead> <tr> <th>Start Time</th> <th>End Time</th> <th></th> </tr> </thead> <tbody>");
-			for (index = 0; index < availreport.length; index++) {
+			for (index = 0; index < availreport.length; index=index+2) {
 				something2 = $("<tr><td>" + new Date(availreport[index]).toDateString() + " " + new Date(availreport[index]).toLocaleTimeString() + "</td><td>" + new Date(availreport[index + 1]).toDateString() + " " + new Date(availreport[index + 1]).toLocaleTimeString() + "</td><td>" + "<input data-role='button' type='button' class='createmeeting' value='Create' starttime='" + new Date(availreport[index]) + "' endtime='" + new Date(availreport[index + 1]) + "'>" + "</td></tr>");
 				$(something).append(something2);
 				something3 = $("</tr></tbody> </table>");
