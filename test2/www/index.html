@@ -249,8 +249,10 @@ $(document).ready(function () {
   
     //Authorize access to Google Calendar
     $("#authgooglecalendar").click(function () {
-        window.open("http://server8.ies.cse.ohio-state.edu/stacker/google/auth.php?email=" + user.email, '_system');
-		$.mobile.pageContainer.pagecontainer("change", "#refreshmanagecalendars", {
+        window.open("http://server8.ies.cse.ohio-state.edu/stacker/google/auth.php?email=" + user.email, "_system");
+
+    //Refresh manage calendars page
+	$.mobile.pageContainer.pagecontainer("change", "#refreshmanagecalendars", {
                         transition: 'none',
                         reloadPage: false
                     });
