@@ -104,7 +104,7 @@ $(document).ready(function () {
                     });
                 } else {
                     $.mobile.pageContainer.pagecontainer("change", "#mainpage", {
-                        transition: 'flow',
+                        transition: 'none',
                         reloadPage: false
                     });
                 }
@@ -129,13 +129,13 @@ $(document).ready(function () {
             if (obj.err) {
                 alert(obj.err);
                 $.mobile.pageContainer.pagecontainer("change", "#signup", {
-                    transition: 'flow',
+                    transition: 'none',
                     reloadPage: false
                 });
             } else {
                 alert("Thank you for signing up. Please login to continue");
                 $.mobile.pageContainer.pagecontainer("change", "#login", {
-                    transition: 'flow',
+                    transition: 'none',
                     reloadPage: false
                 });
             }
@@ -145,7 +145,7 @@ $(document).ready(function () {
     //To check if the user is valid or not Else send to main page
     $(document).on("pagebeforeshow", "#mainpage", function () { // When entering mainpage
         if (!user.name) $.mobile.pageContainer.pagecontainer("change", "#login", {
-            transition: 'flow',
+            transition: 'none',
             reloadPage: false
         });
     });
@@ -286,7 +286,7 @@ $(document).ready(function () {
             var obj = $.parseJSON(data);
             alert(obj.err);
             $.mobile.pageContainer.pagecontainer("change", "#mygroups", {
-                transition: 'flow',
+                transition: 'none',
                 reloadPage: false
             });
         });
@@ -308,7 +308,7 @@ $(document).ready(function () {
             if (obj.length == 0) {
                 alert("You are not part of any groups.");
                 $.mobile.pageContainer.pagecontainer("change", "#creategroup", {
-                    transitiion: 'flow',
+                    transitiion: 'none',
                     reloadPage: false
                 });
             }
@@ -330,7 +330,7 @@ $(document).ready(function () {
                 group.gid = $(this).attr("gid");
                 group.gname = $(this).attr("gname");
                 $.mobile.pageContainer.pagecontainer("change", "#view-group-calendar", {
-                    transitiion: 'flow'
+                    transitiion: 'none'
                 });
             });
 
@@ -339,7 +339,7 @@ $(document).ready(function () {
                 group.gid = $(this).attr("gid");
                 group.gname = $(this).attr("gname");
                 $.mobile.pageContainer.pagecontainer("change", "#managegroups", {
-                    transitiion: 'flow',
+                    transitiion: 'none',
                     reloadPage: false
                 });
             });
@@ -349,7 +349,7 @@ $(document).ready(function () {
                 group.gid = $(this).attr("gid");
                 group.gname = $(this).attr("gname");
                 $.mobile.pageContainer.pagecontainer("change", "#generateavailreportform", {
-                    transitiion: 'flow',
+                    transitiion: 'none',
                     reloadPage: false
                 });
             });
@@ -707,7 +707,7 @@ $(document).ready(function () {
             var obj = $.parseJSON(data);
             alert(obj.err);
             $.mobile.pageContainer.pagecontainer("change", "#mainpage", {
-                transition: 'flow',
+                transition: 'none',
                 reloadPage: false
             });
         });
@@ -792,7 +792,7 @@ $(document).ready(function () {
         if (result.length == 0) {
             alert('Sorry, There is no available meeting time for these filters, please try again');
             $.mobile.pageContainer.pagecontainer("change", "#generateavailreportform", {
-                transition: 'flow',
+                transition: 'none',
                 reloadPage: false
             });
         } else {
@@ -800,7 +800,7 @@ $(document).ready(function () {
             availreport = result;
             console.log(result);
             $.mobile.pageContainer.pagecontainer("change", "#availreportresult", {
-                transition: 'flow',
+                transition: 'none',
                 reloadPage: false
             });
         }
@@ -841,7 +841,7 @@ $(document).ready(function () {
                 console.log(obj);
                 //alert(obj);
                 $.mobile.pageContainer.pagecontainer("change", "#mainpage", {
-                    transition: 'flow',
+                    transition: 'none',
                     reloadPage: false
                 });
             });
@@ -863,9 +863,64 @@ $(document).ready(function () {
         });
     });
 
-   
+	//Before Settings
+    $(document).on("pagebeforeshow", "#settings", function () {
+	$("#settingsname").attr("placeholder","Name: "+user.name);
+	$("#settingsstatus").attr("placeholder","Status: "+user.status);
+    });
+	
+	 //UPDATE NAME
+    $("#updatename").click(function () {
+		var name = $("#settingsname").val();
+		user.name = name;
+        $.post("http://server8.ies.cse.ohio-state.edu/stacker/update_name.php", {
+            uid: user.uid,
+            name: name,
+        },
+        function (data) {
+            var obj = $.parseJSON(data);
+            alert(obj.err);
+            $.mobile.pageContainer.pagecontainer("change", "#mainpage", {
+                transition: 'none',
+                reloadPage: false
+            });
+        });
+    });
 
-
+	 //UPDATE PHONE
+    $("#updatephone").click(function () {
+		var phone = $("#settingsphone").val();
+        $.post("http://server8.ies.cse.ohio-state.edu/stacker/update_phone.php", {
+            uid: user.uid,
+            phone: phone,
+        },
+        function (data) {
+            var obj = $.parseJSON(data);
+            alert(obj.err);
+            $.mobile.pageContainer.pagecontainer("change", "#mainpage", {
+                transition: 'none',
+                reloadPage: false
+            });
+        });
+    });
+	
+	 //UPDATE STATUS
+    $("#updatestatus").click(function () {
+		var status = $("#settingsstatus").val();
+		user.status = status;
+        $.post("http://server8.ies.cse.ohio-state.edu/stacker/update_status.php", {
+            uid: user.uid,
+			status: status
+        },
+        function (data) {
+            var obj = $.parseJSON(data);
+            alert(obj.err);
+            $.mobile.pageContainer.pagecontainer("change", "#mainpage", {
+                transition: 'none',
+                reloadPage: false
+            });
+        });
+    });
 
     //INVITE A FRIEND
     $("#submitinvite").click(function () {
@@ -878,7 +933,7 @@ $(document).ready(function () {
             var obj = $.parseJSON(data);
             alert(obj.err);
             $.mobile.pageContainer.pagecontainer("change", "#mainpage", {
-                transition: 'flow',
+                transition: 'none',
                 reloadPage: false
             });
         });
@@ -897,7 +952,7 @@ $(document).ready(function () {
         function (data) {
             var obj = $.parseJSON(data);
             $.mobile.pageContainer.pagecontainer("change", "#welcome", {
-                transition: 'flow',
+                transition: 'none',
                 reloadPage: false
             });
 
@@ -969,7 +1024,7 @@ body {
 				 
 				  <form id="loginform" action="javascript:void(0);" method="POST">
 						   <input type="text" id="email" data-mini="true" placeholder="Username"></input>
-						     <input type="password" id="password" data-mini="true" placeholder="Password"></input>
+						   <input type="password" id="password" data-mini="true" placeholder="Password"></input>
 						<input type="submit" id="submitlogin" value="submit" data-theme="b"/>
 						
 				  </form>
@@ -1251,7 +1306,7 @@ body {
 			<!--My Groups Design -->
 			 <div data-role="main" class="ui-content" style="font-size:8px; margin-top:2%;">
 				
-				<div id="viewgroups" class="overflow-y:scroll; margin:3px;">
+				<div id="viewgroups" class="overnone-y:scroll; margin:3px;">
 				</div>
 				
 			</div>
@@ -1366,12 +1421,31 @@ body {
 					</div>
 				</div>
 
-			 <div data-role="main" class="ui-content" style="position:fixed; top:30%; left:25%; background:#fff; ">
-				  <div id="main_header">
-					  
-					 <!--Main Page Design -->
-				  </div>
-				
+			 <div data-role="main" class="ui-content" style="margin:50px 50px; background:#fff; ">
+				<div class="ui-grid-a">
+					<div class="ui-block-a">
+				   <input type="text" id="settingsname" data-mini="true" placeholder="Name"></input>
+				   </div>
+				   <div class="ui-block-b">
+				   <button id="updatename" class="ui-btn ui-btn-inline ui-btn-mini ui-btn-icon-right ui-icon-edit ui-btn-corner-all">Update</button>
+				   </div>
+				</div>
+				<div class="ui-grid-a">
+					<div class="ui-block-a">
+				   <input type="text" id="settingsphone" data-mini="true" placeholder="Phone"></input>
+				   </div>
+				   <div class="ui-block-b">
+				   <button id="updatephone" class="ui-btn ui-btn-inline ui-btn-mini ui-btn-icon-right ui-icon-edit ui-btn-corner-all">Update</button>
+				   </div>
+				</div>
+				<div class="ui-grid-a">
+					<div class="ui-block-a">
+				   <input type="text" id="settingsstatus" data-mini="true" placeholder="Status"></input>
+				   </div>
+				   <div class="ui-block-b">
+				  <button id="updatestatus" class="ui-btn ui-btn-inline ui-btn-mini ui-btn-icon-right ui-icon-edit ui-btn-corner-all">Update</button>
+				   </div>
+				</div>
 			  </div>
 			  
 			  <div data-role="footer" data-position="fixed" data-theme="b">
