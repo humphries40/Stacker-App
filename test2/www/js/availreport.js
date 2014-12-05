@@ -27,14 +27,30 @@ function incrementTime(curTime)
 // 1 if dayOne is after dayTwo
 //dayOne is an element from the events array
 function compareDay(dayOne, dayTwo) {
-	if (dayOne.getTime() < dayTwo.getTime()) {
-		return -1;
+	if (!(dayOne instanceof Date)) {
+		console.log(dayOne);
+		dayOne = new Date(dayOne);
+		console.log(dayOne);
 	}
-	else if(dayOne.getTime() === dayTwo.getTime()) {
-		return 0;
+	if (!(dayTwo instanceof Date)) {
+		console.log(dayTwo);
+		dayOne = new Date(dayTwo);
+		console.log(dayTwo);
 	}
-	else{
-		return 1;
+	try {
+		if (dayOne.getTime() < dayTwo.getTime()) {
+			return -1;
+		}
+		else if(dayOne.getTime() === dayTwo.getTime()) {
+			return 0;
+		}
+		else{
+			return 1;
+		}
+	} catch(e) {
+		console.log(e);
+		console.log(dayOne);
+		console.log(dayTwo);
 	}
 }
 
@@ -244,6 +260,13 @@ function findOpen(events, filters) {
 						canMeet = false;
 						duration = 0;
 					}
+
+					if (!(curTime instanceof Date)) {
+						console.log(curTime);
+						curTime = new Date(curTime);
+						console.log(curTime);
+					}
+
 					else if(curTime.getHours() == filters[3])	{
 						//console.log("Outside Limit Meeting");
 						if(compareDay(startMeetingTime, endMeetingTime) == -1){
@@ -281,8 +304,8 @@ function findOpen(events, filters) {
 				}
 							
 			}
-			curTime = new Date(incrementTime(curTime));	
+			curTime = new Date(incrementTime(curTime));
 			
 		}
-		return meetingTimes;	
+		return meetingTimes;
 }

@@ -527,7 +527,8 @@ Improve::
 						alert(obj.err);	
 					});
 					
-					// Add to google 
+					// Add to google
+					console.log(user.uid + "\n" + st + "\n" + et + "\n" + gname);
 					$.post("http://server8.ies.cse.ohio-state.edu/stacker/google/schedule_meeting.php", {
 						uid: user.uid,
 						st: st,
@@ -537,6 +538,7 @@ Improve::
 					function (data) {
 						var obj = $.parseJSON(data);
 						alert(obj.err);
+
 						$.mobile.pageContainer.pagecontainer("change", "#refreshnotifications", {
 							transition: 'none',
 							reloadPage: false
@@ -736,7 +738,7 @@ Improve::
 					var curr_user;
 					var i = 0;
 					var j = 0;
-					var length = obj.length
+					var length = obj.length;
 					for (index = obj.length - 1; index > 0; index = index - 4) {
 						// index -> uid
 						// index + 1 -> starttime
