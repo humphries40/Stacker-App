@@ -189,7 +189,6 @@ function findOpen(events, filters) {
 			if(compareDay(curTime, filters[1]) == 1){
 				break;
 			}
-			//NEED TO ADD A CHANGE START TIME TO END TIME IF A MEETING WAS JUST SCHEDULED!
 			startMeetingTime = new Date(curTime.valueOf());
 			duration = 0;
 			while(canMeet && openTimes.length > count)
@@ -288,7 +287,7 @@ function findOpen(events, filters) {
 					}
 					else {
 						curTime = new Date(incrementTime(curTime));
-						if(compareDay(curTime, filters[1]) >0)
+						if(compareDay(curTime, filters[1]) > 0)
 							{if(compareDay(startMeetingTime, endMeetingTime) == -1){
 								//console.log("Normal Meeting");
 								meetingTimes.push(new Date(startMeetingTime.valueOf()));
