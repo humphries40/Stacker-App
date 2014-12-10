@@ -303,8 +303,8 @@ function findOpen(events, filters) {
 				}
 							
 			}
-			curTime = new Date(incrementTime(curTime));
+			curTime = new Date(incrementTime(curTime));	
 			
 		}
-		return meetingTimes;
+		return meetingTimes;	
 }
