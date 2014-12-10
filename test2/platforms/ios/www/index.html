@@ -507,8 +507,9 @@ Improve::
 					st = new Date(st).toLocaleDateString() + " " + new Date(st).toLocaleTimeString();
 					var et = obj[index + 3];
 					et = new Date(et).toLocaleDateString() + " " + new Date(et).toLocaleTimeString();
+					var gname = mname;
 					mname = mname + ": " + st + " to " + et;
-					var $something = " <div class='ui-grid-b' > <div class='ui-block-a' style='text-align:center'> <h4>" + mname + "</h4> </div> <div  class='ui-block-b'> <button class='acceptmeetingbutton ui-btn ui-btn-inline ui-mini ui-btn-corner-all ui-icon-check ui-btn-icon-right' mname='" + mname + "' mid='" + mid + "'>Accept</button> </div> <div class='ui-block-c'> <button class='declinemeetingbutton ui-btn ui-btn-inline ui-mini ui-btn-corner-all ui-icon-delete ui-btn-icon-right' mname='" + mname + "'mid='" + mid + "'>Decline</button> </div></div>";
+					var $something = " <div class='ui-grid-b' > <div class='ui-block-a' style='text-align:center'> <h4>" + mname + "</h4> </div> <div  class='ui-block-b'> <button class='acceptmeetingbutton ui-btn ui-btn-inline ui-mini ui-btn-corner-all ui-icon-check ui-btn-icon-right' mname='" + mname + "' mid='" + mid + "'  st='" + st + "'  et='" + et + "'  gname='" + gname + "'>Accept</button> </div> <div class='ui-block-c'> <button class='declinemeetingbutton ui-btn ui-btn-inline ui-mini ui-btn-corner-all ui-icon-delete ui-btn-icon-right' mname='" + mname + "'mid='" + mid + "'>Decline</button> </div></div>";
 					$("#groupnotifications").append($something);
 				}
 
@@ -523,7 +524,21 @@ Improve::
 					},
 					function (data) {
 						var obj = $.parseJSON(data);
+						alert(obj.err);	
+					});
+					
+					// Add to google
+					console.log(user.uid + "\n" + st + "\n" + et + "\n" + gname);
+					$.post("http://server8.ies.cse.ohio-state.edu/stacker/google/schedule_meeting.php", {
+						uid: user.uid,
+						st: st,
+						et: et,
+						notes: gname
+					},
+					function (data) {
+						var obj = $.parseJSON(data);
 						alert(obj.err);
+
 						$.mobile.pageContainer.pagecontainer("change", "#refreshnotifications", {
 							transition: 'none',
 							reloadPage: false
@@ -723,7 +738,7 @@ Improve::
 					var curr_user;
 					var i = 0;
 					var j = 0;
-					var length = obj.length
+					var length = obj.length;
 					for (index = obj.length - 1; index > 0; index = index - 4) {
 						// index -> uid
 						// index + 1 -> starttime
@@ -768,7 +783,7 @@ Improve::
 				alert("no meeting times available");
 			}
 			var something = $(" <table data-role='table' data-mode='columntoggle' class='ui-responsive' id='availreporttable'> <thead> <tr> <th>Start Time</th> <th>End Time</th> <th></th> </tr> </thead> <tbody>");
-			for (index = 0; index < availreport.length; index++) {
+			for (index = 0; index < availreport.length; index=index+2) {
 				something2 = $("<tr><td>" + new Date(availreport[index]).toDateString() + " " + new Date(availreport[index]).toLocaleTimeString() + "</td><td>" + new Date(availreport[index + 1]).toDateString() + " " + new Date(availreport[index + 1]).toLocaleTimeString() + "</td><td>" + "<input data-role='button' type='button' class='createmeeting' value='Create' starttime='" + new Date(availreport[index]) + "' endtime='" + new Date(availreport[index + 1]) + "'>" + "</td></tr>");
 				$(something).append(something2);
 				something3 = $("</tr></tbody> </table>");
